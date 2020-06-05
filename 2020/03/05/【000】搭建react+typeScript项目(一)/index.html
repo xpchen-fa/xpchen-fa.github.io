@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          搭建react+typeScript项目(一) - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2020/03/05/【000】搭建react+typeScript项目(一)/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#react" title="react">react</a>
+                        
+                          <a class="tag" href="/tags/#typeScript" title="typeScript">typeScript</a>
+                        
+                    </div>
+                    <h1>搭建react+typeScript项目(一)</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2020-03-05
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="1-初始化"><a href="#1-初始化" class="headerlink" title="1. 初始化"></a>1. 初始化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-安装依赖"><a href="#2-安装依赖" class="headerlink" title="2. 安装依赖"></a>2. 安装依赖</h2><p>react</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add react react-dom</span><br></pre></td></tr></table></figure>
+<p>React 类型库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev @types&#x2F;react @types&#x2F;react-dom</span><br></pre></td></tr></table></figure>
+<p>typeScript 和 ts-loader</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev typescript ts-loader</span><br></pre></td></tr></table></figure>
+<p>Webpack</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev webpack webpack-cli webpack-dev-server webpack-merge</span><br></pre></td></tr></table></figure>
+<p>Webpack插件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev source-map-loader html-webpack-plugin clean-webpack-plugin uglifyjs-webpack-plugin</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-webpack配置"><a href="#3-webpack配置" class="headerlink" title="3. webpack配置"></a>3. webpack配置</h2><ul>
+<li><p>config文件夹，定义变量./config/index.js  区分开发和生产环境</p>
+<blockquote>
+<p>其中 env: require(‘./dev.env’) =&gt;为开发环境最后传入web中使用环境变量./config/dev.env.js </p>
+</blockquote>
+<blockquote>
+<p>env: require(‘./prod.env’) =&gt;为生产环境最后传入web中使用环境变量./config/dev.prod.js</p>
+</blockquote>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const path &#x3D; require(&#39;path&#39;)</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    dev: &#123;</span><br><span class="line">        env: require(&#39;.&#x2F;dev.env&#39;),</span><br><span class="line">        host: &#39;localhost&#39;,</span><br><span class="line">        port: 8888,</span><br><span class="line">        assetsRoot: path.resolve(__dirname, &#39;..&#x2F;dist&#39;),</span><br><span class="line">        assetsPublicPath: &#39;&#x2F;&#39;,</span><br><span class="line">    &#125;,</span><br><span class="line">    prod: &#123;</span><br><span class="line">        env: require(&#39;.&#x2F;prod.env&#39;),</span><br><span class="line">        assetsRoot: path.resolve(__dirname, &#39;..&#x2F;dist&#39;),</span><br><span class="line">        assetsPublicPath: &#39;&#x2F;&#39;,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    NODE_ENV: JSON.stringify(&#39;development&#39;)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    NODE_ENV: JSON.stringify(&#39;production&#39;)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>基础webpack 配置 ./build/webpack.base.conf.js</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">const webpack &#x3D; require(&#39;webpack&#39;)</span><br><span class="line">const HtmlWebpackPlugin &#x3D; require(&#39;html-webpack-plugin&#39;)</span><br><span class="line">const path &#x3D; require(&#39;path&#39;);</span><br><span class="line"></span><br><span class="line">const config &#x3D; require(&#39;..&#x2F;config&#39;)</span><br><span class="line"></span><br><span class="line">const ENV &#x3D; process.env.NODE_ENV || &quot;development&quot;;</span><br><span class="line">const devMode &#x3D; ENV &#x3D;&#x3D;&#x3D; &quot;development&quot;;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    mode: devMode ? &quot;development&quot; : &quot;production&quot;,</span><br><span class="line">    devtool: devMode ? &quot;#source-map&quot; : &quot;inline-source-map&quot;,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">        extensions: [&#39;.tsx&#39;, &#39;.ts&#39;, &#39;.js&#39;, &#39;.json&#39;],</span><br><span class="line">        alias: &#123;</span><br><span class="line">            &#39;@&#39;: path.resolve(__dirname, &#39;..&#x2F;src&#39;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    entry: &#39;.&#x2F;src&#x2F;index.tsx&#39;,</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: config.prod.assetsRoot,</span><br><span class="line">        publicPath: devMode ? config.dev.assetsPublicPath : config.prod.assetsPublicPath,</span><br><span class="line">        filename: &#96;js&#x2F;[name]$&#123;devMode ? &#39;&#39; : &#39;-bundle-[hash:8]&#39;&#125;.js&#96;,&#x2F;&#x2F; 文件名,不加hash,以方便调试时使用，生产环境下可以设置为 [name]-bundle-[hash:8].js</span><br><span class="line">    &#125;,</span><br><span class="line">    module: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">        &#123;</span><br><span class="line">            enforce: &quot;pre&quot;,</span><br><span class="line">            test: &#x2F;\.js$&#x2F;,</span><br><span class="line">            loader: &quot;source-map-loader&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            test: &#x2F;\.(ts|tsx)$&#x2F;,</span><br><span class="line">            loader: &quot;ts-loader&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">        ],</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        new HtmlWebpackPlugin(&#123;</span><br><span class="line">            title: &#39;React + Typescript demo&#39;,</span><br><span class="line">            template: &#39;.&#x2F;index.html&#39;,</span><br><span class="line">            inject: false,</span><br><span class="line">        &#125;),</span><br><span class="line">        new webpack.DefinePlugin(&#123;</span><br><span class="line">            &#39;process.env&#39;: devMode ? config.dev.env : config.prod.env</span><br><span class="line">        &#125;),</span><br><span class="line">    ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>开发环境webpack 配置 ./build/webpack.dev.conf.js</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">const webpack &#x3D; require(&#39;webpack&#39;)</span><br><span class="line">const webpackMerge &#x3D; require(&#39;webpack-merge&#39;)</span><br><span class="line"></span><br><span class="line">const baseConfig &#x3D; require(&#39;.&#x2F;webpack.base.conf&#39;);</span><br><span class="line">const config &#x3D; require(&#39;..&#x2F;config&#39;)</span><br><span class="line"></span><br><span class="line">const devConfig &#x3D; &#123;</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        historyApiFallback: true,&#x2F;&#x2F; 在开发单页应用时非常有用，它依赖于HTML5 history API，如果设置为true，所有的跳转将指向index.html</span><br><span class="line">        disableHostCheck: true,&#x2F;&#x2F; 关闭 Host 检查，同网段其他设备，可通过内网 IP 访问本机服务（需要配合 host: &#39;0.0.0.0&#39;）使用</span><br><span class="line">        hot: true, &#x2F;&#x2F; 模块热更新，取决于HotModuleReplacementPlugin</span><br><span class="line">        host: config.dev.host,</span><br><span class="line">        port: config.dev.port,</span><br><span class="line">        open: true,</span><br><span class="line">        inline: true,</span><br><span class="line">        overlay: true,</span><br><span class="line">        watchOptions: &#123;</span><br><span class="line">            ignored: &#x2F;node_modules&#x2F;,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#x2F;&#x2F; 请求代理服务</span><br><span class="line">        &#x2F;&#x2F; proxy: &#123;</span><br><span class="line">        &#x2F;&#x2F;   &#39;&#x2F;api&#39;: &#123;</span><br><span class="line">        &#x2F;&#x2F;     &#x2F;&#x2F; 这里改为项目后端 API 接口 Host</span><br><span class="line">        &#x2F;&#x2F;     target: &#39;http:&#x2F;&#x2F;backend.api.host&#39;,</span><br><span class="line">        &#x2F;&#x2F;     &#x2F;&#x2F; 支持跨域调用</span><br><span class="line">        &#x2F;&#x2F;     changeOrigin: true,</span><br><span class="line">        &#x2F;&#x2F;   &#125;</span><br><span class="line">        &#x2F;&#x2F; &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        new webpack.HotModuleReplacementPlugin(),</span><br><span class="line">        new webpack.NamedModulesPlugin()</span><br><span class="line">    ],</span><br><span class="line">&#125;</span><br><span class="line">module.exports &#x3D; webpackMerge(devConfig, baseConfig);</span><br></pre></td></tr></table></figure></li>
+<li><p>开发环境webpack 配置 ./build/webpack.prod.conf.js</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">const webpackMerge &#x3D; require(&#39;webpack-merge&#39;);</span><br><span class="line">const CleanWebpackPlugin &#x3D; require(&#39;clean-webpack-plugin&#39;).CleanWebpackPlugin; &#x2F;&#x2F;&quot;clean-webpack-plugin&quot;: &quot;^3.0.0&quot;</span><br><span class="line">const UglifyJsPlugin &#x3D; require(&quot;uglifyjs-webpack-plugin&quot;);</span><br><span class="line"></span><br><span class="line">const baseConfig &#x3D; require(&#39;.&#x2F;webpack.base.conf&#39;);</span><br><span class="line"></span><br><span class="line">const prodConfig &#x3D; &#123;</span><br><span class="line">    plugins: [</span><br><span class="line">        new UglifyJsPlugin(&#123;</span><br><span class="line">            uglifyOptions: &#123;</span><br><span class="line">                warnings: false</span><br><span class="line">            &#125;,</span><br><span class="line">            cache: true,</span><br><span class="line">            parallel: true,</span><br><span class="line">            sourceMap: true</span><br><span class="line">        &#125;),</span><br><span class="line">        &#x2F;&#x2F; 每次编译之前，清空上一次编译的文件</span><br><span class="line">        new CleanWebpackPlugin()</span><br><span class="line">    ],</span><br><span class="line">&#125;</span><br><span class="line">module.exports &#x3D; webpackMerge(prodConfig, baseConfig);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="4-tsconfig-json文件配置"><a href="#4-tsconfig-json文件配置" class="headerlink" title="4. tsconfig.json文件配置"></a>4. tsconfig.json文件配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;compilerOptions&quot;: &#123;</span><br><span class="line">    &quot;allowSyntheticDefaultImports&quot;: true, </span><br><span class="line">    &quot;jsx&quot;: &quot;react&quot;,</span><br><span class="line">    &quot;lib&quot;: [&quot;es6&quot;, &quot;dom&quot;],</span><br><span class="line">    &quot;module&quot;: &quot;esnext&quot;,</span><br><span class="line">    &quot;moduleResolution&quot;: &quot;node&quot;,</span><br><span class="line">    &quot;noImplicitAny&quot;: true,</span><br><span class="line">    &quot;rootDir&quot;: &quot;src&quot;,</span><br><span class="line">    &quot;sourceMap&quot;: true,</span><br><span class="line">    &quot;strict&quot;: true,</span><br><span class="line">    &quot;target&quot;: &quot;es5&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;exclude&quot;: [</span><br><span class="line">    &quot;node_modules&quot;,</span><br><span class="line">    &quot;build&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>allowSyntheticDefaultImports: 允许合成默认导出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import * as React from &#39;react&#39;</span><br><span class="line">&#x3D;&gt;</span><br><span class="line">import React from &#39;react&#39;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-入口文件"><a href="#5-入口文件" class="headerlink" title="5. 入口文件"></a>5. 入口文件</h2><ul>
+<li>./index.html  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1, shrink-to-fit&#x3D;no&quot;&gt;</span><br><span class="line">    &lt;title&gt;&lt;%&#x3D; htmlWebpackPlugin.options.title %&gt;&lt;&#x2F;title&gt;</span><br><span class="line">    &lt;% for (let css in htmlWebpackPlugin.files.css) &#123; %&gt;</span><br><span class="line">    &lt;link href&#x3D;&quot;&#x2F;&lt;%&#x3D;htmlWebpackPlugin.files.css[css] %&gt;&quot; rel&#x3D;&quot;stylesheet&quot;&gt;</span><br><span class="line">    &lt;% &#125; %&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;noscript&gt;</span><br><span class="line">    You need to enable JavaScript to run this app.</span><br><span class="line">    &lt;&#x2F;noscript&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;root&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">    &lt;% for (let chunk in htmlWebpackPlugin.files.chunks) &#123; %&gt;</span><br><span class="line">    &lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;&lt;%&#x3D;htmlWebpackPlugin.files.chunks[chunk].entry %&gt;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">    &lt;% &#125; %&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure></li>
+<li>./src/index.tsx  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import React from &#39;react&#39;</span><br><span class="line">import ReactDOM from &#39;react-dom&#39;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">    &lt;div&gt;Hello React+typeScript&lt;&#x2F;div&gt;,</span><br><span class="line">    document.getElementById(&#39;root&#39;),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="6-package-启动脚本"><a href="#6-package-启动脚本" class="headerlink" title="6. package 启动脚本"></a>6. package 启动脚本</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...,</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;start&quot;: &quot;webpack-dev-server --config .&#x2F;build&#x2F;webpack.dev.conf.js&quot;,</span><br><span class="line">    &quot;build&quot;: &quot;webpack --config .&#x2F;build&#x2F;webpack.prod.conf.js&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.jianshu.com/p/cad0dd832514" target="_blank" rel="noopener">参考</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2020/03/06/【001】搭建react+typeScript项目(二)/" data-toggle="tooltip" data-placement="top" title="搭建react+typeScript项目(二)">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#react" title="react">react</a>
+                        
+                          <a class="tag" href="/tags/#typeScript" title="typeScript">typeScript</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2020/03/05/%E3%80%90000%E3%80%91%E6%90%AD%E5%BB%BAreact+typeScript%E9%A1%B9%E7%9B%AE(%E4%B8%80)/";
+    var disqus_url = "http://yoursite.com/2020/03/05/%E3%80%90000%E3%80%91%E6%90%AD%E5%BB%BAreact+typeScript%E9%A1%B9%E7%9B%AE(%E4%B8%80)/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me" target="_blank" rel="noopener">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks" target="_blank" rel="noopener">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
