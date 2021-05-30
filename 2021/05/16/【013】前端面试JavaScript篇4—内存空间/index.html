@@ -13,11 +13,11 @@
 
     <title>
         
-          【007】Promise 原理 - CXP的博客 | CXP&#39;s Blog
+          前端面试JavaScript篇4—内存空间.md - CXP的博客 | CXP&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2020/07/22/【007】Promise 原理/">
+    <link rel="canonical" href="http://yoursite.com/2021/05/16/【013】前端面试JavaScript篇4—内存空间/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -96,14 +96,14 @@
 
                     
                     <li>
-                        <a href="/archives/archive.html">Archives</a>
+                        <a href="/about/">About</a>
                     </li>
                     
                     
 
                     
                     <li>
-                        <a href="/about/">About</a>
+                        <a href="/archives/archive.html">Archives</a>
                     </li>
                     
                     
@@ -163,12 +163,16 @@
                 <div class="post-heading">
                     <div class="tags">
                         
+                          <a class="tag" href="/tags/#面试" title="面试">面试</a>
+                        
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
                     </div>
-                    <h1>【007】Promise 原理</h1>
-                    <h2 class="subheading"></h2>
+                    <h1>前端面试JavaScript篇4—内存空间.md</h1>
+                    <h2 class="subheading">内存空间、内存机制</h2>
                     <span class="meta">
                         Posted by Xiuping Chen on
-                        2020-07-22
+                        2021-05-16
                     </span>
                 </div>
             </div>
@@ -187,7 +191,25 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                
+                <h4 id="1、内存空间"><a href="#1、内存空间" class="headerlink" title="1、内存空间"></a>1、内存空间</h4><p>在 JavaScript 的执行过程中， 主要有三种类型内存空间，分别是<strong>代码空间</strong>、<strong>栈空间</strong>和<strong>堆空间</strong>。其中</p>
+<p><strong>代码空间</strong>：主要存储可执行代码。</p>
+<p><strong>栈空间</strong>：栈空间即调用栈，用来存储执行上下文，包括变量环境、词法环境等。</p>
+<p><strong>堆空间</strong>：负责对象这种变量类型存储</p>
+<h4 id="2、内存机制"><a href="#2、内存机制" class="headerlink" title="2、内存机制"></a>2、内存机制</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> <span class="keyword">var</span> a = <span class="string">"Chrome"</span></span><br><span class="line"> <span class="keyword">var</span> b = a</span><br><span class="line"> <span class="keyword">var</span> c = &#123;<span class="attr">name</span>:<span class="string">"Chrome"</span>&#125;</span><br><span class="line"> <span class="keyword">var</span> d = c</span><br><span class="line">&#125;</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+
+<p>当执行一段代码时，需要先编译、创建执行上下文，然后才能顺序执行代码。当执行到第 3 行代码时，其调用栈的状态，你可以参考下面这张调用栈状态图：</p>
+<p>从图中可以看出来，当执行到第 3 行时，变量 a 和变量 b 的值都被保存在执行上下文中，而执行上下文又被压入到栈中，所以你也可以认为变量 a 和变量 b 的值都是存放在栈中的。<br><img src="/img/post/013/JS%E8%B0%83%E7%94%A8%E6%A0%88.png" alt="JS调用栈"></p>
+<p>接下来继续执行第 4 行代码，<strong>由于 JavaScript 引擎判断右边的值是一个引用类型，这时候处理的情况就不一样了，JavaScript 引擎并不是直接将该对象存放到变量环境中，而是将它分配到堆空间里面，分配后该对象会有一个在“堆”中的地址，然后再将该数据的地址写进 c 的变量值</strong>，最终分配好内存的示意图如下所示：</p>
+<p><img src="/img/post/013/%E5%BC%95%E7%94%A8%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%A0%86%E4%B8%AD.png" alt="引用变量的值保存在堆中"></p>
+<p>对象类型是存放在堆空间的，在栈空间中只是保留了对象的引用地址，当 JavaScript 需要访问该数据的时候，是通过栈中的引用地址来访问的。</p>
+<p>那为什么原始类型的数据值直接保存在“栈”中的，而引用类型的值存放在“堆”中？所有的数据都放在栈中不就可以了吗？</p>
+<p>答案是不可以的。这是<strong>因为 JavaScript 引擎需要用栈来维护程序执行期间上下文的状态，如果栈空间大了话，所有的数据都存放在栈空间里面，那么会影响到上下文切换的效率，进而又影响到整个程序的执行效率。</strong>比如文中的 foo 函数执行结束了，JavaScript 引擎需要离开当前的执行上下文，只需要将指针下移到上个执行上下文的地址就可以了，foo 函数执行上下文栈区空间全部回收。</p>
+<p>所以通常情况下，<strong>栈空间都不会设置太大，主要用来存放一些原始类型的小数据</strong>。而引用类型的数据占用的空间都比较大，所以这一类数据会被存放到堆中，<strong>堆空间很大，能存放很多大的数据</strong>，不过缺点是分配内存和回收内存都会占用一定的时间。</p>
+<p>继续回到示例代码那里，看看它最后一步将变量 c 赋值给变量 d 是怎么执行的？</p>
+<p>在 JavaScript 中，赋值操作和其他语言有很大的不同，<strong>原始类型的赋值会完整复制变量值，而引用类型的赋值是复制引用地址。 所以d=c的操作就是把 c 的引用地址赋值给 d，此时内存状态如下</strong></p>
+<p><img src="/img/post/013/%E5%8F%98%E9%87%8F%E6%8C%87%E5%90%91%E7%9B%B8%E5%90%8C%E5%9C%B0%E5%9D%80.png" alt="变量指向相同地址"></p>
+<h4 id="3、参考资料"><a href="#3、参考资料" class="headerlink" title="3、参考资料"></a>3、参考资料</h4><p><a href="https://juejin.cn/post/6892780053005139982" target="_blank" rel="noopener">参考资料</a></p>
+
 
                 <hr>
 
@@ -196,12 +218,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2020/07/29/【008】chrome插件实战记录/" data-toggle="tooltip" data-placement="top" title="【008】chrome插件实战记录">&larr; Previous Post</a>
+                            <a href="/2021/05/18/【014】前端面试JavaScript篇5—原型&原型链/" data-toggle="tooltip" data-placement="top" title="前端面试JavaScript篇5—原型&原型链">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/2020/06/30/【006】HTTP/" data-toggle="tooltip" data-placement="top" title="HTTP">Next Post &rarr;</a>
+                            <a href="/2021/05/15/【012】前端面试JavaScript篇3—this/" data-toggle="tooltip" data-placement="top" title="前端面试JavaScript篇3—this">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -234,6 +256,10 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
+                          <a class="tag" href="/tags/#面试" title="面试">面试</a>
+                        
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
                     </div>
                 </section>
                 
@@ -253,8 +279,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "Blog";
-    var disqus_identifier = "http://yoursite.com/2020/07/22/%E3%80%90007%E3%80%91Promise%20%E5%8E%9F%E7%90%86/";
-    var disqus_url = "http://yoursite.com/2020/07/22/%E3%80%90007%E3%80%91Promise%20%E5%8E%9F%E7%90%86/";
+    var disqus_identifier = "http://yoursite.com/2021/05/16/%E3%80%90013%E3%80%91%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95JavaScript%E7%AF%874%E2%80%94%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/";
+    var disqus_url = "http://yoursite.com/2021/05/16/%E3%80%90013%E3%80%91%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95JavaScript%E7%AF%874%E2%80%94%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -324,7 +350,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; CXP&#39;s Blog 2020 
+                    Copyright &copy; CXP&#39;s Blog 2021 
                     <br>
                     Theme by <a href="http://huangxuan.me" target="_blank" rel="noopener">Hux</a> 
                     <span style="display: inline-block; margin: 0 5px;">

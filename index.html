@@ -96,14 +96,14 @@
 
                     
                     <li>
-                        <a href="/archives/archive.html">Archives</a>
+                        <a href="/about/">About</a>
                     </li>
                     
                     
 
                     
                     <li>
-                        <a href="/about/">About</a>
+                        <a href="/archives/archive.html">Archives</a>
                     </li>
                     
                     
@@ -182,20 +182,23 @@
 
 <div class="post-preview">
 
-    <a href="/2020/07/29/【008】chrome插件实战记录/">
+    <a href="/2021/05/20/【015】前端面试JavaScript篇6—深浅拷贝/">
         <h2 class="post-title">
-            【008】chrome插件实战记录
+            前端面试JavaScript篇6—深浅拷贝
         </h2>
         <h3 class="post-subtitle">
-            
+            深拷贝&浅拷贝
         </h3>
         <div class="post-content-preview">
-            ...
+            赋值和深/浅拷贝的区别这三者的区别如下，不过比较的前提都是针对引用类型：
+
+当我们把一个对象赋值给一个新的变量时，赋的其实是该对象的在栈中的地址，而不是堆中的数据。也就是两个对象指向的是同一个存储空间，无论哪个对象发生改变，其实都是改变的存储空间的内容，因此，两个对象是联动的。
+浅拷贝：重新在堆中创建内存，拷贝前后对象的基本数据类型互不影响，但拷贝前后对象的引用类型因共享同一块内存，会相互影......
         </div>
     </a>
     <p class="post-meta">
         Posted by Xiuping Chen on
-        2020-07-29
+        2021-05-20
     </p>
 
 </div>
@@ -203,20 +206,206 @@
 
 <div class="post-preview">
 
-    <a href="/2020/07/22/【007】Promise 原理/">
+    <a href="/2021/05/18/【014】前端面试JavaScript篇5—原型&原型链/">
         <h2 class="post-title">
-            【007】Promise 原理
+            前端面试JavaScript篇5—原型&原型链
         </h2>
         <h3 class="post-subtitle">
-            
+            原型&原型链
         </h3>
         <div class="post-content-preview">
-            ...
+            原型和原型链
+Constructor 构造函数构造函数一般为了区别普通函数要求首字母大写
+1function Person()&#123;&#125;
+
+prototype 原型
+原型指的就是一个对象，实例“继承”那个对象的属性。在原型上定义的属性，通过“继承”，实例也拥有了这个属性。“继承”这个行为是在 new 操作符内部实现的。
+
+Person 是构造函数，Person.prototyp......
         </div>
     </a>
     <p class="post-meta">
         Posted by Xiuping Chen on
-        2020-07-22
+        2021-05-18
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/16/【013】前端面试JavaScript篇4—内存空间/">
+        <h2 class="post-title">
+            前端面试JavaScript篇4—内存空间.md
+        </h2>
+        <h3 class="post-subtitle">
+            内存空间、内存机制
+        </h3>
+        <div class="post-content-preview">
+            1、内存空间在 JavaScript 的执行过程中， 主要有三种类型内存空间，分别是代码空间、栈空间和堆空间。其中
+代码空间：主要存储可执行代码。
+栈空间：栈空间即调用栈，用来存储执行上下文，包括变量环境、词法环境等。
+堆空间：负责对象这种变量类型存储
+2、内存机制1234567function foo()&#123; var a = "Chrome" var b = a var c = &......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-16
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/15/【012】前端面试JavaScript篇3—this/">
+        <h2 class="post-title">
+            前端面试JavaScript篇3—this
+        </h2>
+        <h3 class="post-subtitle">
+            this
+        </h3>
+        <div class="post-content-preview">
+            1. JavaScript 中的 this 是什么作用域链和this是两套不同的系统，它们之间基本没有太多的联系。
+关于 this，我们还是得先从执行上下文说起。前文提到执行上下文包含了变量环境、词法环境、outer，但其实还是有一个this没有提及，参考下图：
+
+从上图可以看出，this和执行上下文是绑定的，也就是说每个执行上下文都有一个this。我们知道，执行上下文主要分为三种——全局执......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-15
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/13/【011】前端面试JavaScript篇2—执行上下文/">
+        <h2 class="post-title">
+            前端面试JavaScript篇2—执行上下文
+        </h2>
+        <h3 class="post-subtitle">
+            作用域、作用域链、闭包
+        </h3>
+        <div class="post-content-preview">
+            一、作用域1. 作用域
+作用域是指程序中变量定义的区域，该位置决定了变量的生命周期。通俗地说，作用域就是变量与函数的可访问范围，作用域控制着变量和函数的可见性和生命周期。
+
+JavaScript在设计之初并未想过这门语言会如此受欢迎，所以只是按照最简单的方式来设计，只保留全局作用域和函数作用域。
+全局作用域 中对象和变量在任何地方都能访问，其生命周期同页面的生命周期。
+函数作用域 是在函数内......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-13
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/11/【010】前端面试JavaScript篇1—基础/">
+        <h2 class="post-title">
+            前端面试JavaScript篇1—基础
+        </h2>
+        <h3 class="post-subtitle">
+            内置类型、类型转换
+        </h3>
+        <div class="post-content-preview">
+            一、基础知识1、内置类型
+JS 中分为七种内置类型，七种内置类型又分为两大类型：基本类型和对象（Object）。
+
+基本类型有六种： null，undefined，boolean，number，string，symbol   (symbol表示独一无二的值；ES6引入)；引用类型函数，对象，数组
+
+其中 JS 的数字类型是浮点类型的，使用64-bit的浮点数来表示数字，并且浮点类型基于 IE......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-11
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/09/【009】EvenLoop/">
+        <h2 class="post-title">
+            EventLoop(事件循环机制)
+        </h2>
+        <h3 class="post-subtitle">
+            事件循环机制
+        </h3>
+        <div class="post-content-preview">
+            EventLoop(事件循环机制)
+最近在学习react的源码，看到了调度模块原理于是就见到了 requestIdleCallback ，顺藤摸瓜就必须先了解一下EventLoop。
+EventLoop从整体上告诉了我们JavaScript代码的执行顺序。
+EventLoop 在 chrome浏览器中 与 nodejs 中相似（TODO：除部分nodejs有但浏览器中没有的API外，查看其他......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-09
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/04/03/【008】HQL学习/">
+        <h2 class="post-title">
+            HQL学习
+        </h2>
+        <h3 class="post-subtitle">
+            HQL学习
+        </h3>
+        <div class="post-content-preview">
+            like进行模糊匹配时，%可以匹配多个字符，_匹配任意一个字符123where name like &#39;陈%&#39; --找出姓陈的人where name like &#39;%铭%&#39; --找出名字中有铭字的人where name like &#39;陈_&#39;  --找出姓陈且名字为两个字的人
+
+创建表123456create table facade_qe_temp_......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-04-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/03/03/【007】大数据每日一题/">
+        <h2 class="post-title">
+            大数据每日一题
+        </h2>
+        <h3 class="post-subtitle">
+            大数据练习题
+        </h3>
+        <div class="post-content-preview">
+            【案例分析】2021-03-05问题：你的委托人原本生产一种护发产品，现在打算进入防晒护肤品市场。这是不是一个好点子？
+第一步：确定为什么。我们的目标是什么？我们的目标是什么？它是否符合我们的整体战略？
+第二步：确定当前和未来市场的状况。
+
+市场的规模是多少？
+增长率是多少？
+公司处于生命周期的哪个阶段？客户是谁，如何细分?
+技术在行业中扮演什么角色，变化速度如何？
+竞争将如何应对？
+
+第三......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-03-03
     </p>
 
 </div>
@@ -247,186 +436,16 @@ GET和POST是什么?HTTP协议中的两种发送请求的方法。HTTP是什么?
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2020/06/29/【005】typeScript+React实践问题总结/">
-        <h2 class="post-title">
-            typeScript+React实践记录总结
-        </h2>
-        <h3 class="post-subtitle">
-            typescript+react搭建项目到实践过程中遇到的一些问题--持续总结
-        </h3>
-        <div class="post-content-preview">
-            项目搭建
-为了方便直接采用react脚手架搭建项目
-
-
-创建项目，安装依赖
-123456789101112131415&#x2F;&#x2F;安装脚手架npm install -g create-react-app&#x2F;&#x2F;创建项目create-react-app my-app --typescriptcd my-app&#x2F;&#x2F;将配置文件暴露出来npm run ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Xiuping Chen on
-        2020-06-29
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2020/06/08/【004】前端面试-(HTML5+CSS3)/">
-        <h2 class="post-title">
-            前端面试-(HTML+CSS)
-        </h2>
-        <h3 class="post-subtitle">
-            面试
-        </h3>
-        <div class="post-content-preview">
-            
-面试面试！关于面试的文章太多了，真正面试需要查缺补漏的时候又不知从何下手，所以自己写一篇文章将看过的一些文章总结一下梳理清楚，也是为了以后面试的时候方便复习哈哈哈。
-
-
-从前端面试最基础的部分开始，HTML5和CSS3的知识在常规的面试中其实不太经常问到，但是既然准备了就从头开始做充分准备。
-
-HTMLHTML5
-一个基本的HTML5页面
-
-123456789101112131415161......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Xiuping Chen on
-        2020-06-08
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2020/06/06/【003】好看就是第一生产力/">
-        <h2 class="post-title">
-            好看就是第一生产力
-        </h2>
-        <h3 class="post-subtitle">
-            微软小工具合集
-        </h3>
-        <div class="post-content-preview">
-            
-微软的一些工具
-
-Windows Terminal
-直接进入Microsoft Store 寻找 Windows Terminal下载启动
-安装power Shell
-安装参考document
-
-
-美化：
-字体安装，我使用的字体cascadia-code
-安装posh-git  1Install-Module posh-git -Scope CurrentUser
-设置 Powershel......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Xiuping Chen on
-        2020-06-06
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2020/03/07/【002】搭建react+typeScript项目(三)/">
-        <h2 class="post-title">
-            搭建react+typeScript项目(三)
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-正式开始做项目
-
-路由
-这两种是通常创建路由的方式；那么他们的区别在哪
-
-123import *** from &#39;react-router&#39;;import *** from &#39;react-router-dom&#39;;
-
-react-router：提供了router的核心api。如Router、Route、Switch等，但没有提供有关dom操作进行路由跳转的ap......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Xiuping Chen on
-        2020-03-07
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2020/03/06/【001】搭建react+typeScript项目(二)/">
-        <h2 class="post-title">
-            搭建react+typeScript项目(二)
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-在搭建项目（一）的基础上，学习一些常用的webpack目录结构模板，增加一些内容
-
-一、安装依赖
-用于npm、node版本检测插件  1yarn add --dev chalk semver shelljs
-用于开发模式时终端漂亮的输出错误/警告  1yarn add --dev friendly-errors-webpack-plugin portfinder node-notifier......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Xiuping Chen on
-        2020-03-06
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2020/03/05/【000】搭建react+typeScript项目(一)/">
-        <h2 class="post-title">
-            搭建react+typeScript项目(一)
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            1. 初始化1yarn init
-
-2. 安装依赖react
-1yarn add react react-dom
-React 类型库
-1yarn add --dev @types&#x2F;react @types&#x2F;react-dom
-typeScript 和 ts-loader
-1yarn add --dev typescript ts-loader
-Webpack
-1yarn ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Xiuping Chen on
-        2020-03-05
-    </p>
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
 
 <ul class="pager">
     
+    
+        <li class="next">
+            <a href="/page/2/">Older Posts &rarr;</a>
+        </li>
     
 </ul>
 
@@ -464,9 +483,21 @@ Webpack
                             
                         
                             
+                            <a href="/tags/#面试" title="面试" rel="7">面试</a>
+                            
                         
                             
                         
+                            
+                        
+                            
+                            <a href="/tags/#HQL" title="HQL" rel="2">HQL</a>
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#JavaScript" title="JavaScript" rel="7">JavaScript</a>
                             
                         
                     </div>
@@ -533,7 +564,7 @@ Webpack
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; CXP&#39;s Blog 2020 
+                    Copyright &copy; CXP&#39;s Blog 2021 
                     <br>
                     Theme by <a href="http://huangxuan.me" target="_blank" rel="noopener">Hux</a> 
                     <span style="display: inline-block; margin: 0 5px;">

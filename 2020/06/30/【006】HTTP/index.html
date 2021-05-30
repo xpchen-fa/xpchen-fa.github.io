@@ -96,14 +96,14 @@
 
                     
                     <li>
-                        <a href="/archives/archive.html">Archives</a>
+                        <a href="/about/">About</a>
                     </li>
                     
                     
 
                     
                     <li>
-                        <a href="/about/">About</a>
+                        <a href="/archives/archive.html">Archives</a>
                     </li>
                     
                     
@@ -163,7 +163,7 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#http" title="http">http</a>
+                          <a class="tag" href="/tags/#HTTP" title="HTTP">HTTP</a>
                         
                           <a class="tag" href="/tags/#CORS" title="CORS">CORS</a>
                         
@@ -211,7 +211,7 @@
 <blockquote>
 <p>请求主体的编码方式：将键值对的参数用&amp;连接起来，如果有空格，将空格转换为+加号；有特殊符号，将特殊符号转换为ASCII HEX值<br>这个时候如果我们传的入参是一个 js 对象，这时候我们可以用 qs 转换数据格式</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;yarn add qs</span><br><span class="line">import qs from &#39;qs&#39;;</span><br><span class="line">qs.stringify(data)&#x2F;&#x2F; 用 qs 将js对象(&#123;&quot;title&quot;:&quot;test&quot;,&quot;sub&quot;:[1,2,3]&#125;)转换为字符串 &#39;title&#x3D;title&amp;sub%5B%5D&#x3D;1&amp;sub%5B%5D&#x3D;2&amp;sub%5B%5D&#x3D;3&#39;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//yarn add qs</span></span><br><span class="line"><span class="keyword">import</span> qs <span class="keyword">from</span> <span class="string">'qs'</span>;</span><br><span class="line">qs.stringify(data)<span class="comment">// 用 qs 将js对象(&#123;"title":"test","sub":[1,2,3]&#125;)转换为字符串 'title=title&amp;sub%5B%5D=1&amp;sub%5B%5D=2&amp;sub%5B%5D=3'</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="multipart-form-data"><a href="#multipart-form-data" class="headerlink" title="multipart/form-data"></a>multipart/form-data</h2><ul>
 <li>这种方式一般用来上传文件<br>请求示例：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST http:&#x2F;&#x2F;www.example.com HTTP&#x2F;1.1</span><br><span class="line">Content-Type:multipart&#x2F;form-data; boundary&#x3D;----WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;text&quot;</span><br><span class="line"></span><br><span class="line">title</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;file&quot;; filename&#x3D;&quot;chrome.png&quot;</span><br><span class="line">Content-Type: image&#x2F;png</span><br><span class="line"></span><br><span class="line">PNG ... content of chrome.png ...</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA--</span><br></pre></td></tr></table></figure>
@@ -300,7 +300,7 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2020/07/22/【007】Promise 原理/" data-toggle="tooltip" data-placement="top" title="【007】Promise 原理">&larr; Previous Post</a>
+                            <a href="/2021/03/03/【007】大数据每日一题/" data-toggle="tooltip" data-placement="top" title="大数据每日一题">&larr; Previous Post</a>
                         </li>
                     
                     
@@ -338,7 +338,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#http" title="http">http</a>
+                          <a class="tag" href="/tags/#HTTP" title="HTTP">HTTP</a>
                         
                           <a class="tag" href="/tags/#CORS" title="CORS">CORS</a>
                         
@@ -432,7 +432,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; CXP&#39;s Blog 2020 
+                    Copyright &copy; CXP&#39;s Blog 2021 
                     <br>
                     Theme by <a href="http://huangxuan.me" target="_blank" rel="noopener">Hux</a> 
                     <span style="display: inline-block; margin: 0 5px;">

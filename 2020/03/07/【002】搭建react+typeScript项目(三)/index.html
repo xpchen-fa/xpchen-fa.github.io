@@ -96,14 +96,14 @@
 
                     
                     <li>
-                        <a href="/archives/archive.html">Archives</a>
+                        <a href="/about/">About</a>
                     </li>
                     
                     
 
                     
                     <li>
-                        <a href="/about/">About</a>
+                        <a href="/archives/archive.html">Archives</a>
                     </li>
                     
                     
@@ -206,7 +206,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yarn add react-router-dom</span><br><span class="line"></span><br><span class="line">yarn add --dev @types&#x2F;react-router-dom</span><br></pre></td></tr></table></figure>
 <p>路由配置原理可以参考<a href="http://react-guide.github.io/react-router-cn/docs/guides/basics/Histories.html" target="_blank" rel="noopener"> react-router中文文档</a></p>
 <h2 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h2><ol>
-<li>@/pages 会提示ts找不到该模块是由于tsconfig.json中没有配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;compilerOptions&quot;: &#123;</span><br><span class="line">    ···</span><br><span class="line">    &quot;baseUrl&quot;:&quot;.&#x2F;&quot;,</span><br><span class="line">    &quot;paths&quot;:&#123;</span><br><span class="line">      &quot;@&#x2F;*&quot;:[&quot;src&#x2F;*&quot;]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>@/pages 会提示ts找不到该模块是由于tsconfig.json中没有配置<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"compilerOptions"</span>: &#123;</span><br><span class="line">    ···</span><br><span class="line">    <span class="string">"baseUrl"</span>:<span class="string">"./"</span>,</span><br><span class="line">    <span class="string">"paths"</span>:&#123;</span><br><span class="line">      <span class="string">"@/*"</span>:[<span class="string">"src/*"</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
 
 
@@ -349,7 +349,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; CXP&#39;s Blog 2020 
+                    Copyright &copy; CXP&#39;s Blog 2021 
                     <br>
                     Theme by <a href="http://huangxuan.me" target="_blank" rel="noopener">Hux</a> 
                     <span style="display: inline-block; margin: 0 5px;">
