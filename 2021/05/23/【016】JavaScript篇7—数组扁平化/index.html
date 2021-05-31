@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          JavaScript篇7—数组扁平化 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/05/23/【016】JavaScript篇7—数组扁平化/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                    <h1>JavaScript篇7—数组扁平化</h1>
+                    <h2 class="subheading">数组扁平化</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-05-23
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h4 id="1、Array-prototype-flat-特性"><a href="#1、Array-prototype-flat-特性" class="headerlink" title="1、Array.prototype.flat() 特性"></a>1、<code>Array.prototype.flat()</code> 特性</h4><blockquote>
+<p>注：数组拍平方法 <code>Array.prototype.flat()</code> 也叫数组扁平化、数组拉平、数组降维。 本文统一叫：数组拍平</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> animals = [<span class="string">"🐷"</span>, [<span class="string">"🐶"</span>, <span class="string">"🐂"</span>], [<span class="string">"🐎"</span>, [<span class="string">"🐑"</span>, [<span class="string">"🐲"</span>]], <span class="string">"🐛"</span>]];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不传参数时，默认“拉平”一层</span></span><br><span class="line">animals.flat();</span><br><span class="line"><span class="comment">// ["🐷", "🐶", "🐂", "🐎", ["🐑", ["🐲"]], "🐛"]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 传入一个整数参数，整数即“拉平”的层数</span></span><br><span class="line">animals.flat(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// ["🐷", "🐶", "🐂", "🐎", "🐑", ["🐲"], "🐛"]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Infinity 关键字作为参数时，无论多少层嵌套，都会转为一维数组</span></span><br><span class="line">animals.flat(<span class="literal">Infinity</span>);</span><br><span class="line"><span class="comment">// ["🐷", "🐶", "🐂", "🐎", "🐑", "🐲", "🐛"]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 传入 &lt;=0 的整数将返回原数组，不“拉平”</span></span><br><span class="line">animals.flat(<span class="number">0</span>);</span><br><span class="line">animals.flat(<span class="number">-10</span>);</span><br><span class="line"><span class="comment">// ["🐷", ["🐶", "🐂"], ["🐎", ["🐑", ["🐲"]], "🐛"]];</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果原数组有空位，flat()方法会跳过空位。</span></span><br><span class="line">[<span class="string">"🐷"</span>, <span class="string">"🐶"</span>, <span class="string">"🐂"</span>, <span class="string">"🐎"</span>,,].flat();</span><br><span class="line"><span class="comment">// ["🐷", "🐶", "🐂", "🐎"]</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p><code>Array.prototype.flat()</code> 用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响。</p>
+</li>
+<li><p>不传参数时，默认“拉平”一层，可以传入一个整数，表示想要“拉平”的层数。</p>
+</li>
+<li><p>传入 <code>&lt;=0</code> 的整数将返回原数组，不“拉平”</p>
+</li>
+<li><p><code>Infinity</code> 关键字作为参数时，无论多少层嵌套，都会转为一维数组</p>
+</li>
+<li><p>如果原数组有空位，<code>Array.prototype.flat()</code> 会跳过空位。</p>
+</li>
+</ol>
+<h4 id="2、flat-实现"><a href="#2、flat-实现" class="headerlink" title="2、flat()实现"></a>2、flat()实现</h4><p><strong>1. 简单实现</strong></p>
+<blockquote>
+<p>主要涉及三个知识点数组判断，数组合并，递归</p>
+</blockquote>
+<p>数组判断方法：</p>
+<ul>
+<li><code>instanceof</code>： 操作符是假定只有一种全局环境，如果网页中包含多个框架，多个全局环境，如果你从一个框架向另一个框架传入一个数组，那么传入的数组与在第二个框架中原生创建的数组分别具有各自不同的构造函数。（所以在这种情况下会不准确）</li>
+<li><code>constructor</code>：因为可以被重写，所以不能确保一定是数组。</li>
+<li><code>Object.prototype.toString</code>  准确</li>
+<li><code>isArray</code></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]]], <span class="number">5</span>, <span class="string">"string"</span>, &#123; <span class="attr">name</span>: <span class="string">"xxx"</span> &#125;];</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">flat</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> arrResult = [];</span><br><span class="line">  arr.forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(item)) &#123;</span><br><span class="line">      arrResult = arrResult.concat(<span class="built_in">arguments</span>.callee(item));   <span class="comment">// 递归</span></span><br><span class="line">      <span class="comment">// 或者用扩展运算符</span></span><br><span class="line">      <span class="comment">// arrResult.push(...arguments.callee(item));</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arrResult.push(item);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> arrResult;</span><br><span class="line">&#125;</span><br><span class="line">flat(arr)</span><br><span class="line"><span class="comment">// [1, 2, 3, 4, 1, 2, 3, 1, 2, 3, 1, 2, 3, 5, "string", &#123; name: "xxxx" &#125;];</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 用 <code>reduce</code> 实现 <code>flat</code> 函数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]]], <span class="number">5</span>, <span class="string">"string"</span>, &#123; <span class="attr">name</span>: <span class="string">"xxx"</span> &#125;];</span><br><span class="line"><span class="keyword">const</span> flat = <span class="function"><span class="params">arr</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> arr.reduce(<span class="function">(<span class="params">pre, cur</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> pre.concat(<span class="built_in">Array</span>.isArray(cur) ? flat(cur) : cur);</span><br><span class="line">  &#125;, []);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 使用栈的思想实现 <code>flat</code> 函数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">flatten</span>(<span class="params">input</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> stack = [...input];</span><br><span class="line">  <span class="keyword">const</span> res = [];</span><br><span class="line">  <span class="keyword">while</span>(stack.length) &#123;</span><br><span class="line">    <span class="comment">// pop value from stack</span></span><br><span class="line">    <span class="keyword">const</span> next = stack.pop();</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">Array</span>.isArray(next)) &#123;</span><br><span class="line">      <span class="comment">// push back array items, won't modify the original input</span></span><br><span class="line">      stack.push(...next);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      res.unshift(next);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, <span class="number">4</span>, [<span class="number">5</span>, <span class="number">6</span>]]];</span><br><span class="line">flatten(arr);</span><br></pre></td></tr></table></figure>
+
+<p><strong>4. 通过传入整数参数控制“拉平”层数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, <span class="number">4</span>, [<span class="number">5</span>, <span class="number">6</span>]]];</span><br><span class="line"></span><br><span class="line"><span class="comment">// to enable deep level flatten use recursion with reduce and concat</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">flatDeep</span>(<span class="params">arr, d = <span class="number">1</span></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> d &gt; <span class="number">0</span> ? arr.reduce(<span class="function">(<span class="params">acc, val</span>) =&gt;</span> acc.concat(<span class="built_in">Array</span>.isArray(val) ? flatDeep(val, d - <span class="number">1</span>) : val), [])</span><br><span class="line">                : arr.slice();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">flatDeep(arr, <span class="literal">Infinity</span>); <span class="comment">// [1, 2, 3, 4, 5, 6]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>5. 使用 <code>Generator</code> 实现 <code>flat</code> 函数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">flatten</span>(<span class="params">array, depth</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(depth === <span class="literal">undefined</span>) &#123;</span><br><span class="line">      depth = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> item <span class="keyword">of</span> array) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Array</span>.isArray(item) &amp;&amp; depth &gt; <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="keyword">yield</span>* flatten(item, depth - <span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">yield</span> item;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, <span class="number">4</span>, [<span class="number">5</span>, <span class="number">6</span>]]];</span><br><span class="line"><span class="keyword">const</span> flattened = [...flatten(arr, <span class="literal">Infinity</span>)];</span><br><span class="line"><span class="comment">// [1, 2, 3, 4, 5, 6]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>6. 在原型链上重写 <code>flat</code> 函数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.fakeFlat = <span class="function"><span class="keyword">function</span>(<span class="params">num = <span class="number">1</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">Number</span>(num) || <span class="built_in">Number</span>(num) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> arr = <span class="keyword">this</span>.concat();    <span class="comment">// 获得调用 fakeFlat 函数的数组</span></span><br><span class="line">  <span class="keyword">while</span> (num &gt; <span class="number">0</span>) &#123;           </span><br><span class="line">    <span class="keyword">if</span> (arr.some(<span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">Array</span>.isArray(x))) &#123;</span><br><span class="line">      arr = [].concat.apply([], arr);	<span class="comment">// 数组中还有数组元素的话并且 num &gt; 0，继续展开一层数组 </span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">break</span>; <span class="comment">// 数组中没有数组元素并且不管 num 是否依旧大于 0，停止循环。</span></span><br><span class="line">    &#125;</span><br><span class="line">    num--;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> arr;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]]], <span class="number">5</span>, <span class="string">"string"</span>, &#123; <span class="attr">name</span>: <span class="string">"xxx"</span> &#125;]</span><br><span class="line">arr.fakeFlat(<span class="literal">Infinity</span>)</span><br><span class="line"><span class="comment">// [1, 2, 3, 4, 1, 2, 3, 1, 2, 3, 1, 2, 3, 5, "string", &#123; name: "xxx" &#125;];</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>7.考虑数组空位的情况</strong></p>
+<blockquote>
+<p>由最开始我们总结的 <code>flat</code> 特性知道，<code>flat</code> 函数执行是会跳过空位的。ES5 大多数数组方法对空位的处理都会选择跳过空位包括：<code>forEach()</code>, <code>filter()</code>, <code>reduce()</code>, <code>every()</code> 和 <code>some()</code> 都会跳过空位。</p>
+<p>所以我们可以利用上面几种方法来实现 flat 跳过空位的特性</p>
+</blockquote>
+<h4 id="3、扩展阅读：由于空位的处理规则非常不统一，所以建议避免出现空位。"><a href="#3、扩展阅读：由于空位的处理规则非常不统一，所以建议避免出现空位。" class="headerlink" title="3、扩展阅读：由于空位的处理规则非常不统一，所以建议避免出现空位。"></a>3、扩展阅读：<strong>由于空位的处理规则非常不统一，所以建议避免出现空位。</strong></h4><p><strong>ES5 对空位的处理，就非常不一致，大多数情况下会忽略空位。</strong></p>
+<ul>
+<li><code>forEach()</code>, <code>filter()</code>, <code>reduce()</code>, <code>every()</code> 和 <code>some()</code> 都会跳过空位。</li>
+<li><code>map()</code> 会跳过空位，但会保留这个值。</li>
+<li><code>join()</code> 和 <code>toString()</code> 会将空位视为 <code>undefined</code>，而 <code>undefined</code> 和 <code>null</code> 会被处理成空字符串。</li>
+</ul>
+<p><strong>ES6 明确将空位转为 <code>undefined</code>。</strong></p>
+<ul>
+<li><code>entries()</code>、<code>keys()</code>、<code>values()</code>、<code>find()</code>和 <code>findIndex()</code> 会将空位处理成 <code>undefined</code>。</li>
+<li><code>for...of</code> 循环会遍历空位。</li>
+<li><code>fill()</code> 会将空位视为正常的数组位置。</li>
+<li><code>copyWithin()</code> 会连空位一起拷贝。</li>
+<li>扩展运算符（<code>...</code>）也会将空位转为 <code>undefined</code>。</li>
+<li><code>Array.from</code> 方法会将数组的空位，转为 <code>undefined</code>。</li>
+</ul>
+<h4 id="4、参考"><a href="#4、参考" class="headerlink" title="4、参考"></a>4、参考</h4><p><a href="https://juejin.cn/post/6844904025993773063" target="_blank" rel="noopener">参考文章</a></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat" target="_blank" rel="noopener">MDN</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/05/31/【017】JavaScript篇8—V8引擎/" data-toggle="tooltip" data-placement="top" title="JavaScript篇8—认识V8引擎">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/05/20/【015】JavaScript篇6—深浅拷贝/" data-toggle="tooltip" data-placement="top" title="JavaScript篇6—深浅拷贝">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/05/23/%E3%80%90016%E3%80%91JavaScript%E7%AF%877%E2%80%94%E6%95%B0%E7%BB%84%E6%89%81%E5%B9%B3%E5%8C%96/";
+    var disqus_url = "http://yoursite.com/2021/05/23/%E3%80%90016%E3%80%91JavaScript%E7%AF%877%E2%80%94%E6%95%B0%E7%BB%84%E6%89%81%E5%B9%B3%E5%8C%96/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a href="http://huangxuan.me" target="_blank" rel="noopener">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks" target="_blank" rel="noopener">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
