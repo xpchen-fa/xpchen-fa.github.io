@@ -96,6 +96,13 @@
 
                     
                     <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
                         <a href="/archives/archive.html">Archives</a>
                     </li>
                     
@@ -103,7 +110,7 @@
 
                     
                     <li>
-                        <a href="/about/">About</a>
+                        <a href="/tags/tags.html">Tags</a>
                     </li>
                     
                     
@@ -196,7 +203,8 @@
 <h4 id="2、内存机制"><a href="#2、内存机制" class="headerlink" title="2、内存机制"></a>2、内存机制</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> <span class="keyword">var</span> a = <span class="string">"Chrome"</span></span><br><span class="line"> <span class="keyword">var</span> b = a</span><br><span class="line"> <span class="keyword">var</span> c = &#123;<span class="attr">name</span>:<span class="string">"Chrome"</span>&#125;</span><br><span class="line"> <span class="keyword">var</span> d = c</span><br><span class="line">&#125;</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
 
 <p>当执行一段代码时，需要先编译、创建执行上下文，然后才能顺序执行代码。当执行到第 3 行代码时，其调用栈的状态，你可以参考下面这张调用栈状态图：</p>
-<p>从图中可以看出来，当执行到第 3 行时，变量 a 和变量 b 的值都被保存在执行上下文中，而执行上下文又被压入到栈中，所以你也可以认为变量 a 和变量 b 的值都是存放在栈中的。<br><img src="/img/post/013/JS%E8%B0%83%E7%94%A8%E6%A0%88.png" alt="JS调用栈"></p>
+<p>从图中可以看出来，当执行到第 3 行时，变量 a 和变量 b 的值都被保存在执行上下文中，而执行上下文又被压入到栈中，所以你也可以认为变量 a 和变量 b 的值都是存放在栈中的。</p>
+<p><img src="/img/post/013/JS%E8%B0%83%E7%94%A8%E6%A0%88.png" alt="JS调用栈"></p>
 <p>接下来继续执行第 4 行代码，<strong>由于 JavaScript 引擎判断右边的值是一个引用类型，这时候处理的情况就不一样了，JavaScript 引擎并不是直接将该对象存放到变量环境中，而是将它分配到堆空间里面，分配后该对象会有一个在“堆”中的地址，然后再将该数据的地址写进 c 的变量值</strong>，最终分配好内存的示意图如下所示：</p>
 <p><img src="/img/post/013/%E5%BC%95%E7%94%A8%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%A0%86%E4%B8%AD.png" alt="引用变量的值保存在堆中"></p>
 <p>对象类型是存放在堆空间的，在栈空间中只是保留了对象的引用地址，当 JavaScript 需要访问该数据的时候，是通过栈中的引用地址来访问的。</p>
