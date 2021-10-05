@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          React篇3-Hooks - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/06/28/【030】React篇4-Hooks/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                    <h1>React篇3-Hooks</h1>
+                    <h2 class="subheading">Hooks</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-06-28
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p><a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/hooks-reference.html">Hooks</a>为函数组件赋予处理副作用（状态）的能力，也为复用代码提供另一种方式。以下两篇文章阐述了一些背景和目的：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/968ukIjEhhEOeLD5SQoKaw">源码解析React Hook构建过程：没有设计就是最好的设计</a>  <a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904158244372487">React系列-Mixin、HOC、Render Props(上)</a></p>
+<p>（有一个词也值得记住：代数效应（Algebraic Effects），这是<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/76158581">React团队背后的设计思想</a>。理解代数效应为什么叫“代数”需要很深的数学背景，我们其实更关注Dan所解释的：代数效应=纯函数里可以被try-catch-continue处理的副作用。我们遇见的大量副作用都是代数的，包括IO操作、异常、状态等等，至于哪些不是：<a target="_blank" rel="noopener" href="https://cstheory.stackexchange.com/questions/42431/how-to-tell-if-an-effect-is-algebraic%E3%80%82%EF%BC%89">https://cstheory.stackexchange.com/questions/42431/how-to-tell-if-an-effect-is-algebraic。）</a></p>
+<p>在了解Hooks之前，有必要强调：虽然Hooks都以use开头，它们实现的方法也基本一致,但每个Hook的影响是非常不一样的，非常了解useState不意味着就能相当了解useEffect或者useCallback。</p>
+<p><a target="_blank" rel="noopener" href="https://react.iamkasong.com/hooks/structure.html#memoizedstate">https://react.iamkasong.com/hooks/structure.html#memoizedstate</a></p>
+<p>第二是要谨记，Hooks不是什么黑魔法，它们都只是正常的(闭包)函数，符合所有JS函数的规则。</p>
+<h2 id="Hooks的基本实现"><a href="#Hooks的基本实现" class="headerlink" title="Hooks的基本实现"></a>Hooks的基本实现</h2><p>简单来说，Hooks就是将变量保存在Fiber上的闭包函数。你可以通过以下两篇文章非常快速地了解到它的精髓：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/brickspert/blog/issues/26">https://github.com/brickspert/blog/issues/26</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021057476">https://segmentfault.com/a/1190000021057476</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wuyawei/fe-code/blob/master/react/hooks/%E6%B7%B1%E5%85%A5%20React%20hooks%20%20%E2%80%94%20%E5%8E%9F%E7%90%86%20%26%20%E5%AE%9E%E7%8E%B0.md">https://github.com/wuyawei/fe-code/blob/master/react/hooks/%E6%B7%B1%E5%85%A5%20React%20hooks%20%20%E2%80%94%20%E5%8E%9F%E7%90%86%20%26%20%E5%AE%9E%E7%8E%B0.md</a></p>
+<p>现在你也明白为何不要在循环，条件或嵌套函数中调用Hook了：因为是按调用顺序以数组/链表的形式保存的变量，如果有Hook被跳过，数组的curser就会指向错误的Hook。（那为什么非要用数组呢？用map，给每个Hook命个名，不好吗？）接下来将讨论每个Hook的具体影响和注意点</p>
+<p>源码分析资料：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903807269208072">深入 React Hook 系统的原理</a>、<a target="_blank" rel="noopener" href="https://www.yuque.com/dixdiydiz/os28l5/yvr8ve?language=zh-cn">函数组件涉及到hooks的阶段</a></p>
+<h2 id="useState"><a href="#useState" class="headerlink" title="useState"></a>useState</h2><h3 id="useState-1"><a href="#useState-1" class="headerlink" title="useState()"></a>useState()</h3><p>useState和class的state有一个很重要的不同：它不会合并state，而是替换state</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// class component，合并state</span></span><br><span class="line"><span class="built_in">this</span>.setState(&#123;<span class="attr">a</span>:<span class="number">1</span>&#125;);</span><br><span class="line"><span class="built_in">this</span>.setState(&#123;<span class="attr">b</span>:<span class="number">2</span>&#125;);</span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line"><span class="built_in">this</span>.setState(&#123;<span class="attr">a</span>:<span class="number">1</span>, <span class="attr">b</span>:<span class="number">2</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// function component，替换state</span></span><br><span class="line"><span class="keyword">const</span> [a, setA] = useState(&#123;<span class="attr">a</span>:<span class="number">0</span>&#125;);</span><br><span class="line"><span class="keyword">const</span> [b, setB] = useState(&#123;<span class="attr">b</span>:<span class="number">0</span>&#125;);</span><br><span class="line">setA(&#123;<span class="attr">a</span>:<span class="number">1</span>&#125;); <span class="comment">// 替换旧a，不会和旧a合并</span></span><br><span class="line">setB(&#123;<span class="attr">b</span>:<span class="number">2</span>&#125;); <span class="comment">// a和b也不会合并</span></span><br><span class="line"><span class="comment">// 不等价于</span></span><br><span class="line"><span class="built_in">this</span>.setState(&#123;<span class="attr">a</span>:<span class="number">1</span>, <span class="attr">b</span>:<span class="number">2</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>官方推荐将通常会一起操作的state放在一起，创建多个state，这样可以少写合并的代码，也更容易提炼出重复的逻辑写自定义Hook，并且还能避免在下一节state要讨论的相同引用不渲染的问题。</p>
+<p><strong>initialValue</strong></p>
+<p>useState的唯一参数就算initialValue，它可以是任意表达式，如果是函数则会以函数返回值作为初始值。</p>
+<p>虽然initialValue实际上只会用到一次，但表达式每一次都会计算！譬如</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [state, setState] = useState(veryLongComputation());</span><br></pre></td></tr></table></figure>
+
+<p>每一次对应组件render时，这个非常耗时的函数都会计算一遍。为了避免这种情况，我们可以采用函数作为参数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [state, setState] = useState(veryLongComputation);</span><br></pre></td></tr></table></figure>
+
+<p>这里React使用了懒加载的技术，传入的函数只会在需要时被调用。而只有第一次需要initialValue时会调用该函数，所以该函数也只会在第一次render组件时运行。</p>
+<h3 id="state"><a href="#state" class="headerlink" title="state"></a>state</h3><p>useState()的返回值是state的值，而不是state的引用。这就是人们常提的<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904193044512782">闭包陷阱</a>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [state, setState] = useState(<span class="number">0</span>); <span class="comment">// 不是[refToState, setState], 而是[0, setState]</span></span><br><span class="line"><span class="built_in">setInterval</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(state); <span class="comment">// 等于console.log(0);</span></span><br><span class="line">&#125;, <span class="number">500</span>);</span><br></pre></td></tr></table></figure>
+
+<p>不管如何setState，这个setInterval只会一直打印0，因为useState返回的是值。</p>
+<p>如果你的state保存的是一个对象，那么setState时应该传入一个新对象，而不可以只是修改原来的对象——这样组件不会重新render。因为React会用Object.is判断前后state是否有差异，如果没有就不render。</p>
+<p>两个推论：</p>
+<ul>
+<li><p>不要直接在原数组、对象上操作。</p>
+</li>
+<li><p>nested对象应该采用深拷贝</p>
+</li>
+</ul>
+<p>牢记函数组件关注数据的不可变性！</p>
+<h3 id="setState"><a href="#setState" class="headerlink" title="setState"></a>setState</h3><p>setState是整个useState中最复杂的部分，当然也是人们用的最多的部分。我们要仔细讨论的主要是setState的运行时机和batching的问题。不过首先还是讲它的基本用法。</p>
+<p>作为useState()的返回值，setState始终指向同一个函数不会改变。</p>
+<p>它只接受一个参数，但该参数可以是函数。如果是函数，那么该函数的参数是原来的state，返回值则是新的state。当你想基于现有state更新时，就应该传函数参数，确保它总是能拿到正确的state值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setState(<span class="function"><span class="params">prevState</span>=&gt;</span>newState)</span><br></pre></td></tr></table></figure>
+
+<h4 id="setState的运行时机"><a href="#setState的运行时机" class="headerlink" title="setState的运行时机"></a>setState的运行时机</h4><p>简单来说，setState会在下一次useState()时运行。只是React会判断setState是不是在组件渲染的过程中调用的：</p>
+<ul>
+<li><p>如果是在组件渲染后（譬如listener）调用的，就安排一次调度scheduleUpdateOnFiber；</p>
+</li>
+<li><p>如果组件正在渲染，那么函数组件的Component函数会再运行一遍，直到没有setState被调用或者达到次数上限</p>
+</li>
+</ul>
+<p>你可能不明白正在渲染怎么调用setState，一个非常简单的例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Component</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> [state, setState] = useState(<span class="number">0</span>);</span><br><span class="line">    setState(<span class="number">1</span>); <span class="comment">// Component正在执行，但是已经调用setState，导致Component会再次(无限)执行</span></span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> /&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 所以React为render阶段内的setState设置了一个上限，譬如25次</span></span><br></pre></td></tr></table></figure>
+
+<p>那为什么会在下一次useState()时运行呢？因为React对setState也用了懒加载的技术。setState只是在对应的Fiber上创建了一个update，其中记录了要执行的action，但不会执行，直到真正需要新state——也就是下一次useState时——才会执行。如果组件不渲染了，那么这些action都不会被执行。</p>
+<h4 id="setState的batching"><a href="#setState的batching" class="headerlink" title="setState的batching"></a>setState的batching</h4><p>在React 17的blocking或者concurrent mode下，这个问题很简单，几个同级的setState只会引起一次调度，也就只有一次render。</p>
+<p>而在老版本（React 16以及更老）或者React 17的legacy mode下，只有在React event handler或者生命周期函数中才有batching。如果你在React管理之外的函数中（如Promise，setTimeout）连续调用两次setState，它会导致两次render。参见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/48563650/does-react-keep-the-order-for-state-updates/48610973#48610973">React开发者的回答</a></p>
+<p>当然你也可以采用unstable_batchedUpdates来强制batch一些setStates。<a target="_blank" rel="noopener" href="https://blog.logrocket.com/a-guide-to-usestate-in-react-ecb9952e406c/#usinganobjectasastatevariablewithusestatehook">参考一</a>、<a target="_blank" rel="noopener" href="https://dev.to/adamklein/we-don-t-know-how-react-state-hook-works-1lp8">参考二</a></p>
+<h2 id="useReducer"><a href="#useReducer" class="headerlink" title="useReducer"></a>useReducer</h2><p>useState, useReducer背后的实现几乎是一致的，useState就是使用了一个默认reduer的useReducer。所以useState的分析可以无缝套用到useReducer上，只不过useReducer有一些更灵活的用法值得讲一讲。</p>
+<h3 id="useReducer的使用场景"><a href="#useReducer的使用场景" class="headerlink" title="useReducer的使用场景"></a>useReducer的使用场景</h3><p>简而言之就是处理state的逻辑比较复杂时：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903817981460493">参考一</a>、<a target="_blank" rel="noopener" href="https://gaohaoyang.github.io/2020/05/13/react-hooks4-useReducer/">参考二</a>。也可以和useContext结合起来模拟轻量的Redux。</p>
+<h3 id="懒加载"><a href="#懒加载" class="headerlink" title="懒加载"></a>懒加载</h3><p>useReducer的懒加载跟useState略有不同<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer">https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer</a></p>
+<h2 id="useEffect-useLayoutEffect"><a href="#useEffect-useLayoutEffect" class="headerlink" title="useEffect, useLayoutEffect"></a>useEffect, useLayoutEffect</h2><p>useEffect可能是最最容易犯错的Hook了，官方甚至专门写了一篇长文讲如何正确地使用它，请<a target="_blank" rel="noopener" href="https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/">务必一读</a></p>
+<h3 id="useEffect的使用场景"><a href="#useEffect的使用场景" class="headerlink" title="useEffect的使用场景"></a>useEffect的使用场景</h3><p>useEffect的effect是指side effect，但是实际上只是副作用的一种：</p>
+<ul>
+<li><p>从纯函数的角度，所有Hook都是在处理某种副作用，而显然useEffect不能处理所有的副作用。</p>
+</li>
+<li><p>从副作用的对待方式上，根据vDOM更新DOM也一种effect，但和useEffect的effect处理方式截然不同。更准确地说，React的side effect总共有十几、二十种，useEffect只对应了其中一种：Passive</p>
+</li>
+</ul>
+<p>所以useEffect其实应该叫usePassiveEffect。它主要应该是用于同步某些props和state的变动到其它地方。虽然现在人们更常用它来做数据请求，但将来这一部分的工作会逐渐被suspense所取代。</p>
+<h3 id="passive-effect与运行的时机（包括清除）"><a href="#passive-effect与运行的时机（包括清除）" class="headerlink" title="passive effect与运行的时机（包括清除）"></a>passive effect与运行的时机（包括清除）</h3><p>那什么是passive effect呢？这些effects不会立即执行，而是会被动地等待（下一次）绘制<strong>后</strong>触发执行。passive effect的销毁函数一样不会在effect执行后立即执行，而是等待下一次effect被调用<strong>前</strong>执行。</p>
+<p>passive effects总是批量地执行（注意复数），它按照全部销毁（一起执行所有effects上一次的销毁函数）再全部执行（一起执行所有effects这一次的回调函数）的方式运作——这样能保障不会引用某个将要被销毁的值。passive effects的执行顺序和effects在effectList中的顺序是一致的。</p>
+<p>passive effects的处理/调度时机主要在commit阶段。commit根据DOM操作分成三个子阶段：DOM操作前(before mutation)、操作中(mutation)、操作后(layout)，各个子阶段处理不同类的side effect。</p>
+<p>passive effects因为是异步调度执行的，它们的运行时机比较特别：</p>
+<ol>
+<li>在before mutation之前，React需要检查是否有上一次未完成的passive effects，并将这些遗留的effects完成</li>
+<li>在before mutation时，检查这次commit有没有passive effects，如果有就以普通优先级调度它们——因为commit是一个不中断的task，所以新调度的任务一定会在commit结束之后运行</li>
+<li>在layout之后，事实上是在浏览器绘制页面之后，我们预期被调度的passive effects会运行，当然也可能有新的render会在下一次commit before mutation阶段前执行</li>
+</ol>
+<h3 id="依赖项"><a href="#依赖项" class="headerlink" title="依赖项"></a>依赖项</h3><p>这一节开头的文章中讲了很多和依赖项相关的事，它实在是很容易出错。</p>
+<ul>
+<li><p>依赖欺骗（遗漏）</p>
+<ul>
+<li>直接遗漏</li>
+</ul>
+</li>
+<li><p>间接遗漏：譬如在useEffect中调用了某函数，某函数内部其实依赖某个state或者prop，这就间接地欺骗了React</p>
+</li>
+<li><p>依赖过诚实（不必要的依赖）</p>
+<ul>
+<li>没有区分职责：本该写多个useEffect的场景只写了一个，就会导致其中一部分effect不必要地依赖另一部分effect的依赖项</li>
+</ul>
+</li>
+<li><p>引用变动：譬如组件内函数，因为每次都会创建新函数，引用不同导致依赖项每次都变动，useEffect也就每次都执行</p>
+</li>
+</ul>
+<p>这些问题都有各自针对性的解决方法：</p>
+<ul>
+<li><p>直接遗漏：官方提供的eslint规则检查</p>
+</li>
+<li><p>间接遗漏：</p>
+<ul>
+<li>把函数写到useEffect里，间接依赖就能转化为直接依赖被eslint检查了</li>
+</ul>
+</li>
+<li><p>把函数写到依赖项里，转化为依赖过诚实的问题</p>
+</li>
+<li><p>混乱职责：划分多个逻辑内聚的useEffect</p>
+</li>
+<li><p>引用变动：针对函数</p>
+<ul>
+<li>把不依赖任何state和prop的函数挪到组件外</li>
+</ul>
+</li>
+<li><p>把函数用useCallback包装，并声明函数的依赖项</p>
+</li>
+<li><p>把函数写到useEffect内</p>
+</li>
+</ul>
+<p>另外一个官方推荐考虑的解决方法是采用useReducer（也包括函数参数的useState）来减少真正的依赖项。</p>
+<h3 id="异步请求"><a href="#异步请求" class="headerlink" title="异步请求"></a>异步请求</h3><p>异步请求是一个比useEffect更大的话题，究竟React应该以什么方式处理异步请求，不属于本文讨论范围。这里介绍的是如果要用useEffect来做异步请求应该怎么处理：<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000018652589">https://segmentfault.com/a/1190000018652589</a></p>
+<p>最后取消请求是依赖一个变量来判断的，其实也可以考虑直接取消的方法：</p>
+<ul>
+<li><p>原生：clearTimeout/clearInterval/AbortController</p>
+</li>
+<li><p>库：axios的cancelToken等等</p>
+</li>
+</ul>
+<p>我们也可以自己写或者找一个别人写好的自定义Hook来处理这些通用的请求逻辑。</p>
+<h3 id="useLayoutEffect"><a href="#useLayoutEffect" class="headerlink" title="useLayoutEffect"></a>useLayoutEffect</h3><p>它和useEffect的唯一不同就是触发时机，它会在commit的layout阶段、浏览器绘制页面之前执行。</p>
+<h2 id="useRef"><a href="#useRef" class="headerlink" title="useRef"></a>useRef</h2><p>useRef是一个贯穿组件生命周期的存储空间，你可以用来存储任何数据。它的概念和使用方式不难理解，你可以把它当成没有setState的对象state。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> useRef = <span class="function">(<span class="params">initialValue</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [ref, setRef] = useState(&#123; <span class="attr">current</span>: initialValue&#125;);</span><br><span class="line">  <span class="keyword">return</span> ref</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只要注意两点：</p>
+<ul>
+<li><p>它作为引用在整个生命周期是不变的，所以它作依赖项是没有意义的</p>
+</li>
+<li><p>在render阶段调用可能有无限循环（达到次数上线）的问题（和setState原因一样）</p>
+</li>
+</ul>
+<p>它更不容易把握的是它的使用场景，因为可变的数据和React一直宣传的不可变数据有点冲突。</p>
+<p>有一些场景：</p>
+<ul>
+<li><p>直接获取DOM（包括兼容需要直接获取DOM的库，如jQuery）</p>
+</li>
+<li><p>不需要重渲染的可变数据：譬如保存previous state</p>
+</li>
+<li><p>兼容可变数据的思想或者代码：实现类似于类组件中this.state的效果</p>
+</li>
+</ul>
+<h2 id="useMemo-useCallback"><a href="#useMemo-useCallback" class="headerlink" title="useMemo, useCallback"></a>useMemo, useCallback</h2><p>useMemo, useCallback都是用记忆化来做性能优化的，和React.memo的思想类似。它们俩的差别是：</p>
+<ul>
+<li><p>使用方式：useMemo会缓存函数的返回值，useCallback会缓存函数的引用。</p>
+</li>
+<li><p>实现保障：React不保证useMemo的缓存值在依赖不改变的情况始终不变。“将来，React 可能会选择‘遗忘’以前的一些 memoized 值，并在下次渲染时重新计算它们，比如为离屏组件释放内存。”</p>
+</li>
+<li><p>使用目的：用useMemo缓存函数返回值是因为计算耗时。用useCallback缓存函数引用是因为引用不相等会引起重渲染，这不仅包括我们说useEffect中的依赖项，也包括传给子组件的函数prop。</p>
+</li>
+</ul>
+<p>如果不是为了刚刚提到的目的使用这两个Hook，都可能造成负优化。因为运行useMemo和useCallback也需要资源，如果缓存的好处比不上运行Hook的消耗，就不应该使用这两个Hook。具体而言，你不应该为了不昂贵的计算使用useMemo，也不应该为了减少函数声明的次数使用useCallback。其它情况下可以优先考虑useRef或者别的Hook。<a target="_blank" rel="noopener" href="https://juejin.cn/post/6847902217261809671">https://juejin.cn/post/6847902217261809671</a></p>
+<h2 id="useContext-useImperativeHandle-useDebugValue"><a href="#useContext-useImperativeHandle-useDebugValue" class="headerlink" title="useContext, useImperativeHandle, useDebugValue"></a>useContext, useImperativeHandle, useDebugValue</h2><p>阅读文档就足够了。useContext是其中最常用的，主要用来解决跨组件传递数据的问题。它可以和其它Hooks（如useReducer）结合做轻量的状态管理。<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/context.html">https://zh-hans.reactjs.org/docs/context.html</a></p>
+<h2 id="自定义Hooks"><a href="#自定义Hooks" class="headerlink" title="自定义Hooks"></a>自定义Hooks</h2><p>正如本节开头所说，Hooks允许我们更好地复用逻辑，这都得益于我们可以自由地编写自定义的Hook，只需要遵守：</p>
+<ul>
+<li><p>以use开头命名该自定义Hook</p>
+</li>
+<li><p>使用Hooks的常规限制：只在函数最顶层使用其它Hooks</p>
+</li>
+</ul>
+<p>如果遇见了像异步请求这样通用的问题，可以考虑去找一找是否有他人的自定义Hook可以使用，如果没有也可以考虑自己写一个开源。</p>
+<p>这里收录了不少资源：<a target="_blank" rel="noopener" href="https://github.com/rehooks/awesome-react-hooks">https://github.com/rehooks/awesome-react-hooks</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/07/05/【031】React篇5-生态/" data-toggle="tooltip" data-placement="top" title="React篇5-生态">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/06/25/【100】Commit规范总结/" data-toggle="tooltip" data-placement="top" title="Commit规范总结">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/06/28/%E3%80%90030%E3%80%91React%E7%AF%874-Hooks/";
+    var disqus_url = "http://yoursite.com/2021/06/28/%E3%80%90030%E3%80%91React%E7%AF%874-Hooks/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

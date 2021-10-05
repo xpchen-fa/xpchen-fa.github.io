@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          浏览器原理篇1-渲染流程 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/06/16/【023】浏览器原理篇1-渲染流程/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#浏览器原理" title="浏览器原理">浏览器原理</a>
+                        
+                    </div>
+                    <h1>浏览器原理篇1-渲染流程</h1>
+                    <h2 class="subheading">渲染流程</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-06-16
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>关于浏览器渲染流程，很多同学会给出如下答案，也是我之前一直以为的答案：</p>
+<blockquote>
+<p>浏览器根据html文件构建出DOM Tree，根据CSS文件构建出CSS stylesheets，浏览器解析完CSS和JS文件后将两个文件结合生成Render Tree，然后渲染到屏幕上。</p>
+</blockquote>
+<p>这个答案不算错，但是不够具体。本文就来详细地聊聊浏览器渲染，在开始正文之前，需要特别指出，本文的分析都是基于 Chrome 浏览器。国内大部分的浏览器内核都是基于 Chromium 二次开发而来，渲染流程大致相同只在产品层面有一些差异。</p>
+<h2 id="浏览器进程"><a href="#浏览器进程" class="headerlink" title="浏览器进程"></a>浏览器进程</h2><p>在开始说浏览器渲染流程前需要先了解一下浏览器进程，浏览器经过多年发展已经进入多进程浏览器时代，目前 <code>Chrome</code> 浏览器采用的进程架构如下：</p>
+<p><img src="/img/post/023/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%9B%E7%A8%8B.png" alt="浏览器进程"></p>
+<p>从图中可以看出，最新的 Chrome 浏览器包括：1 个浏览器（Browser）主进程、1 个 GPU 进程、1 个网络（NetWork）进程、多个渲染进程和多个插件进程。那这些进程的功能分别是什么呢？</p>
+<ol>
+<li><strong>浏览器主进程。</strong>主要负责界面显示、用户交互、子进程管理，同时提供存储等功能。</li>
+<li><strong>渲染进程。</strong>核心任务是将 HTML、CSS 和 JavaScript 转换为用户可以与之交互的网页，排版引擎 Blink 和 JavaScript 引擎 V8 都是运行在该进程中。默认情况下，Chrome 浏览器会为每个tab标签创建一个渲染进程，但如果从一个页面打开了另一个新页面，而新页面和当前页面属于同一站点的话，那么新页面会复用父页面的渲染进程。</li>
+<li><strong>GPU进程。</strong>GPU 的使用初衷是为了实现 3D CSS 的效果，只是随后网页、Chrome 的 UI 界面都选择采用 GPU 来绘制，这使得 GPU 成为浏览器普遍的需求。最后，Chrome 在其多进程架构上也引入了 GPU 进程。</li>
+<li><strong>网路进程。</strong>主要负责页面的网络资源加载。</li>
+<li><strong>插件进程。</strong>主要是负责插件的运行，因插件易崩溃，所以需要通过插件进程来隔离，以保证插件进程崩溃不会对浏览器和页面造成影响。</li>
+</ol>
+<p><strong>基于该模型，在 Chrome 中打开一个页面至少 需要四个进程，可以通过更多工具-任务管理器查看：1 个网络进程、1 个浏览器进程、1 个 GPU 进程以及 1 个渲染进程，共 4 个；如果打开的页面有运行插件的话，还需要再加上 1 个插件进程。</strong></p>
+<h2 id="第一步：构建-DOM-树"><a href="#第一步：构建-DOM-树" class="headerlink" title="第一步：构建 DOM 树"></a>第一步：构建 DOM 树</h2><p>服务器响应浏览器的HTML请求后，浏览器进程便开始准备渲染进程，渲染进程准备好之后，从网络进程获取到具体的HTML文件，通知浏览器进程移除旧的文档，便进入解析阶段。</p>
+<p>渲染进程解析HTML文件，构建成DOM树，如下所示：</p>
+<p><img src="/img/post/023/%E8%A7%A3%E6%9E%90html.png" alt="浏览器进程"></p>
+<p>可以在浏览器控制台输入 <code>document</code> 查看网页生成的 DOM 树。</p>
+<h2 id="第二步：样式计算"><a href="#第二步：样式计算" class="headerlink" title="第二步：样式计算"></a>第二步：样式计算</h2><p>样式计算的目的是为了计算出 DOM 节点中每个元素的具体样式，这个阶段大体可分为三步来完成。</p>
+<h3 id="2-1-把-CSS-转换为浏览器能够理解的结构"><a href="#2-1-把-CSS-转换为浏览器能够理解的结构" class="headerlink" title="2.1 把 CSS 转换为浏览器能够理解的结构"></a>2.1 把 CSS 转换为浏览器能够理解的结构</h3><p>CSS 样式来源主要有三种：</p>
+<ul>
+<li><p>通过 link 或者<code>@import</code>引用的外部 CSS 文件</p>
+</li>
+<li><p>&lt; style &gt;标记内的 CSS</p>
+</li>
+<li><p>元素的 style 属性内嵌的 CSS</p>
+</li>
+</ul>
+<p>浏览器是无法直接理解这些纯文本的 CSS 样式的，所以<strong>当渲染引擎接收到 CSS 文本时，会执行一个转换操作，将 CSS 文本转换为浏览器可以理解的结构——styleSheets。</strong>可以打开控制台输入 <code>document.styleSheets</code> 查看其结构。</p>
+<p>这里需要特别指出的是，很多文章将CSS文件构建出的文件称为 <code>CSSOM</code>，源码中并没有这个概念，产物应该是 <strong>styleSheets。</strong></p>
+<h3 id="2-2-标准化属性值"><a href="#2-2-标准化属性值" class="headerlink" title="2.2 标准化属性值"></a>2.2 标准化属性值</h3><p>属性的值一般有多种声明方式，看看下面这段 CSS 文本：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123; <span class="attribute">font-size</span>: <span class="number">2em</span> &#125;</span><br><span class="line"><span class="selector-tag">p</span> &#123;<span class="attribute">color</span>:blue;&#125;</span><br><span class="line"><span class="selector-tag">span</span> &#123;<span class="attribute">display</span>: none&#125;</span><br><span class="line"><span class="selector-tag">div</span> &#123;<span class="attribute">font-weight</span>: bold&#125;</span><br><span class="line"><span class="selector-tag">div</span> <span class="selector-tag">p</span> &#123;<span class="attribute">color</span>:green;&#125;</span><br><span class="line"><span class="selector-tag">div</span> &#123;<span class="attribute">color</span>:red; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，渲染引擎无法直接理解 <code>2em</code>、<code>blue</code>、<code>bold</code> 等值，所以需要将所有值转换为渲染引擎容易理解的、标准化的计算值，这个过程就是属性值标准化。</p>
+<p>那标准化后的属性值是什么样子呢？</p>
+<p><img src="/img/post/023/%E6%A0%87%E5%87%86%E5%8C%96%E5%B1%9E%E6%80%A7%E5%80%BC.png" alt="浏览器进程"></p>
+<h3 id="2-3-计算出每个-DOM-节点的具体样式"><a href="#2-3-计算出每个-DOM-节点的具体样式" class="headerlink" title="2.3 计算出每个 DOM 节点的具体样式"></a>2.3 计算出每个 DOM 节点的具体样式</h3><p>每个 DOM 节点的样式属性，是 <strong>CSS 继承规则和层叠规则</strong>进行叠加计算的结果。</p>
+<ul>
+<li> 继承规则：每个DOM 节点都会继承其父节点的样式</li>
+</ul>
+<p><img src="/img/post/023/css%E7%BB%A7%E6%89%BF%E8%A7%84%E5%88%99.png" alt="浏览器进程"></p>
+<ul>
+<li>层叠规则：层叠是 CSS 的一个基本特征，它是一个定义了如何合并来自多个源的属性值的算法。</li>
+</ul>
+<h2 id="第三步：布局阶段"><a href="#第三步：布局阶段" class="headerlink" title="第三步：布局阶段"></a>第三步：布局阶段</h2><p>现在，我们有 DOM 树和 DOM 树中元素的样式，但这还不足以显示页面，因为我们还不知道 DOM 元素的几何位置信息。<strong>那么接下来就需要计算出 DOM 树中可见元素的几何位置，我们把这个计算过程叫做布局。</strong></p>
+<p>Chrome 在布局阶段需要完成两个任务：创建布局树和布局计算。</p>
+<h3 id="3-1-创建布局树"><a href="#3-1-创建布局树" class="headerlink" title="3.1 创建布局树"></a>3.1 创建布局树</h3><p>DOM 树中包含很多不可见的元素，所以在显示元素之前，还要额外地构建一棵只包含可见元素布局树。</p>
+<p>构建过程大致如下：</p>
+<ul>
+<li>遍历 DOM 树中的所有可见节点，并把这些节点加到布局中；</li>
+<li>忽略不可见节点，比如 <code>head</code> 标签，比如具有 <code>display:none</code> 样式的元素。</li>
+</ul>
+<h3 id="3-2-布局计算"><a href="#3-2-布局计算" class="headerlink" title="3.2 布局计算"></a>3.2 布局计算</h3><p>有了布局树之后，就需要对布局树中各节点的几何坐标位置进行计算，输出带有坐标位置的布局树。</p>
+<p>在执行布局操作的时候，会把布局运算的结果重新写回布局树中，所以布局树既是输入内容也是输出内容，这是布局阶段一个不合理的地方，因为在布局阶段并没有清晰地将输入内容和输出内容区分开来。针对这个问题，Chrome 团队正在重构布局代码，下一代布局系统叫 LayoutNG，试图更清晰地分离输入和输出，从而让新设计的布局算法更加简单。</p>
+<h2 id="第四步：分层"><a href="#第四步：分层" class="headerlink" title="第四步：分层"></a>第四步：分层</h2><p>现在我们有了布局树，而且每个元素的具体位置信息都计算出来了，那么接下来是不是就要开始着手绘制页面了？</p>
+<p>答案依然是否定的。</p>
+<p>因为页面中有很多复杂的效果，如一些 3D 变换、页面滚动、Z 轴排序等，<strong>为了更加方便地实现这些效果，渲染引擎还需要为特定的节点生成专用的图层，并生成一棵对应的图层树。</strong></p>
+<p>要想直观地理解什么是图层，你可以打开 Chrome 的“开发者工具”，选择“Layers”标签，就可以可视化页面的分层情况，如下图所示：</p>
+<p><img src="/img/post/023/%E5%9B%BE%E5%B1%82.png" alt="浏览器进程"></p>
+<p>其中 Compositing Reasons 指出了该图层被独立的原因。</p>
+<p>此时我们已经知道，浏览器中的页面实际上被分成了很多图层，这些图层叠加后合成了最终的页面。图层和布局树节点之间的关系如下图所示：</p>
+<p><img src="/img/post/023/%E5%9B%BE%E5%B1%82%E6%A0%91.png" alt="浏览器进程"></p>
+<p>通常情况下，并不是布局树的每个节点都包含一个图层，如果一个节点没有对应的层，那么这个节点就从属于父节点的图层。</p>
+<h3 id="4-1-加餐：什么样的节点会创建独立的图层？"><a href="#4-1-加餐：什么样的节点会创建独立的图层？" class="headerlink" title="4.1 加餐：什么样的节点会创建独立的图层？"></a>4.1 加餐：什么样的节点会创建独立的图层？</h3><p>满足如下任一条件的元素会被提升为单独的一个图层：</p>
+<h4 id="4-1-1-拥有层叠上下文属性的元素会被提升为单独的一层"><a href="#4-1-1-拥有层叠上下文属性的元素会被提升为单独的一层" class="headerlink" title="4.1.1 拥有层叠上下文属性的元素会被提升为单独的一层"></a>4.1.1 <strong>拥有层叠上下文属性的元素会被提升为单独的一层</strong></h4><p>页面是个二维平面，但是层叠上下文能够让 HTML 元素具有三维概念，这些 HTML 元素按照自身属性的优先级分布在垂直于这个二维平面的 z 轴上。可以结合下图来直观感受下：</p>
+<p><img src="/img/post/023/%E5%B1%82%E5%8F%A0%E5%B1%9E%E6%80%A7.png" alt="浏览器进程"></p>
+<p>从图中可以看出，明确定位属性的元素、定义透明属性的元素、使用 CSS 滤镜的元素等，都拥有层叠上下文属性。</p>
+<p><strong>文档中的层叠上下文由满足以下任意一个条件的元素形成：</strong></p>
+<ul>
+<li><p><strong>根元素 (HTML)</strong></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">z-index</a> <strong>值不为</strong> <code>auto</code> <strong>的绝对/相对定位元素</strong></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">z-index</a> <strong>值不为</strong> <code>auto</code> <strong>的</strong> <code>flex</code><strong>（</strong> <strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flexbox">flexbox</a></strong> <strong>）子项 (flex item)，即：父元素 display: flex|inline-flex</strong></p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">z-index</a></strong> <strong>值不为</strong> <code>auto</code> <strong>的</strong> <code>grid</code><strong>（<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid">grid</a>）子项，即：父元素</strong><code>display：grid</code><strong>，</strong></p>
+</li>
+<li><p><strong>固定（</strong><code>fixed</code><strong>） / 沾滞（</strong><code>sticky</code>）定位（沾滞定位适配所有移动设备上的浏览器，但老的桌面浏览器不支持</p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/opacity">opacity</a></strong> <strong>属性值小于</strong> <code>1</code> <strong>的元素（参考</strong> <a target="_blank" rel="noopener" href="http://www.w3.org/TR/css3-color/#transparency">the specification for opacity</a>）</p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mix-blend-mode">mix-blend-mode</a></strong> <strong>属性值不为</strong> <code>normal</code> <strong>的元素</strong></p>
+</li>
+<li><p><strong>以下任意属性值不为</strong><code>none</code>的<strong>元素：</strong> <strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform">transform</a></strong> 、 **<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter">filter</a>**、 **<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective">perspective</a>**、 **<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/clip-path">clip-path</a>**、 <strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask">mask</a></strong> <strong>/</strong> <strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-image">mask-image</a></strong> <strong>/</strong> <strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-border">mask-border</a></strong></p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/isolation">isolation</a></strong> <strong>属性被设置为</strong> <code>isolate</code> <strong>的元素，</strong></p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/-webkit-overflow-scrolling">-webkit-overflow-scrolling</a></strong> <strong>属性被设置为</strong> <code>touch</code> <strong>的元素，</strong></p>
+</li>
+<li><p><strong>在</strong> <strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/will-change">will-change</a></strong> <strong>中指定了任意CSS属性（参考</strong><a target="_blank" rel="noopener" href="http://dev.opera.com/articles/css-will-change-property/">这篇文章</a>）</p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain">contain</a></strong> <strong>属性值为</strong> <code>layout</code><strong>、</strong><code>paint</code><strong>，或者综合值（比如</strong> <code>contain: strict</code><strong>、</strong><code>contain: content</code><strong>）</strong></p>
+</li>
+</ul>
+<p>在层叠上下文中，其子元素同样也按照上面解释的规则进行层叠。 特别值得一提的是，其子元素的 <code>z-index</code> 值只在父级层叠上下文中有意义。子级层叠上下文被自动视为父级层叠上下文的一个独立单元。关于层叠上下文，更加详细的信息看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context">这里</a>。</p>
+<h4 id="4-1-2-需要剪裁（clip）的地方也会被创建为图层"><a href="#4-1-2-需要剪裁（clip）的地方也会被创建为图层" class="headerlink" title="4.1.2  需要剪裁（clip）的地方也会被创建为图层"></a>4.1.2  需要剪裁（clip）的地方也会被创建为图层</h4><p>当子元素需要展示的区域大于父元素的大小时，就需要进行裁剪。如下例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">      div &#123;</span><br><span class="line">            width: 200;</span><br><span class="line">            height: 200;</span><br><span class="line">            overflow:auto;</span><br><span class="line">            background: gray;</span><br><span class="line">        &#125; </span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div &gt;</span><br><span class="line">        &lt;p&gt;我是子元素一：我很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;我是子元素二：我很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;我是子元素三：我很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>此处，<code>div</code> 元素的大小被限制为 200<em>200，其子元素的内容较多，超过了父元素的大小，需要渲染引擎将文字内容的一部分显示在div区域。*<em>出现裁剪情况的时候，渲染引擎会为文字部分单独创建一个层，如果出现滚动条，滚动条也会被提升为单独的层。</em></em></p>
+<p>总之，元素有了层叠上下文的属性或者需要被剪裁，满足这任意一点，就会被提升成为单独一层。</p>
+<h2 id="第五步：图层绘制"><a href="#第五步：图层绘制" class="headerlink" title="第五步：图层绘制"></a>第五步：图层绘制</h2><p>布局树生成图层树后，渲染引擎会依次对图层树中的图层进行绘制。接下来看看渲染引擎如何实现图层的绘制？</p>
+<p>试想一下，如果给你一张纸，让你先把纸的背景涂成蓝色，然后在中间位置画一个红色的圆，最后再在圆上画个绿色三角形。你会怎么操作呢？</p>
+<p>一般我们会把绘制操作分解为三步：</p>
+<ul>
+<li>绘制蓝色背景；</li>
+<li>在中间绘制一个红色的圆；</li>
+<li>再在圆上绘制绿色三角形。</li>
+</ul>
+<p>渲染引擎实现图层的绘制与之类似，会把一个图层的绘制拆分成很多小的<strong>绘制指令</strong>，然后再把这些指令按照顺序组成一个<strong>待绘制列表，</strong>如下图所示：</p>
+<p><img src="/img/post/023/%E7%BB%98%E5%88%B6%E6%93%8D%E4%BD%9C.png" alt="绘制操作"></p>
+<p>从图中可以看出，绘制指令其实非常简单，就是一个简单的绘制操作，比如绘制一个黑色的矩形。通常绘制一个元素需要多条绘制指令，因为每个元素的背景、前景、边框都需要单独的指令去绘制。<strong>所以在图层绘制阶段，输出的内容就是一个绘制指令集合-待绘制列表。</strong></p>
+<h2 id="第六步：栅格化-光栅化"><a href="#第六步：栅格化-光栅化" class="headerlink" title="第六步：栅格化(光栅化)"></a>第六步：栅格化(光栅化)</h2><p>在第五步的图层绘制中，并没有真正对图层进行绘制，只是输出了一个记录了绘制顺序和绘制指令的列表，实际上绘制操作是由渲染引擎的合成线程来完成的</p>
+<p>当图层的绘制列表准备好之后，主线程会把该绘制列表提交给合成线程，那么接下来合成线程是怎么工作的呢？</p>
+<p>在有些情况下，有的图层很大，内容很长，需要滚动很久才能滚动到底部，真正展示在视口内的内容只有一小部分，如果将整个图层完全绘制，就会产生很大的开销。为了降低绘制成本、尽可能快地呈现内容给用户，合成线程进行了一些优化。</p>
+<h3 id="6-1-划分图块"><a href="#6-1-划分图块" class="headerlink" title="6.1 划分图块"></a>6.1 划分图块</h3><p>首先，合成线程会将图层划分为图块(<code>tile</code>)，图片的大小通常是 256<em>256 或者 512</em>512。<strong>合成线程会按照视口附近的图块优先生成位图的原则将图块生成位图，而实际生成位图的操作是由栅格化来执行的。所谓栅格化，就是将图块转换为位图。</strong></p>
+<h3 id="6-2-生成位图"><a href="#6-2-生成位图" class="headerlink" title="6.2 生成位图"></a>6.2 生成位图</h3><p><strong>图块是栅格化执行的最小单位。渲染进程维护了一个栅格化线程池，所有图块栅格化都是在此线程池中完成的。</strong>流程如下图所示：</p>
+<p><img src="/img/post/023/%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B.png" alt="渲染进程"></p>
+<p><strong>现代浏览器支持 GPU，通常会使用 GPU 加速栅格化的过程，使用 GPU 生成位图的过程叫快速栅格化，生成的位图保存在 GPU 内存中。</strong></p>
+<p>前文说到，<strong>GPU 操作有一个独立的进程——GPU 进程，如果栅格化操作使用了GPU，那么最终位图生成的操作理应是在 GPU 中完成的，这是一个跨进程、多进程协作的过程</strong>：</p>
+<p>渲染进程把生成图块的指令发送给 GPU，然后在 GPU 中执行生成图块的位图，保存在 GPU 内存中</p>
+<h2 id="第七步：合成和显示"><a href="#第七步：合成和显示" class="headerlink" title="第七步：合成和显示"></a>第七步：合成和显示</h2><p>所有图块完成栅格化后，合成线程会生成一个绘制图块的命令——“DrawQuad” 并提交给浏览器进程。</p>
+<p>浏览器进程里面有一个叫 <code>viz</code> 的组件，用来接收合成线程发过来的 <code>DrawQuad</code> 命令，然后根据 <code>DrawQuad</code> 命令，将页面内容绘制到内存中，最后再将内存数据显示在屏幕上。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>一个完整的渲染流程大致可总结为如下：</p>
+<ol>
+<li>渲染进程将 HTML 内容转换为能够读懂的 <strong>DOM 树</strong>结构。</li>
+<li>渲染引擎将 CSS 样式表转化为浏览器可以理解的 <strong>styleSheets</strong>，计算出 DOM 节点的样式。</li>
+<li>创建<strong>布局树</strong>，并计算元素的布局信息。</li>
+<li>对布局树进行分层，并生成<strong>分层树</strong>。</li>
+<li>为每个图层生成<strong>绘制列表</strong>，并将其提交到合成线程。</li>
+<li>合成线程将图层分成<strong>图块</strong>，并在<strong>光栅化</strong> <strong>（栅格化）</strong>线程池中将图块转换成位图。</li>
+<li>合成线程发送绘制图块命令 <strong>DrawQuad</strong> 给浏览器进程。</li>
+<li>浏览器进程根据 DrawQuad 消息<strong>生成页面</strong>，并<strong>显示</strong>到显示器上。</li>
+</ol>
+<h2 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lhb25/p/how-browsers-work.html">深入解析浏览器的幕后工作原理</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/06/16/【022】JavaScript篇13-手写API/" data-toggle="tooltip" data-placement="top" title="JavaScript篇13—手写代码">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/06/16/【021】JavaScript篇12-异步实现方案/" data-toggle="tooltip" data-placement="top" title="JavaScript篇12-异步实现方案">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#浏览器原理" title="浏览器原理">浏览器原理</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/06/16/%E3%80%90023%E3%80%91%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%E7%AF%871-%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B/";
+    var disqus_url = "http://yoursite.com/2021/06/16/%E3%80%90023%E3%80%91%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%E7%AF%871-%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

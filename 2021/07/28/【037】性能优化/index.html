@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          性能优化 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/07/28/【037】性能优化/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                    <h1>性能优化</h1>
+                    <h2 class="subheading">性能优化大集合</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-07-28
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p><img src="/img/post/018/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.png" alt="前端性能优化"></p>
+<h2 id="一、-网络传输"><a href="#一、-网络传输" class="headerlink" title="一、 网络传输"></a>一、 网络传输</h2><h3 id="1-开启HTTP-2"><a href="#1-开启HTTP-2" class="headerlink" title="1. 开启HTTP/2"></a>1. 开启HTTP/2</h3><ul>
+<li>多路复用：多个请求复用一次网络连接，实现真正意义的并发</li>
+<li>二进制传输：解析更高效、体积更小、不易出错</li>
+<li>消息头压缩：压缩消息头体积，建立”字典”，用索引号表示重复的字符串</li>
+<li>服务端推送：在用户请求HTML时，一并把页面其他资源主动推送过来（一般不开启）</li>
+</ul>
+<h3 id="2-使用CDN静态部署"><a href="#2-使用CDN静态部署" class="headerlink" title="2. 使用CDN静态部署"></a>2. 使用CDN静态部署</h3><ul>
+<li><p>全局负载均衡</p>
+</li>
+<li><p>缓存系统（命中率—越高越好 &amp; 回源率—越低越好，一般不高于5%）</p>
+</li>
+<li><p>缓存策略调优：</p>
+<p>客户端：强缓存，协商缓存</p>
+<p>CDN节点：缓存时间、缓存刷新、缓存预热</p>
+</li>
+</ul>
+<h3 id="3-使用DNS预解析"><a href="#3-使用DNS预解析" class="headerlink" title="3. 使用DNS预解析"></a>3. 使用DNS预解析</h3><p>DNS解析时比较耗时的操作，一些比较小的网站域名解析甚至需要0.5s之久</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;dns-prefetch&quot;</span> <span class="attr">href</span>=<span class="string">&quot;//example.com&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-提前建立网络连接"><a href="#4-提前建立网络连接" class="headerlink" title="4. 提前建立网络连接"></a>4. 提前建立网络连接</h3><p>浏览器在建立网络连接时，要经过DNS解析、TCP握手等过程，在https场景下还需要进行TLS加密信息验证。我们可以使用preconnect的link标签提前触发上述操作</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preconnect&quot;</span> <span class="attr">href</span>=<span class="string">&quot;//example.com&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preconnect&quot;</span> <span class="attr">href</span>=<span class="string">&quot;//example.com&quot;</span> <span class="attr">crossorigin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-网络传输"><a href="#5-网络传输" class="headerlink" title="5. 网络传输"></a>5. 网络传输</h3><ul>
+<li>域名收敛：把页面资源部署在尽可能少的域名下</li>
+<li>域名发散：把页面资源部署在尽可能多的域名下</li>
+</ul>
+<p>随着时代发展域名发散逐渐落后，使用域名收敛配合H2，可以最大化的节省DNS解析、TCP建连等网络成本，更好的发挥其多路复用的优势，大幅提升页面性能。</p>
+<h3 id="6-使用brotli压缩"><a href="#6-使用brotli压缩" class="headerlink" title="6. 使用brotli压缩"></a>6. 使用brotli压缩</h3><p>谷歌在2015年发布brotli压缩算法，相比gzip，它具有更高的压缩比和更快的压缩性能。</p>
+<ul>
+<li>javascript 体积比gzip小 14%</li>
+<li>HTML 体积比gzip小 21%</li>
+<li>CSS 体积比gzip小 17%</li>
+</ul>
+<h3 id="7-优化HTTPS"><a href="#7-优化HTTPS" class="headerlink" title="7. 优化HTTPS"></a>7. 优化HTTPS</h3><p>目前整个互联网都在大力推行https，但是https的多次握手、TLS相关算法运算等会造成额外的开销导致未经优化的https的性能相比http差距较大</p>
+<ol>
+<li>Session Resume：把昂贵的计算结果保存在Session中复用</li>
+<li>OCSP Stampling：由服务端直接返回OCSP内容，而不需要客户端额外查询</li>
+<li>使用TLS 1.3：只需要一次往返（1-RTT）就可以完成握手</li>
+<li>TCP Fast Open：一个RTT的时间内syn包发出的同时捎上应用层的数据</li>
+<li>HSTS：强制客户端（如浏览器）使用HTTPS与服务器创建连接</li>
+</ol>
+<h2 id="二、使用缓存加速页面"><a href="#二、使用缓存加速页面" class="headerlink" title="二、使用缓存加速页面"></a>二、使用缓存加速页面</h2><h3 id="1-DNS缓存"><a href="#1-DNS缓存" class="headerlink" title="1. DNS缓存"></a>1. DNS缓存</h3><p>浏览器缓存  &gt;  操作系统缓存  &gt;  DNS缓存</p>
+<p>local DNS 查询  &gt;  </p>
+<p>查询 mail.google.com 记录  &gt; </p>
+<p>有则返回结果，无则查询 google.com记录 &gt;  </p>
+<p>有则向上迭代查询，无则查询 com 记录 &gt;  </p>
+<p>有则向上迭代查询，无则执行ROOT开始的迭代查询</p>
+<h3 id="2-宿主浏览器缓存"><a href="#2-宿主浏览器缓存" class="headerlink" title="2. 宿主浏览器缓存"></a>2. 宿主浏览器缓存</h3><ul>
+<li>Memory 缓存</li>
+<li>Cache API 缓存</li>
+<li>HTTP 缓存 （强缓存/协商缓存）</li>
+<li>Push 缓存：当我们使用H2 的Server Push功能时，浏览器会生成一层push缓存。这个缓存存在感比较弱，当其他形式的宿主缓存都失效时，才会使用push缓存。</li>
+</ul>
+<p>当用户重复请求资源时，会按照一定的层次顺序来获取缓存资源，若当前层资源可用则立即返回，否则寻找下一层缓存。</p>
+<p>Memory Cache &gt; Cache API &gt; HTTP Cache &gt; Push Cache &gt; Server</p>
+<h3 id="3-运行时缓存"><a href="#3-运行时缓存" class="headerlink" title="3. 运行时缓存"></a>3. 运行时缓存</h3><ul>
+<li>Cookie：存放一些简单数据</li>
+<li>LocalStrotage： 存储具有一定体积的数据</li>
+<li>DB：存储大量结构化数据</li>
+<li>Memory：存放临时数据</li>
+</ul>
+<h2 id="三、资源网络加载"><a href="#三、资源网络加载" class="headerlink" title="三、资源网络加载"></a>三、资源网络加载</h2><h3 id="1-资源预加载"><a href="#1-资源预加载" class="headerlink" title="1. 资源预加载"></a>1. 资源预加载</h3><ul>
+<li><p>预加载当前页面的资源</p>
+<p>我们可以使用link preload 来声明当前页面所需要的核心资源，可以时一些关键字体、样式、脚本等资源：</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preload&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/assets/font.woff&quot;</span> <span class="attr">as</span>=<span class="string">&quot;font&quot;</span> <span class="attr">type</span>=<span class="string">&quot;font/woff&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>​        在不支持使用link preload的宿主环境中，我们可以通过js编码来提前发起资源请求</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> preloadImg = <span class="function"><span class="params">url</span> =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">const</span> img = <span class="keyword">new</span> Image()</span><br><span class="line">	img.src = url</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>预加载下级页面的资源<br>我们可以使用link prefetch来声明跳转后的页面所需要的核心资源<br>当用户停留在当前页面时，浏览器会在合适的空闲时机提前加载跳转后所需的资源，提升用户后续浏览的体验。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;prefetch&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/library.js&quot;</span> <span class="attr">as</span>=<span class="string">&quot;script&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>​        我们可以使用link prerender来声明跳转后的页面所需要的核心资源</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;prerender&quot;</span> <span class="attr">href</span>=<span class="string">&quot;https://eden.bytedance.net&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-HTML加载"><a href="#2-HTML加载" class="headerlink" title="2. HTML加载"></a>2. HTML加载</h3><p>控制HTML体积：</p>
+<ul>
+<li>传输体积不要超过30KB</li>
+<li>减少DOM节点和属性</li>
+<li>压缩HTML代码</li>
+<li>谨慎使用内联</li>
+</ul>
+<h2 id="四、代码实际运行"><a href="#四、代码实际运行" class="headerlink" title="四、代码实际运行"></a>四、代码实际运行</h2><ol>
+<li>HTML语义化</li>
+<li>多使用伪元素，减少js多DOM的查找遍历</li>
+<li>能用HTML/CSS实现的效果就不要用JS</li>
+<li>逻辑与展示节藕，避免不必要的JS引擎启动</li>
+<li>减少作用域查找和闭包，避免==，使用块级作用域</li>
+</ol>
+<h2 id="五、服务接口"><a href="#五、服务接口" class="headerlink" title="五、服务接口"></a>五、服务接口</h2><h2 id="六、其他"><a href="#六、其他" class="headerlink" title="六、其他"></a>六、其他</h2><h3 id="分析工具："><a href="#分析工具：" class="headerlink" title="分析工具："></a>分析工具：</h3><ol>
+<li>ab</li>
+<li>node –prof</li>
+<li>node –prof-process ./isoxxxxxxxx-v8.log &gt; xxx.text</li>
+<li>Chrome Devtool</li>
+<li><a target="_blank" rel="noopener" href="https://www.webpagetest.org/">https://www.webpagetest.org/</a></li>
+</ol>
+<h3 id="渲染方案"><a href="#渲染方案" class="headerlink" title="渲染方案"></a>渲染方案</h3><p><strong>客户端渲染方案CSR：</strong></p>
+<ol>
+<li>白屏实际长</li>
+<li>html中无内容，SEO不友好</li>
+</ol>
+<p><strong>服务端渲染方案SSR：</strong></p>
+<ol>
+<li>Next 针对 vue</li>
+<li>Nuxt 针对 React</li>
+</ol>
+<p><strong>静态站点生成方案SSG：</strong></p>
+<ol>
+<li>Gatsby  针对 React</li>
+<li>Gridsome 针对 vue</li>
+</ol>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/07/30/【038】设计模式/" data-toggle="tooltip" data-placement="top" title="设计模式">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/07/28/【036】继承/" data-toggle="tooltip" data-placement="top" title="继承">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/07/28/%E3%80%90037%E3%80%91%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/";
+    var disqus_url = "http://yoursite.com/2021/07/28/%E3%80%90037%E3%80%91%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

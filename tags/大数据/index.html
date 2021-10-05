@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/tags/大数据/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<header class="intro-header"
+    style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>CXP&#39;s Blog</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">阳光下永远做小朋友</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+            <!-- 归档列表 -->
+            
+            <!-- 归档列表 -->
+            
+            <div class="mini-post-list js-result d-none">
+                <span class="fa listing-seperator" id="2021">
+                    <span class="tag-text">2021</span>
+                </span>
+                <div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/10/05/【103】终端配置/">
+                            <h2 class="post-title">
+                                终端配置
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                工欲善其事，必先利其器
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/30/【038】设计模式/">
+                            <h2 class="post-title">
+                                设计模式
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                单例模式、策略模式、发布订阅模式、状态模式
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/28/【036】继承/">
+                            <h2 class="post-title">
+                                继承
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                原型链继承、构造函数继承、组合式继承、寄生式组合式继承、ES6继承
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/28/【037】性能优化/">
+                            <h2 class="post-title">
+                                性能优化
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                性能优化大集合
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/25/【102】Vue面试题/">
+                            <h2 class="post-title">
+                                Vue前端面试
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                面试题收集
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/22/【035】跨域/">
+                            <h2 class="post-title">
+                                前端跨域
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                websocket、postMessage、iframe，cors，node代理，Nginx反向代理、jsonp
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/21/【034】前端安全/">
+                            <h2 class="post-title">
+                                前端安全
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                XSS、CSRF、SQL注入，OS注入，爬虫，DDOS、运营商劫持、点击拦截
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/20/【033】React_diff算法/">
+                            <h2 class="post-title">
+                                React2.0_diff算法
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                diff算法
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/19/【032】Vue2.0_diff算法/">
+                            <h2 class="post-title">
+                                Vue2.0_diff算法
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                diff算法
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/12/【101】chrome插件开发指南/">
+                            <h2 class="post-title">
+                                chrome插件开发指南
+                            </h2>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/07/05/【031】React篇5-生态/">
+                            <h2 class="post-title">
+                                React篇5-生态
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                Hooks
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/28/【030】React篇4-Hooks/">
+                            <h2 class="post-title">
+                                React篇3-Hooks
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                Hooks
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/25/【100】Commit规范总结/">
+                            <h2 class="post-title">
+                                Commit规范总结
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                规范
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/23/【029】React篇3-调度/">
+                            <h2 class="post-title">
+                                React篇3-调度
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                调度
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/22/【028】React篇2-虚拟DOM/">
+                            <h2 class="post-title">
+                                React篇2-虚拟DOM
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                虚拟DOM
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/21/【027】React篇1/">
+                            <h2 class="post-title">
+                                React篇1-基础思想
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                基础思想
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/20/【026】浏览器原理篇4-导航流程/">
+                            <h2 class="post-title">
+                                浏览器原理篇4-导航流程
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                导航流程
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/19/【025】浏览器原理篇3-浏览器存储/">
+                            <h2 class="post-title">
+                                浏览器原理篇3-存储
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                浏览器存储
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/17/【024】浏览器原理篇2-浏览器缓存/">
+                            <h2 class="post-title">
+                                浏览器原理篇2-缓存
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                浏览器缓存
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/16/【023】浏览器原理篇1-渲染流程/">
+                            <h2 class="post-title">
+                                浏览器原理篇1-渲染流程
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                渲染流程
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/16/【022】JavaScript篇13-手写API/">
+                            <h2 class="post-title">
+                                JavaScript篇13—手写代码
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                节流、防抖
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/16/【021】JavaScript篇12-异步实现方案/">
+                            <h2 class="post-title">
+                                JavaScript篇12-异步实现方案
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                异步实现方案
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/15/【020】JavaScript篇11-函数式编程/">
+                            <h2 class="post-title">
+                                JavaScript篇11—函数式编程
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                函数式编程
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/07/【019】JavaScript篇10-EvenLoop/">
+                            <h2 class="post-title">
+                                JavaScript篇10—EvenLoop
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                EvenLoop
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/06/01/【018】JavaScript篇9-垃圾回收机制/">
+                            <h2 class="post-title">
+                                JavaScript篇9—垃圾回收机制
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                垃圾回收机制
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/31/【017】JavaScript篇8-V8引擎/">
+                            <h2 class="post-title">
+                                JavaScript篇8—认识V8引擎
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                认识V8引擎
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/23/【016】JavaScript篇7-数组扁平化/">
+                            <h2 class="post-title">
+                                JavaScript篇7—数组扁平化
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                数组扁平化
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/20/【015】JavaScript篇6-深浅拷贝/">
+                            <h2 class="post-title">
+                                JavaScript篇6—深浅拷贝
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                深拷贝&浅拷贝
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/18/【014】JavaScript篇5-原型&原型链/">
+                            <h2 class="post-title">
+                                JavaScript篇5—原型&原型链
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                原型&原型链
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/16/【013】JavaScript篇4-内存空间/">
+                            <h2 class="post-title">
+                                JavaScript篇4—内存空间
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                内存空间、内存机制
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/15/【012】JavaScript篇3-this/">
+                            <h2 class="post-title">
+                                JavaScript篇3—this
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                this
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/13/【011】JavaScript篇2-执行上下文/">
+                            <h2 class="post-title">
+                                JavaScript篇2—执行上下文
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                作用域、作用域链、闭包
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/11/【010】JavaScript篇1-基础/">
+                            <h2 class="post-title">
+                                JavaScript篇1-基础
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                内置类型、类型转换
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/05/09/【009】EvenLoop/">
+                            <h2 class="post-title">
+                                EventLoop(事件循环机制)
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                事件循环机制
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/04/03/【008】HQL学习/">
+                            <h2 class="post-title">
+                                HQL学习
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                HQL学习
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2021/03/03/【007】大数据每日一题/">
+                            <h2 class="post-title">
+                                大数据每日一题
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                大数据练习题
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="mini-post-list js-result d-none">
+                <span class="fa listing-seperator" id="2020">
+                    <span class="tag-text">2020</span>
+                </span>
+                <div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2020/06/30/【006】HTTP/">
+                            <h2 class="post-title">
+                                HTTP
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                http相关知识总结
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2020/06/29/【005】typeScript+React实践问题总结/">
+                            <h2 class="post-title">
+                                TypeScript+React实践记录总结
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                TypeScript+React搭建项目到实践过程中遇到的一些问题--持续总结
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2020/06/08/【004】前端面试-(HTML5+CSS3)/">
+                            <h2 class="post-title">
+                                前端面试-(HTML+CSS)
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                面试
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2020/06/06/【003】好看就是第一生产力/">
+                            <h2 class="post-title">
+                                好看就是第一生产力
+                            </h2>
+                            
+                            <h3 class="post-subtitle">
+                                微软小工具合集
+                            </h3>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2020/03/07/【002】搭建react+typeScript项目(三)/">
+                            <h2 class="post-title">
+                                搭建React+TypeScript项目(三)
+                            </h2>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2020/03/06/【001】搭建react+typeScript项目(二)/">
+                            <h2 class="post-title">
+                                搭建React+TypeScript项目(二)
+                            </h2>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                    <div class="post-preview item">
+                        <a href="/2020/03/05/【000】搭建react+typeScript项目(一)/">
+                            <h2 class="post-title">
+                                搭建React+TypeScript项目(一)
+                            </h2>
+                            
+                        </a>
+                        <hr>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

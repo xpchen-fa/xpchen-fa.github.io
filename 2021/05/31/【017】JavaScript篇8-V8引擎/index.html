@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          JavaScript篇8—认识V8引擎 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/05/31/【017】JavaScript篇8-V8引擎/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                    <h1>JavaScript篇8—认识V8引擎</h1>
+                    <h2 class="subheading">认识V8引擎</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-05-31
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h3 id="一、-认识V8引擎"><a href="#一、-认识V8引擎" class="headerlink" title="一、 认识V8引擎"></a>一、 认识V8引擎</h3><blockquote>
+<p>V8 是一个谷歌开源的JavaScript引擎，内置在 Chrome 浏览器中，它将 JavaScript 语言编译成机器可以理解的语言并执行。目前市面上有很多 JavaScript 引擎，诸如 SpiderMonkey、JavaScriptCore 等。而 V8 是当下使用最广泛的 JavaScript 引擎，全球有超过 25 亿台安卓设备，而这些设备中都使用了 Chrome 浏览器，所以我们写的 JavaScript 应用，大都跑在 V8 上。</p>
+<p>在 V8 出现之前，所有的 JavaScript 虚拟机采用的都是解释执行的方式，这是 JavaScript 执行速度过慢的一个主要原因。而 V8 率先引入了即时编译（JIT）的双轮驱动的设计，这是一种权衡策略，混合编译执行和解释执行这两种手段，给 JavaScript 的执行速度带来了极大的提升。另外，V8 也引入了惰性编译、内联缓存、隐藏类等机制，进一步优化了 JavaScript 代码的编译执行效率。</p>
+</blockquote>
+<h3 id="二、运行时环境"><a href="#二、运行时环境" class="headerlink" title="二、运行时环境"></a>二、运行时环境</h3><p>当我们把一段JS代码丢给 V8 虚拟机时，<strong>V8 会先首先准备代码的运行时环境，这个环境包括堆空间和栈空间、全局执行上下文、全局作用域、内置的内建函数、宿主环境提供的扩展函数和对象、消息循环系统。</strong></p>
+<h4 id="1-宿主环境"><a href="#1-宿主环境" class="headerlink" title="1.宿主环境"></a>1.宿主环境</h4><p>​        V8 引擎需要一个宿主环境才可以执行JS代码，这个宿主环境可以是浏览器、Node.js 进程，也可以是其他的定制开发环境。<strong>浏览器为V8提供了基础的消息循环系统、全局变量、web API，V8只需提供ECMAScript定义的一些对象和核心函数，这包括了 Object、Function、String。</strong>除此之外，<strong>V8 还提供了垃圾回收器、协程等基础内容，不过这些功能依然需要宿主环境的配合才能完整执行。</strong>Node.js 也是 V8 的另外一种宿主环境，它提供了不同的宿主对象和宿主的 API，但是整个流程依然是相同的，比如 Node.js 也会提供一套消息循环系统，也会提供一个运行时的主线程。</p>
+<h4 id="2-堆空间和栈空间"><a href="#2-堆空间和栈空间" class="headerlink" title="2. 堆空间和栈空间"></a>2. 堆空间和栈空间</h4><p>​        栈空间主要是用来管理 JavaScript 函数调用的，栈是内存中连续的一块空间，同时栈结构是“先进后出”的策略。在函数调用过程中，涉及到上下文相关的内容都会存放在栈上，比如原生类型、引用到的对象的地址、函数的执行状态、this 值等都会存在在栈上。当一个函数执行结束，那么该函数的执行上下文便会被销毁掉。</p>
+<p>​        <strong>栈空间的最大的特点是空间连续，所以在栈中每个元素的地址都是固定的，因此栈空间的查找效率非常高</strong>。但是通常在内存中，很难分配到一块很大的连续空间，因此，V8 对栈空间的大小做了限制，如果函数调用层过深，那么 V8 就有可能抛出栈溢出的错误。</p>
+<p>​        <strong>堆空间是一种树形的存储结构，用来存储对象类型的离散数据，</strong>JavaScript 中除了原生类型的数据，其他的都是对象类型，诸如函数、数组，在浏览器中还有 window 对象、document 对象等，这些都是存在堆空间的。宿主在启动 V8 的过程中，会同时创建堆空间和栈空间，再继续往下执行，产生的新数据都会存放在这两个空间中。</p>
+<h4 id="3-全局执行上下文和全局作用域"><a href="#3-全局执行上下文和全局作用域" class="headerlink" title="3. 全局执行上下文和全局作用域"></a>3. 全局执行上下文和全局作用域</h4><p>​        V8 初始化了基础的存储空间之后，接下来就需要初始化全局执行上下文和全局作用域了。当 V8 开始执行一段可执行代码时，会生成一个执行上下文。V8 用执行上下文来维护执行当前代码所需要的变量声明、this 指向等。</p>
+<p>​        <strong>执行上下文中主要包含三部分，变量环境、词法环境和 this 关键字。</strong>比如在浏览器的环境中，全局执行上下文中就包括了 window 对象，还有默认指向 window 的 this 关键字，另外还有一些 Web API 函数，诸如 setTimeout、XMLHttpRequest 等API。</p>
+<p>​        全局执行上下文在 V8 的生存周期内是不会被销毁的，它会一直保存在堆中，这样当下次在需要使用函数或者全局变量时，就不需要重新创建了。</p>
+<h4 id="4-构造事件循环系统"><a href="#4-构造事件循环系统" class="headerlink" title="4.构造事件循环系统"></a>4.构造事件循环系统</h4><p>​        V8需要一个主线程，用来执行 JavaScript 和执行垃圾回收等工作，V8 是寄生在宿主环境中的，它并没有自己的主线程，而是使用宿主所提供的主线程，V8 所执行的代码都是在宿主的主线程上执行的。</p>
+<p>​        如果只有一个主线程依然是不行的，因为线程执行完一段代码后就会自动退出，为了让线程在执行完代码之后继续运行，需要添加一个循环语句，在循环语句中监听下个事件，不断地获取新事件并执行，大意如下:</p>
+<p>​        如果主线程正在执行一个任务，这时候又来了一个新任务，比如 V8 正在操作 DOM，这时候浏览器的网络线程完成了一个页面下载的任务，而且 V8 注册监听下载完成的事件，那么这种情况下就需要引入一个消息队列，让下载完成的事件暂存到消息队列中，等当前的任务执行结束之后，再从消息队列中取出正在排队的任务。当执行完一个任务之后，我们的事件循环系统会重复这个过程，继续从消息队列中取出并执行下个任务。</p>
+<h3 id="三、生成字节码"><a href="#三、生成字节码" class="headerlink" title="三、生成字节码"></a>三、生成字节码</h3><p><strong>V8准备好运行时环境后，会先对 JavaScript 代码进行解析 (Parser)，并生成为 AST 和作用域信息，之后 AST 和作用域信息被输入到一个称为 Ignition 的解释器中，并将其转化为字节码</strong>，然后再根据情况解释执行字节码或者直接将字节码编译成二进制代码然后执行。</p>
+<h4 id="1-字节码"><a href="#1-字节码" class="headerlink" title="1. 字节码"></a>1. 字节码</h4><p><strong>字节码是指在编译过程中产生的中间代码，可以把字节码看成是为机器代码的抽象</strong>，在V8中，字节码有两个作用:</p>
+<ul>
+<li>第一个是解释器可以直接解释执行字节码 ;</li>
+<li>第二个是优化编译器可以将字节码编译为二进制代码，然后再执行二进制机器代码。</li>
+</ul>
+<p>虽然现在的架构使用了字节码，但在早期的 V8 中并没有字节码，那时候V8团队认为这个中间环节会牺牲代码的执行速度，于是采用了非常激进的策略，直接将JavaScript代码编译成机器代码，但这种模式在最新的V8引擎中已经被抛弃了。原因是什么呢？我们来看看。</p>
+<h4 id="2-代码缓存"><a href="#2-代码缓存" class="headerlink" title="2. 代码缓存"></a>2. 代码缓存</h4><p>当 JavaScript 代码在浏览器中被执行的时候，需要先被 V8 编译，早期的 V8 会将 JavaScript 编译成未经优化的二进制机器代码，然后再执行这些未优化的二进制代码，通常情况下，编译占用了很大一部分时间，几乎和执行所消耗的时间是差不多的。</p>
+<p>怎么样可以节约编译时间呢？是否可以把编译后的二进制码保存下来，如果代码没有做任何改动，直接使用上次的编译结果呢？基于此 V8 引入了二进制代码缓存，通过把二进制代码保存在内存中来节约编译时间。</p>
+<p>V8 使用两种代码缓存策略来缓存生成的代码:</p>
+<ul>
+<li>首先，是 V8 第一次执行一段代码时，会编译源 JavaScript 代码，并将编译后的二进制代码缓存在内存中，我们把这种方式称为<strong>内存缓存</strong>（in-memory cache)。然后通过 JavaScript 源文件的字符串在内存中查找对应的编译后的二进制代码。这样当再次执行到这段代码时，V8 就可以直接去内存中查找是否编译过这段代码。如果内存缓存中存在这段代码所对应的二进制代码，那么就直接执行编译好的二进制代码。</li>
+<li>其次，V8 除了采用将代码缓存在内存中策略之外，还会将代码缓存到硬盘上，这样即便关闭了浏览器，下次重新打开浏览器再次执行相同代码时，也可以直接重复使用编译好的二进制代码。</li>
+</ul>
+<p>实践表明，在浏览器中采用了二进制代码缓存的方式，初始加载时分析和编译的时间缩短了 20%～40%。</p>
+<p>但这个策略是一个很明显的“空间换时间”的策略，牺牲存储空间来换取执行速度，如果缓存的二级制码较多，会占用很大一部分内存。而且存储的是二进制码，其体积也是非常大的。</p>
+<p><img src="/img/post/017/%E4%BB%A3%E7%A0%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%93%E7%A7%AF%E5%AF%B9%E6%AF%94.png"></p>
+<p>从上图我们可以看出，<strong>二进制代码所占用的内存空间是 JavaScript 代码的几千倍</strong>，通常一个页面的 JavaScript 几 M 大小，转换为二进制代码就变成几十 M 了，如果是 PC 应用，多占用一些内存，也不会太影响性能，但是在移动设备流行起来之后，V8 过度占用内存的问题就充分暴露出来了。因为通常一部手机的内存不会太大，如果过度占用内存，那么会导致 Web 应用的速度大大降低。</p>
+<p>为了解决内存占用的问题，V8团队提出了生成中间产物字节码，将字节码缓存起来，同样可以达到节约二次编译时间的目的，同时内存占用大小会大大降低。</p>
+<p><img src="/img/post/017/%E4%BB%A3%E7%A0%81%E5%AD%97%E8%8A%82%E7%A0%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%93%E7%A7%AF%E5%AF%B9%E6%AF%94.png"></p>
+<p>从图中可以看到字节码虽然比JavaScript大很多，但是比起二进制码已经小了很多了。虽然采用字节码在执行速度上稍慢于机器代码，但是整体上权衡利弊，采用字节码也许是最优解。之所以说是最优解，是<strong>因为采用字节码除了降低内存之外，还提升了代码的启动速度，并降低了代码的复杂度，而牺牲的仅仅是一点执行效率。</strong></p>
+<h4 id="3-提升速度-amp-降低复杂度"><a href="#3-提升速度-amp-降低复杂度" class="headerlink" title="3. 提升速度&amp;降低复杂度"></a>3. 提升速度&amp;降低复杂度</h4><p>生成机器代码比生成字节码需要花费更久的时间，但是直接执行机器代码却比解释执行字节码要更高效，所以在快速启动 JavaScript 代码与花费更多时间获得最优运行性能的代码之间，我们需要找到一个平衡点。V8 使用的模型，解释器叫 Ignition，（就原始字节码执行速度而言）是所有引擎中最快的解释器。V8 的优化编译器名为 TurboFan，最终由它生成高度优化的机器码。</p>
+<p>早期的 V8 代码是基于 AST 抽象语法树来将代码转换为机器码的，我们知道，不同架构的机器码是不一样的，而市面上存在不同架构的处理器又是非常之多，你可以参看下图：</p>
+<p><img src="/img/post/017/%E6%BA%90%E7%A0%81%E8%BD%AC%E6%8D%A2%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B.png"></p>
+<p>这意味着基线编译器和优化编译器要针对不同的体系的 CPU 编写不同的代码，这会大大增加代码量。引入了字节码，就可以统一将字节码转换为不同平台的二进制代码，你可以对比下执行流程：</p>
+<p><img src="/img/post/017/%E6%BA%90%E7%A0%81%E8%BD%AC%E6%8D%A2%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B.png"></p>
+<p>因为字节码的执行过程和 CPU 执行二进制代码的过程类似，相似的执行流程，那么将字节码转换为不同架构的二进制代码的工作量也会大大降低，这就降低了转换底层代码的工作量。</p>
+<h4 id="4-延迟解析"><a href="#4-延迟解析" class="headerlink" title="4. 延迟解析"></a>4. 延迟解析</h4><p>在编译JavaScript代码的过程中，V8 并不会一次将所有的 JavaScript 解析为字节码，处于以下思考:</p>
+<ul>
+<li>首先，如果一次解析和编译所有的 JavaScript 代码，过多的代码会增加编译时间，这会严重影响到首次执行 JavaScript 代码的速度，让用户感觉到卡顿。因为有时候一个页面的 JavaScript 代码都有 10 多兆，如果要将所有的代码一次性解析编译完成，那么会大大增加用户的等待时间；</li>
+<li>其次，解析完成的字节码和编译之后的机器代码都会存放在内存中，如果一次性解析和编译所有 JavaScript 代码，那么这些中间代码和机器代码将会一直占用内存，特别是在手机普及的年代，内存是非常宝贵的资源。</li>
+</ul>
+<p>基于以上原因，几乎所有的 JavaScript 虚拟机都实现了延迟解析，也称惰性解析。所谓惰性解析就是解析器解析的过程中，如果遇到函数声明，会先跳过函数内部的代码，并不会为其生成 AST 和 字节码，而仅仅生成顶层代码需要的 AST 和字节码。</p>
+<p>举个🌰看看:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a,b</span>) </span>&#123;</span><br><span class="line"> <span class="keyword">var</span> d = <span class="number">100</span></span><br><span class="line"> <span class="keyword">var</span> f = <span class="number">10</span></span><br><span class="line"> <span class="keyword">return</span> d + f + a + b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">var</span> c = <span class="number">4</span></span><br><span class="line">foo(<span class="number">1</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<p>当 V8 拿到代码后，自上而下地解析代码，在解析过程中首先会遇到 <code>foo</code> 函数，由于这只是一个函数声明语句，V8 在这个阶段只会将这个函数转成为一个函数对象，如下图所示:</p>
+<p><img src="/img/post/017/%E5%BB%B6%E8%BF%9F%E8%A7%A3%E6%9E%901.png"></p>
+<p>这时并不会解析和编译 foo 函数内部的代码，所以也不会为 foo 函数生成抽象语法树。继续向下解析，由于后续代码都是顶层代码，V8 会为他们生成抽象语法树，最终的结果如下:</p>
+<p><img src="/img/post/017/%E5%BB%B6%E8%BF%9F%E8%A7%A3%E6%9E%902.png"></p>
+<p>代码解析完成后，V8 会按照顺序自上而下执行代码，首先会执行 <code>a=1</code> 和 <code>c=4</code> 这两个赋值表达式，接下来会执行 foo 函数的调用，过程是从 foo 函数对象中取出函数代码，然后和编译顶层代码一样，V8 会先编译 foo 函数的代码，编译时同样需要先将其编译成抽象语法树和字节码，然后再解析执行。</p>
+<h3 id="三、执行字节码"><a href="#三、执行字节码" class="headerlink" title="三、执行字节码"></a>三、执行字节码</h3><p>V8使用 Ignition 解释器来解释执行字节码，我们举个🌰 看看，这里有一段代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line"> <span class="keyword">var</span> z = x+y</span><br><span class="line"> <span class="keyword">return</span> z</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(add(<span class="number">1</span>, <span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+
+<p>生成的字节码是:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">StackCheck</span><br><span class="line">Ldar a1</span><br><span class="line">Add a0, <span class="section">[0]</span></span><br><span class="line">Star r0</span><br><span class="line">LdaSmi <span class="section">[2]</span></span><br><span class="line">Star r1</span><br><span class="line">Ldar r0</span><br><span class="line">Return</span><br></pre></td></tr></table></figure>
+
+<p>因为解释器就是模拟物理机器来执行字节码的，比如可以实现如取指令、解析指令、执行指令、存储数据等，所以解释器的执行架构和 CPU 处理机器代码的架构类似，我们试着解释一下这段字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">StackCheck</span><br><span class="line">Ldar a1 // Ldar表示将寄存器中的某个值加载到累加器中，这个指令是把a1寄存器的值放在累加器中,a1的值是1</span><br><span class="line">Add a0, [0] // 将a0寄存器的值和累加器中的值相加，再存入累加器中，此时寄存器的值是2</span><br><span class="line">Star r0 // 把累加器中的值保存到某个寄存器中，将累加器的值3保存到r0</span><br><span class="line">LdaSmi [2] // 将小整数2加载到寄存器中</span><br><span class="line">Star r1 // 将累加器中的值2保存在r1中</span><br><span class="line">Ldar r0 // 将r0的值3加载进累加器</span><br><span class="line">Return // 结束执行，并将累加器中的值3返回</span><br></pre></td></tr></table></figure>
+
+<p>和汇编语言其实有点像，操作寄存器来计算结果。</p>
+<p>通常有两种类型的解释器，<strong>基于栈 (Stack-based)和基于寄存器 (Register-based)，基于栈的解释器使用栈来保存函数参数、中间运算结果、变量等，基于寄存器的虚拟机则支持寄存器的指令操作，使用寄存器来保存参数、中间计算结果</strong>。大多数解释器都是基于栈的，比如 Java 虚拟机，.Net 虚拟机，还有早期的 V8 虚拟机，现在的V8 虚拟机则采用了基于寄存器的设计。V8支持的字节码很多,对字节码感兴趣的同学可以到 <a target="_blank" rel="noopener" href="https://github.com/v8/v8/blob/master/src/interpreter/bytecodes.h">V8源码</a> 看看~</p>
+<h3 id="四、执行机器码"><a href="#四、执行机器码" class="headerlink" title="四、执行机器码"></a>四、执行机器码</h3><p>字节码虽然可以直接解释执行，但是耗时较长，为了优化代码执行速度，V8在解释器内增加了一个监控机器人，在解释执行字节码的过程中，如果发现某一段代码被重复执行多次，那么监控机器人会将这段代码标记为热点代码。</p>
+<p><strong>当某段代码被标记为热点代码后，V8就会将这段字节码丢给优化编译器TurboFan，优化编译器会在后台将字节码编译成二进制代码，然后再对编译后的二进制代码进行优化操作，优化后的二进制机器代码的执行效率会得到大幅提升。如果下面再执行到这段代码时，那么 V8 会优先选择优化之后的二进制代码，这样代码的执行速度就会大幅提升。</strong></p>
+<p>不过，和静态语言不同的是，JavaScript 是一种非常灵活的动态语言，对象的结构和属性是可以在运行时任意修改的，而经过优化编译器优化过的代码只能针对某种固定的结构，一旦在执行过程中，<strong>对象的结构被动态修改了，那么优化之后的代码势必会变成无效的代码，这时候优化编译器就需要执行反优化操作，经过反优化的代码，下次执行时就会回退到解释器解释执行</strong>。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="/img/post/017/%E5%85%A8%E6%B5%81%E7%A8%8B.png"></p>
+<p>整个编译流水线的流程依次为: </p>
+<ol>
+<li>初始化基础环境；</li>
+<li>解析源码生成 AST 和作用域；</li>
+<li>依据 AST 和作用域生成字节码；</li>
+<li>解释执行字节码；</li>
+<li>监听热点代码；</li>
+<li>优化热点代码为二进制的机器代码；</li>
+<li>反优化生成的二进制机器代码。</li>
+</ol>
+<p>这里值得一提的是，JavaScript 是一门动态语言，在运行过程中，某些被优化的结构可能会被 V8 动态修改了，这会导致之前被优化的代码失效，如果某块优化之后的代码失效了，那么编译器需要执行反优化操作。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/06/01/【018】JavaScript篇9-垃圾回收机制/" data-toggle="tooltip" data-placement="top" title="JavaScript篇9—垃圾回收机制">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/05/23/【016】JavaScript篇7-数组扁平化/" data-toggle="tooltip" data-placement="top" title="JavaScript篇7—数组扁平化">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/05/31/%E3%80%90017%E3%80%91JavaScript%E7%AF%878-V8%E5%BC%95%E6%93%8E/";
+    var disqus_url = "http://yoursite.com/2021/05/31/%E3%80%90017%E3%80%91JavaScript%E7%AF%878-V8%E5%BC%95%E6%93%8E/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

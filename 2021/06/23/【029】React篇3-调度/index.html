@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          React篇3-调度 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/06/23/【029】React篇3-调度/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                    <h1>React篇3-调度</h1>
+                    <h2 class="subheading">调度</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-06-23
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>重写reconciler的结果就是能够支持异步可中断的更新。我们刚刚说重写的目的是流畅的渲染，那和异步可中断有什么关系呢？React团队认为优化不同任务的执行顺序(调度)可以大幅度降低响应延迟，而调度就必须要任务是可中断的。</p>
+<p>更根本地说，之所以调度能够优化，是因为现代前端的交互足够复杂：浏览器本身就是一个小型操作系统，有输入有输出有内核有数量庞大的应用和用户（还有安全隐患）。大部分其它需要调度优化的场景，我们都是直接开一个额外的线程/进程运行费时的任务让系统来调度。但是浏览器作为底层系统只给予了非常非常有限的调度能力：</p>
+<ul>
+<li><p>单线程的事件循环模型不能进行更细粒度的控制</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/facebook/react/issues/3092#issuecomment-183154290">Web Worker的使用有所限制</a>：大致因为现有的Web Worker不能正确处理layout，如果有Compositor Worker也许就不是现在这样的实现了——注意，React Native是没有这个问题的</p>
+</li>
+</ul>
+<p>React设计的调度器可以分成：</p>
+<ol>
+<li>调度JS和浏览器其他线程（GUI）的部分A</li>
+<li>调度JS线程内部任务的部分B。</li>
+</ol>
+<blockquote>
+<p>前者可以理解成是为了实现帧（虽然现在默认是三分之一帧）的调度，后者是帧内的调度。</p>
+<p>而调度功能的实现也拆分成了两半：一个是独立于React的scheduler库（以下scheduler特指这个库）负责A和为B提供框架；Fiber reconciler里利用sheduler的框架实现React内部组件更新的调度。</p>
+</blockquote>
+<h2 id="scheduler"><a href="#scheduler" class="headerlink" title="scheduler"></a>scheduler</h2><p>调度器的基本职责是什么呢？当然就是让任务在恰当的时间运行。这个恰当有几个含义：</p>
+<ul>
+<li><p>重要的任务要先运行</p>
+</li>
+<li><p>不重要的任务虽然不重要，但是不能不运行</p>
+</li>
+<li><p>同样重要的任务最好（让用户觉得在）同时运行——并发</p>
+</li>
+</ul>
+<p>这就导致了我们需要：</p>
+<ul>
+<li><p>优先级</p>
+</li>
+<li><p>防止饥饿</p>
+</li>
+<li><p>分时(time slicing)：将每个任务切成小片，轮流执行小片段</p>
+</li>
+</ul>
+<p>概括地说，React的解决方案，就是每次运行优先级最高的几个任务直到超过5ms(可设置)，然后把控制权交给浏览器（宿主环境），让浏览器绘制DOM或者做其他任何事情。</p>
+<p>具体的实现则是设计了一个基于分时的合作式优先级调度器（解决优先级和time slicing的问题），其中单个任务的优先级会随着等待时间的增加而增加（解决饥饿的问题）。“基于分时的合作式优先级调度器”的含义是：</p>
+<ul>
+<li>优先级：React设计了6个不同的优先级，高优先级可以插低优先级任务的队。而优先级实质上就是指该任务可以忍受的过期时间，优先级越高的任务过期时间越小。最高优先级ImmediatePriority的过期时间是-1，意味着它立刻过期，而最低优先级IdlePriority的过期时间是maxSigned31BitInt，意味着永不过期。默认优先级是NormalPriority，它可以忍受5秒之内不执行。</li>
+<li>合作式：实现插队有两种方式。抢占式——强制中断低优先级函数的运行；合作式——低优先级的函数主动出让控制权，让调度器看看有没有高优先级的任务要插队。JS中没法强制中断一个函数，所以只能用合作式。</li>
+<li>基于分时：除了解决并发需要分时，合作式也要求分时。因为主动出让控制器的频率不能太低，否则高优先级的任务要过很久才能被调度。但毕竟是合作式，分时注定是约定而不是严格的。</li>
+</ul>
+<p>分时将JS线程切成片段，React的调度器切了三层：</p>
+<ul>
+<li><p>JS线程切成多个调度周期。一个调度周期是5ms（可自定义）左右的小片段，和浏览器其他线程交替运行——因为合作式的特性，不能保证真正在5ms。调度器只能在新任务启动时检查是否超过5ms，如果最后一个任务根本不停止，这个调度周期就永远不会结束。在合作良好的情况下，一个调度周期大概是5ms多一点点。</p>
+</li>
+<li><p>调度周期可以切成多个task（或一个task的多个片段）。task有优先级并且可以中断，是scheduler调度的基本单位。（以下task特指scheduler调度的单位，而任务=工作=函数执行）</p>
+</li>
+<li><p>task又可以切成多个片段。因为每个task包含一个回调函数（真正被调度的工作），根据合作式调度的约定，这个回调函数会分步骤完成，每个步骤结束会return它自己作为未完成的标志，这样task就可以中断在任一步骤的结束处，恢复时只要再一次调用它自己就行了。</p>
+</li>
+</ul>
+<p>具体的实现可以阅读下面的文章：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/110161396">react scheduler 再解析篇</a>          <a target="_blank" rel="noopener" href="https://juejin.cn/post/6889314677528985614">调度原理</a>          <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000039101758">调度机制原理</a></p>
+<h2 id="reconciler中的调度"><a href="#reconciler中的调度" class="headerlink" title="reconciler中的调度"></a>reconciler中的调度</h2><p>scheduler提供了依优先级执行task的框架，reconciler中的调度则要解决</p>
+<ul>
+<li><p>React的更新要拆分成哪些片段</p>
+</li>
+<li><p>这些片段要以什么优先级进入scheduler</p>
+</li>
+<li><p>高优先级打断低优先级任务之后怎么确保状态的一致</p>
+</li>
+</ul>
+<p>简单地概括React的答案：</p>
+<ul>
+<li><p>一次页面更新拆成两个阶段，render阶段将vDOM的diff拆成页面上每个vDOM的update(以下update特指vDOM的一个更新操作)，commit阶段是一个不可中断的将整体diff结果同步到DOM上的任务：</p>
+<ul>
+<li>一次页面更新 = 一个render task+一个commit task</li>
+</ul>
+</li>
+<li><p>一个vDOM的update = render task的一个步骤</p>
+</li>
+<li><p>render task的优先级基本取决于触发该更新的事件的性质。但如果已经安排了不少update，那更新优先级可能会降低。commit task的优先级是最高优先级——立即执行</p>
+<ul>
+<li>task的优先级 = max{update的优先级 | 该页面更新引发的所有update}</li>
+</ul>
+</li>
+<li><p>update优先级 = f(触发更新的事件性质，已经被安排的update的优先级)</p>
+</li>
+<li><p>按顺序记录所有update，每次render挑选符合优先级的执行，但是并不删除记录，直到某次render执行完全部update才会删除记录（方便理解的错误描述，具体看下面）。</p>
+</li>
+</ul>
+<h3 id="Fiber"><a href="#Fiber" class="headerlink" title="Fiber"></a><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903909186617357">Fiber</a></h3><blockquote>
+<p><strong>React Fiber是对核心算法的一次重新实现，用于替换原本的Stack Reconciler</strong> <a target="_blank" rel="noopener" href="https://claudiopro.github.io/react-fiber-vs-stack-demo/">demo</a></p>
+</blockquote>
+<p>在Fiber reconciler中它有三重含义：</p>
+<ul>
+<li><p>从组件的角度说，它等于vDOM</p>
+</li>
+<li><p>从调度的角度说，它是工作的基本单元（因为一个组件包含的数据量不大，将Fiber作为5ms以内完成的工作单位正合适）</p>
+</li>
+<li><p>从实现的角度说，在内存上它还对应着一种数据结构，其既包含组件的信息（作为vDOM），也包括运行的上下文信息（作为工作的基本单元），包括这些：<a target="_blank" rel="noopener" href="https://react.iamkasong.com/process/fiber.html#fiber%E7%9A%84%E7%BB%93%E6%9E%84">fiber的结构</a></p>
+</li>
+</ul>
+<p>可以想象，React的开发者认为一个组件(不包含子组件)的更新(包括创建删除)就是一个线程。整个组件树的更新就是一个个组件之间互相接力完成的工作。接力在数据结构上的体现就是Fiber之间构成了一个链表结构。</p>
+<p>Fiber虽然是一个基本工作单位，但不对应scheduler中的task，而是task的一个步骤。一个task对应的其实是一个ReactDOM.render()。你写了多少个ReactDOM.render()，就有多少个task。通常我们只在入口写一次ReactDOM.render()，scheduler中就会永远只有一个task。可能是render task，可能render task完成后改为commit task，也可能render task中途遇见一个更高优先级的render task取消了之前的再新建了一个。</p>
+<p>Fiber在render task中严格遵守合作式调度的要求，每次完成一步（一个Fiber的render）就问一下scheduler该不该暂停。整个vDOM树都diff完后，我们会得到一个包含所有更新的记录（在一个叫effect list的列表里）。注意，render跟renderer不是同一个含义，而是浏览器render-tree的render，表示<strong>绘制</strong>之前对DOM样式的<strong>计算</strong>。</p>
+<p>commit task把effect list的影响一次性在浏览器上全部绘制出来。这个task会不可中断地运行到完成，因为页面绘制如果可中断会引起页面状态的不一致。</p>
+<p>commit task把effect list的影响一次性在浏览器上全部绘制出来。这个task会不可中断地运行到完成，因为页面绘制如果可中断会引起页面状态的不一致。</p>
+<p>于是vDOM的渲染过程，两个阶段是这样：</p>
+<blockquote>
+<p>…→状态变化→新Component树 →旧v树+concurrentDiff(旧Fiber树, 新Fiber树)→旧DOM树+commit(diff结果)→…</p>
+</blockquote>
+<p>而加上调度则是这样：</p>
+<blockquote>
+<p>…→旧Fiber树+concurrentDiff(旧Fiber树, 新Fiber树, 低优先级)→高优先级插队→旧Fiber树+concurrentDiff(旧Fiber树, 新新Fiber树, 高优先级)→旧DOM树+commit(diff结果)→新Component树→新Fiber树+继续concurrentDiff(旧Fiber树, 新新Fiber树, 低优先级)→新DOM树+commit(diff结果)→…</p>
+</blockquote>
+<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000038947307">优先级</a></h3><p>React不直接使用scheduler的六个优先级，而是用一个额外的模型，最后做了一层该模型优先级到scheduler优先级的映射。现在这个额外模型是lane模型，<a target="_blank" rel="noopener" href="https://react.iamkasong.com/concurrent/lane.html#">参考这里</a> 表示优先级的不同，以下我们用lane简称Fiber reconciler里的优先级。</p>
+<p>额外的模型主要带来了两个好处：</p>
+<ul>
+<li><p>lane是根据触发事件的性质决定的，这是从应用角度思考的模型，它不用受制于只有六种优先级，可以更细致，也可以在语义上更明确每条lane意味着什么</p>
+</li>
+<li><p>lane允许reconciler自己再做一层内部调度，决定哪些操作可以先进入sheduler调度，哪些操作后被调度，而这个决策的依据就可以和scheduler优先级的依据不一致。</p>
+</li>
+</ul>
+<p>譬如网络请求，它从触发事件性质上可能是高优先级的，但是它很耗时，没有必要阻塞低优先级的CPU任务，但是把它设置为低优先级又和语义（触发事件的性质）不符。这时React可以自行调度，决定这次更新先不处理这个“高优先级”的网络请求，而是处理两个高、低优先级的CPU任务。（官方的解说参见<a target="_blank" rel="noopener" href="https://github.com/facebook/react/pull/18796#issue-411947697%EF%BC%89">https://github.com/facebook/react/pull/18796#issue-411947697）</a></p>
+<p>lane作用在触发更新的整个流程（具体内容可能在新React版本有变动）：</p>
+<ol>
+<li>触发update的场景：用户事件回调函数/render()中的setState,forceUpdate；ReactDOM.render()。我们主要关心用户事件的场景，其中<a target="_blank" rel="noopener" href="https://github.com/facebook/react/blob/696e736be11b22e8d4fa40438d235b63db7fddde/packages/react-dom/src/events/ReactDOMEventListener.js#L361">DOM事件主要分为两类</a>：离散事件、连续事件，分别对应InputDiscreteLanePriority，InputContinuousLanePriority。</li>
+<li>事件产生update：update会根据场景lane，以及已经被占用的lanes来设置一个合适的lane。大概就是在已经被占用的lanes中，从事件lane的位置开始找空位，找不到就往更低优先级的lane找(requestUpdateLane)。</li>
+<li>updates纳入一个task：这次事件所有updates的lane会归并到root.pendinglanes，reconciler会综合考虑之前过期的lanes、暂停的lanes等情况挑选出这次task应该执行哪些lanes(getNextLanes)，并选择其中最优先lane的优先级作为task的lane优先级。</li>
+<li>将task传给scheduler调度：根据task的lane优先级查找对应的scheduler优先级，进行调度。</li>
+</ol>
+<h3 id="状态的一致"><a href="#状态的一致" class="headerlink" title="状态的一致"></a><a target="_blank" rel="noopener" href="https://react.iamkasong.com/state/priority.html#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E7%8A%B6%E6%80%81%E6%AD%A3%E7%A1%AE">状态的一致</a></h3><p>最重要的就是一个不轻易删除的、按顺序记录的update链表(fiber.updateQueue)。记录暂停的位置可以在中断后继续接着的更新。而只要不轻易删除被跳过的低优先级update，插队也不会导致错误的最终状态：</p>
+<ul>
+<li><p>每次更新Fiber都会遍历updateQueue，如果某个update的优先级低于当前task的优先级，该update会被跳过但不会被删除。如果有update被跳过，它后面所有的任务都不会被删除。换句话说，只有[queue第一个元素，第一个因低优先级跳过的元素)左闭右开区间内的update才会被删除。</p>
+</li>
+<li><p>高优先级的task执行完之后会以原先低优先级的task级别再次遍历updateQueue，直到updateQueue清空。</p>
+</li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/06/25/【100】Commit规范总结/" data-toggle="tooltip" data-placement="top" title="Commit规范总结">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/06/22/【028】React篇2-虚拟DOM/" data-toggle="tooltip" data-placement="top" title="React篇2-虚拟DOM">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/06/23/%E3%80%90029%E3%80%91React%E7%AF%873-%E8%B0%83%E5%BA%A6/";
+    var disqus_url = "http://yoursite.com/2021/06/23/%E3%80%90029%E3%80%91React%E7%AF%873-%E8%B0%83%E5%BA%A6/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

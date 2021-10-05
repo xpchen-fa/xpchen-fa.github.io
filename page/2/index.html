@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/page/2/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>CXP&#39;s Blog</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">阳光下永远做小朋友</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+            
+                <!-- Main Content -->
+
+
+<div class="post-preview">
+
+    <a href="/2021/06/16/【023】浏览器原理篇1-渲染流程/">
+        <h2 class="post-title">
+            浏览器原理篇1-渲染流程
+        </h2>
+        <h3 class="post-subtitle">
+            渲染流程
+        </h3>
+        <div class="post-content-preview">
+            关于浏览器渲染流程，很多同学会给出如下答案，也是我之前一直以为的答案：
+
+浏览器根据html文件构建出DOM Tree，根据CSS文件构建出CSS stylesheets，浏览器解析完CSS和JS文件后将两个文件结合生成Render Tree，然后渲染到屏幕上。
+
+这个答案不算错，但是不够具体。本文就来详细地聊聊浏览器渲染，在开始正文之前，需要特别指出，本文的分析都是基于 Chrome 浏......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-16
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/16/【021】JavaScript篇12-异步实现方案/">
+        <h2 class="post-title">
+            JavaScript篇12-异步实现方案
+        </h2>
+        <h3 class="post-subtitle">
+            异步实现方案
+        </h3>
+        <div class="post-content-preview">
+            前言在了解异步方案前，需要了解的是执行上下文和EvenLoop部分。
+简单了解EvenLoop的运行机制：
+
+
+所有同步任务都在主线程上执行，形成一个执行栈(execution context stack）。
+主线程之外，还存在一个”task queue”。只要异步任务有了运行结果，就在”task queue”之中放置一个事件。
+一旦”执行栈”中的所有同步任务执行完毕，系统就会读取”task......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-16
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/15/【020】JavaScript篇11-函数式编程/">
+        <h2 class="post-title">
+            JavaScript篇11—函数式编程
+        </h2>
+        <h3 class="post-subtitle">
+            函数式编程
+        </h3>
+        <div class="post-content-preview">
+            编程范式(Programming paradigm)引用维基百科上的解释：
+
+编程范式是一类典型的编程风格，是指从事软件工程的一类典型的风格。如：函数式编程、过程式编程、面向对象编程、指令式编程等等为不同的编程范式。
+
+
+编程范式提供了（同时决定了）程序员对程序执行的看法。例如，在面向对象编程中，程序员认为程序是一系列相互作用的对象，而在函数式编程中一个程序会被看作是一个无状态的函数计算的序......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-15
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/07/【019】JavaScript篇10-EvenLoop/">
+        <h2 class="post-title">
+            JavaScript篇10—EvenLoop
+        </h2>
+        <h3 class="post-subtitle">
+            EvenLoop
+        </h3>
+        <div class="post-content-preview">
+            看了阮一峰的evenloop的文章，发现之前了解的宏任务，微任务既不好理解，也不正确，Help I’m stuck in an event loop 推荐看这个，更好的了解EvenLoop；如果想要看上下文的执行情况可以使用演讲中用到这个网站  latentflip.com
+一、JavaScript是单线程
+JavaScript的单线程，与它的用途有关。作为浏览器脚本语言，JavaScrip......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-07
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/01/【018】JavaScript篇9-垃圾回收机制/">
+        <h2 class="post-title">
+            JavaScript篇9—垃圾回收机制
+        </h2>
+        <h3 class="post-subtitle">
+            垃圾回收机制
+        </h3>
+        <div class="post-content-preview">
+            一、 垃圾回收策略通常情况下，垃圾数据回收分为手动回收和自动回收两种策略。大家熟悉的 C/C++ 语言属于手动回收策略，需要开发者手动控制内存的分配和销毁，另一种策略是自动垃圾回收策略，如 JavaScript、Java、Python 等语言，产生的垃圾数据是由垃圾回收器来释放的，并不需要手动通过代码来释放。
+JavaScript “自动”释放资源这个特性让很多 JavaScript 开发者......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-01
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/31/【017】JavaScript篇8-V8引擎/">
+        <h2 class="post-title">
+            JavaScript篇8—认识V8引擎
+        </h2>
+        <h3 class="post-subtitle">
+            认识V8引擎
+        </h3>
+        <div class="post-content-preview">
+            一、 认识V8引擎
+V8 是一个谷歌开源的JavaScript引擎，内置在 Chrome 浏览器中，它将 JavaScript 语言编译成机器可以理解的语言并执行。目前市面上有很多 JavaScript 引擎，诸如 SpiderMonkey、JavaScriptCore 等。而 V8 是当下使用最广泛的 JavaScript 引擎，全球有超过 25 亿台安卓设备，而这些设备中都使用了 Chr......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-31
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/23/【016】JavaScript篇7-数组扁平化/">
+        <h2 class="post-title">
+            JavaScript篇7—数组扁平化
+        </h2>
+        <h3 class="post-subtitle">
+            数组扁平化
+        </h3>
+        <div class="post-content-preview">
+            1、Array.prototype.flat() 特性
+注：数组拍平方法 Array.prototype.flat() 也叫数组扁平化、数组拉平、数组降维。 本文统一叫：数组拍平
+
+12345678910111213141516171819202122const animals = [&quot;🐷&quot;, [&quot;🐶&quot;, &quot;🐂&quot;], [&qu......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-23
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/20/【015】JavaScript篇6-深浅拷贝/">
+        <h2 class="post-title">
+            JavaScript篇6—深浅拷贝
+        </h2>
+        <h3 class="post-subtitle">
+            深拷贝&浅拷贝
+        </h3>
+        <div class="post-content-preview">
+            赋值和深/浅拷贝的区别这三者的区别如下，不过比较的前提都是针对引用类型：
+
+当我们把一个对象赋值给一个新的变量时，赋的其实是该对象的在栈中的地址，而不是堆中的数据。也就是两个对象指向的是同一个存储空间，无论哪个对象发生改变，其实都是改变的存储空间的内容，因此，两个对象是联动的。
+浅拷贝：重新在堆中创建内存，拷贝前后对象的基本数据类型互不影响，但拷贝前后对象的引用类型因共享同一块内存，会相互影......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-20
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/18/【014】JavaScript篇5-原型&原型链/">
+        <h2 class="post-title">
+            JavaScript篇5—原型&原型链
+        </h2>
+        <h3 class="post-subtitle">
+            原型&原型链
+        </h3>
+        <div class="post-content-preview">
+            1. 原型和原型链
+2. Constructor 构造函数构造函数一般为了区别普通函数要求首字母大写
+1function Person()&#123;&#125;
+
+3. prototype 原型每一个对象都有他的原型对象，他可以使用自己原型对象上的所有属性和方法
+
+原型指的就是一个对象，实例“继承”那个对象的属性。
+在原型上定义的属性，通过“继承”，实例也拥有了这个属性。
+“继承”这个行为......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-18
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/16/【013】JavaScript篇4-内存空间/">
+        <h2 class="post-title">
+            JavaScript篇4—内存空间
+        </h2>
+        <h3 class="post-subtitle">
+            内存空间、内存机制
+        </h3>
+        <div class="post-content-preview">
+            1、内存空间在 JavaScript 的执行过程中， 主要有三种类型内存空间，分别是代码空间、栈空间和堆空间。其中
+代码空间：主要存储可执行代码。
+栈空间：栈空间即调用栈，用来存储执行上下文，包括变量环境、词法环境等。
+堆空间：负责对象这种变量类型存储
+2、内存机制1234567function foo()&#123; var a = &quot;Chrome&quot; var b = a......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-16
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/15/【012】JavaScript篇3-this/">
+        <h2 class="post-title">
+            JavaScript篇3—this
+        </h2>
+        <h3 class="post-subtitle">
+            this
+        </h3>
+        <div class="post-content-preview">
+            1. JavaScript 中的 this 是什么作用域链和this是两套不同的系统，它们之间基本没有太多的联系。
+关于 this，我们还是得先从执行上下文说起。前文提到执行上下文包含了变量环境、词法环境、outer，但其实还是有一个this没有提及，参考下图：
+
+从上图可以看出，this和执行上下文是绑定的，也就是说每个执行上下文都有一个this。我们知道，执行上下文主要分为三种——全局执......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-15
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/13/【011】JavaScript篇2-执行上下文/">
+        <h2 class="post-title">
+            JavaScript篇2—执行上下文
+        </h2>
+        <h3 class="post-subtitle">
+            作用域、作用域链、闭包
+        </h3>
+        <div class="post-content-preview">
+            一、作用域1. 作用域
+作用域是指程序中变量定义的区域，该位置决定了变量的生命周期。通俗地说，作用域就是变量与函数的可访问范围，作用域控制着变量和函数的可见性和生命周期。
+
+JavaScript在设计之初并未想过这门语言会如此受欢迎，所以只是按照最简单的方式来设计，只保留全局作用域和函数作用域。
+全局作用域 中对象和变量在任何地方都能访问，其生命周期同页面的生命周期。
+函数作用域 是在函数内......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-13
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/11/【010】JavaScript篇1-基础/">
+        <h2 class="post-title">
+            JavaScript篇1-基础
+        </h2>
+        <h3 class="post-subtitle">
+            内置类型、类型转换
+        </h3>
+        <div class="post-content-preview">
+            一、基础知识1、内置类型
+JS 中分为七种内置类型，七种内置类型又分为两大类型：基本类型和对象（Object）。
+
+基本类型有六种： null，undefined，boolean，number，string，symbol   (symbol表示独一无二的值；ES6引入)；引用类型函数，对象，数组
+
+其中 JS 的数字类型是浮点类型的，使用64-bit的浮点数来表示数字，并且浮点类型基于 IE......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-11
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/05/09/【009】EvenLoop/">
+        <h2 class="post-title">
+            EventLoop(事件循环机制)
+        </h2>
+        <h3 class="post-subtitle">
+            事件循环机制
+        </h3>
+        <div class="post-content-preview">
+            EventLoop(事件循环机制)
+最近在学习react的源码，看到了调度模块原理于是就见到了 requestIdleCallback ，顺藤摸瓜就必须先了解一下EventLoop。
+EventLoop从整体上告诉了我们JavaScript代码的执行顺序。
+EventLoop 在 chrome浏览器中 与 nodejs 中相似（TODO：除部分nodejs有但浏览器中没有的API外，查看其他......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-05-09
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/04/03/【008】HQL学习/">
+        <h2 class="post-title">
+            HQL学习
+        </h2>
+        <h3 class="post-subtitle">
+            HQL学习
+        </h3>
+        <div class="post-content-preview">
+            like进行模糊匹配时，%可以匹配多个字符，_匹配任意一个字符123where name like &#x27;陈%&#x27; --找出姓陈的人where name like &#x27;%铭%&#x27; --找出名字中有铭字的人where name like &#x27;陈_&#x27;  --找出姓陈且名字为两个字的人
+
+创建表123456create table facade_qe......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-04-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/03/03/【007】大数据每日一题/">
+        <h2 class="post-title">
+            大数据每日一题
+        </h2>
+        <h3 class="post-subtitle">
+            大数据练习题
+        </h3>
+        <div class="post-content-preview">
+            【案例分析】2021-03-05问题：你的委托人原本生产一种护发产品，现在打算进入防晒护肤品市场。这是不是一个好点子？
+第一步：确定为什么。我们的目标是什么？我们的目标是什么？它是否符合我们的整体战略？
+第二步：确定当前和未来市场的状况。
+
+市场的规模是多少？
+增长率是多少？
+公司处于生命周期的哪个阶段？客户是谁，如何细分?
+技术在行业中扮演什么角色，变化速度如何？
+竞争将如何应对？
+
+第三......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-03-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2020/06/30/【006】HTTP/">
+        <h2 class="post-title">
+            HTTP
+        </h2>
+        <h3 class="post-subtitle">
+            http相关知识总结
+        </h3>
+        <div class="post-content-preview">
+            HTTPget请求与post请求
+GET和POST是什么?HTTP协议中的两种发送请求的方法。HTTP是什么?HTTP是基于TCP/IP的关于数据如何在万维网中如何通信的协议
+
+
+在我大万维网世界中，TCP就像汽车，我们用TCP来运输数据，它很可靠，从来不会发生丢件少件的现象。但是如果路上跑的全是看起来一模一样的汽车，那这个世界看起来是一团混乱，送急件的汽车可能被前面满载货物的汽车拦堵在路上......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2020-06-30
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2020/06/29/【005】typeScript+React实践问题总结/">
+        <h2 class="post-title">
+            TypeScript+React实践记录总结
+        </h2>
+        <h3 class="post-subtitle">
+            TypeScript+React搭建项目到实践过程中遇到的一些问题--持续总结
+        </h3>
+        <div class="post-content-preview">
+            项目搭建
+为了方便直接采用react脚手架搭建项目
+
+
+创建项目，安装依赖
+123456789101112131415//安装脚手架npm install -g create-react-app//创建项目create-react-app my-app --typescriptcd my-app//将配置文件暴露出来npm run eject//安装需要的一些依赖npm install re......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2020-06-29
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2020/06/08/【004】前端面试-(HTML5+CSS3)/">
+        <h2 class="post-title">
+            前端面试-(HTML+CSS)
+        </h2>
+        <h3 class="post-subtitle">
+            面试
+        </h3>
+        <div class="post-content-preview">
+            
+面试面试！关于面试的文章太多了，真正面试需要查缺补漏的时候又不知从何下手，所以自己写一篇文章将看过的一些文章总结一下梳理清楚，也是为了以后面试的时候方便复习哈哈哈。
+
+
+从前端面试最基础的部分开始，HTML5和CSS3的知识在常规的面试中其实不太经常问到，但是既然准备了就从头开始做充分准备。
+
+HTMLHTML5
+一个基本的HTML5页面
+
+123456789101112131415161......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2020-06-08
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2020/06/06/【003】好看就是第一生产力/">
+        <h2 class="post-title">
+            好看就是第一生产力
+        </h2>
+        <h3 class="post-subtitle">
+            微软小工具合集
+        </h3>
+        <div class="post-content-preview">
+            
+微软的一些工具
+
+Windows Terminal
+直接进入Microsoft Store 寻找 Windows Terminal下载启动
+安装power Shell
+安装参考document
+
+
+美化：
+字体安装，我使用的字体cascadia-code
+安装posh-git  1Install-Module posh-git -Scope CurrentUser
+设置 Powershel......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2020-06-06
+    </p>
+
+</div>
+<hr>
+
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+        <li class="previous">
+            <a href="/">&larr; Newer Posts</a>
+        </li>
+    
+    
+        <li class="next">
+            <a href="/page/3/">Older Posts &rarr;</a>
+        </li>
+    
+</ul>
+
+
+
+                <!-- 如果开启评论功能 -->
+                
+
+            </div>
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#React" title="React" rel="10">React</a>
+                            
+                        
+                            
+                            <a href="/tags/#TypeScript" title="TypeScript" rel="4">TypeScript</a>
+                            
+                        
+                            
+                            <a href="/tags/#others" title="others" rel="4">others</a>
+                            
+                        
+                            
+                            <a href="/tags/#面试" title="面试" rel="2">面试</a>
+                            
+                        
+                            
+                            <a href="/tags/#大数据" title="大数据" rel="2">大数据</a>
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#JavaScript" title="JavaScript" rel="17">JavaScript</a>
+                            
+                        
+                            
+                            <a href="/tags/#浏览器原理" title="浏览器原理" rel="4">浏览器原理</a>
+                            
+                        
+                            
+                            <a href="/tags/#Vue" title="Vue" rel="2">Vue</a>
+                            
+                        
+                            
+                            <a href="/tags/#前端安全" title="前端安全" rel="2">前端安全</a>
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+
+                        
+                            <img src="/img/avatar.jpg" />
+                        
+
+                        
+                            <p>人是因为失去激情才变老的</p>
+                        
+
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            
+                            
+
+                            
+
+                            
+
+                            
+                            
+                            
+                            
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Friends Blog -->
+                
+            </div>
+        
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

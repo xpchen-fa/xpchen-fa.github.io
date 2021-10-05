@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          JavaScript篇11—函数式编程 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/06/15/【020】JavaScript篇11-函数式编程/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                    <h1>JavaScript篇11—函数式编程</h1>
+                    <h2 class="subheading">函数式编程</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-06-15
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="编程范式-Programming-paradigm"><a href="#编程范式-Programming-paradigm" class="headerlink" title="编程范式(Programming paradigm)"></a>编程范式(Programming paradigm)</h2><p>引用维基百科上的解释：</p>
+<blockquote>
+<p>编程范式是一类典型的编程风格，是指从事软件工程的一类典型的风格。如：函数式编程、过程式编程、面向对象编程、指令式编程等等为不同的编程范式。</p>
+</blockquote>
+<blockquote>
+<p>编程范式提供了（同时决定了）程序员对程序执行的看法。例如，在面向对象编程中，程序员认为程序是一系列相互作用的对象，而在函数式编程中一个程序会被看作是一个无状态的函数计算的序列。</p>
+</blockquote>
+<blockquote>
+<p>正如软件工程中不同的群体会提倡不同的“方法学”一样，不同的编程语言也会提倡不同的“编程范式”。一些语言是专门为某个特定的范式设计的（如Smalltalk和Java支持面向对象编程，而Haskell和Scheme则支持函数式编程），同时还有另一些语言支持多种范式（如Ruby、Common Lisp、Python和Oz）。</p>
+</blockquote>
+<p>函数式编程属于声明式编程的一种，而与声明式编程相对应的范式是命令式编程。</p>
+<h3 id="命令式编程-Imperative-Programming"><a href="#命令式编程-Imperative-Programming" class="headerlink" title="命令式编程(Imperative Programming)"></a>命令式编程(Imperative Programming)</h3><p>一个 <strong>冯诺伊曼结构（存储程序型电脑）</strong>被抽象成5大组成部分： <strong>控制器、运算器、存储器、输入设备、输出设备</strong></p>
+<p><img src="/img/post/020/%E5%86%AF%E8%AF%BA%E4%BC%8A%E6%9B%BC%E7%BB%93%E6%9E%84.png" alt="冯诺伊曼结构"></p>
+<p>现代计算机设备是基于冯诺依曼结构的产物，而命令式编程则是面向计算机硬件的抽象，有变量（对应存储器），赋值语句（获取，存储指令），表达式（内存引用和算术运算）和控制语句（跳转指令），所谓的“高级语言”， 背后依然是冯诺依曼机器的影子：</p>
+<p><img src="/img/post/020/%E5%91%BD%E4%BB%A4%E5%BC%8F%E7%BC%96%E7%A8%8B.png" alt="命令式编程"></p>
+<p>而命令式编程，实际上就是冯诺依曼结构的指令序列，程序员需要通过指令，精确的告诉计算机干什么事情。因此，在使用命令式编程范式写代码时，程序员做的事情就是把人类语言翻译成精确的计算机语言指令<strong>。我们熟悉的面向对象编程就是命令式编程的一种。</strong></p>
+<h3 id="声明式编程-Declarative-Programming"><a href="#声明式编程-Declarative-Programming" class="headerlink" title="声明式编程(Declarative Programming)"></a>声明式编程(Declarative Programming)</h3><blockquote>
+<p>声明式编程是一种编程范式，与命令式编程相对立。它描述目标的性质，让电脑明白目标，而非流程。声明式编程不用告诉电脑问题领域，从而避免随之而来的副作用。而命令式编程则需要用算法来明确的指出每一步该怎么做。</p>
+</blockquote>
+<h3 id="命令式编程-vs-声明式编程"><a href="#命令式编程-vs-声明式编程" class="headerlink" title="命令式编程 vs. 声明式编程"></a>命令式编程 vs. 声明式编程</h3><ul>
+<li>命令式编程（Imperative）：详细的命令机器怎么（How）去处理一件事情以达到你想要的结果（What）；</li>
+<li>声明式编程（ Declarative）：只告诉你想要的结果（What），机器自己摸索过程（How）</li>
+</ul>
+<h2 id="函数式编程-Functional-Programming"><a href="#函数式编程-Functional-Programming" class="headerlink" title="函数式编程(Functional Programming)"></a>函数式编程(Functional Programming)</h2><p>函数式编程中的<strong>函数</strong>这个词不是指计算机中的函数（实际上是 <strong>Subroutine,</strong> 中文翻译是<strong>子程序</strong>），而是指数学中的函数，即自变量的映射。也就是说一个函数的值仅决定于函数参数的值，不依赖其他状态。比如 sqrt(x) 函数计算 x 的平方根，只要 x 不变，不论什么时候调用，调用几次，值都是不变的。</p>
+<p>从理论上说，函数式语言也不是在<strong>冯诺伊曼结构</strong>的机器上运行的，而是通过<strong>λ演算</strong>来运行的。λ演算是<strong>图灵完全（Turing completeness）</strong>的，但是大多数情况，函数式程序还是被编译成冯诺依曼机的机器语言的指令执行。</p>
+<h3 id="1、函数是一等公民-First-Class"><a href="#1、函数是一等公民-First-Class" class="headerlink" title="1、函数是一等公民(First Class)"></a><strong>1、函数是一等公民(First Class)</strong></h3><p>一等公民指的是函数与其他数据类型一样可以赋值给其他变量，也可以作为其他函数的参数或者返回值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> addOne =  &#123; (a:Int) -&gt; Int <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">return</span> a + <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> computeThenDouble = &#123; (fn :@escaping (Int) -&gt; Int, <span class="attr">a</span>:Int) -&gt; Int <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">return</span> fn(a) * <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> ret = computeThenDouble(addOne, <span class="number">1</span>) <span class="comment">// ret = 4</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2、惰性求值-Lazy-Evaluation"><a href="#2、惰性求值-Lazy-Evaluation" class="headerlink" title="2、惰性求值(Lazy Evaluation)"></a><strong>2、惰性求值(Lazy Evaluation)</strong></h3><p>惰性求值是函数式编程语言的一个特性。在使用惰性计算时，表达式不在它被绑定到变量之后就立即求值，而是在该值被取用的时候求值。惰性计算有如下优点</p>
+<p>首先，你可以用它们来创建无限序列这样一种数据类型。因为直到需要时才会计算值，这样就可以使用惰性集合模拟无限序列</p>
+<ul>
+<li>首先，你可以用它们来创建无限序列这样一种数据类型。因为直到需要时才会计算值，这样就可以使用惰性集合模拟无限序列。</li>
+<li>第二，减少了存储空间。因为在真正需要时才会发生计算。所以，节约了不必要的存储空间。</li>
+<li>第三，减少计算量，产生更高效的代码。因为在真正需要时才会发生计算。例如，寻找数组中第一个符合某个条件的值。</li>
+</ul>
+<blockquote>
+<p> Haskell 的无限列表, <code>[1..]</code> 这是一个无限长的列表。我们是无法在内存上直接放这么大的数组的，但是通过惰性求值就能使用它。从第一个元素开始获取，用到几个计算几个, 这个就是惰性求值的例子。</p>
+</blockquote>
+<h3 id="3、不可变数据-immutable-data"><a href="#3、不可变数据-immutable-data" class="headerlink" title="3、不可变数据(immutable data)"></a>3、不可变数据(immutable data)</h3><p>函数式编程语言中的<strong>变量</strong>也不是命令式编程语言中的变量，即存储状态的单元，而是代数中的变量，即一个值的名称。变量的值是<strong>不可变</strong>的<strong>（immutable）</strong>，也就是说不允许像命令式编程语言中那样多次给一个变量赋值。比如说在命令式编程语言我们写“x = x + 1”，这依赖可变状态的事实，拿给程序员看说是对的，但拿给数学家看，却被认为这个等式为假。</p>
+<p>在其他类型的语言中，变量往往用来保存”状态”（state）。不修改变量，意味着状态不能保存在变量中。函数式编程使用参数保存状态，最好的例子就是递归。下面的代码是一个将字符串逆序排列的函数，它演示了不同的参数如何决定了运算所处的”状态”。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">　<span class="function"><span class="keyword">function</span> <span class="title">reverse</span>(<span class="params">string</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(string.length == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> string;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> reverse(string.substring(<span class="number">1</span>, string.length)) + string.substring(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p>由于使用了递归，函数式语言的运行速度比较慢，这可能也是是长期不能在业界推广的主要原因。</p>
+<h3 id="4、没有副作用-No-Side-Effect"><a href="#4、没有副作用-No-Side-Effect" class="headerlink" title="4、没有副作用(No Side Effect)"></a><strong>4、没有副作用(No Side Effect)</strong></h3><p>所谓<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Side_effect_(computer_science)">“副作用”</a>（side effect），指的是函数内部与外部互动（最典型的情况，就是修改全局变量的值），产生运算以外的其他结果。</p>
+<p>函数式编程强调没有”副作用”，意味着函数要保持独立，所有功能就是返回一个新的值，没有其他行为，尤其是不得修改外部变量的值。</p>
+<p>副作用包括但不限于以下行为：</p>
+<ul>
+<li>改变一个类的一个成员属性的值</li>
+<li>将一些数据写入磁盘；</li>
+<li>改变某个按钮的颜色/文字/交互状态。</li>
+<li>往数据库插入记录</li>
+<li>发送一个 http 请求</li>
+<li>打印/log</li>
+<li>获取用户输入</li>
+<li>访问系统状态</li>
+</ul>
+<h3 id="5、引用透明-Referential-transparency"><a href="#5、引用透明-Referential-transparency" class="headerlink" title="5、引用透明(Referential transparency)"></a><strong>5、引用透明(Referential transparency)</strong></h3><p>引用透明指的是函数的运行不依赖于外部变量或状态，只依赖于输入的参数，任何时候只要参数相同，引用函数所得到的返回值总是相同的。</p>
+<p>基于前面的两点，即可得出这一点的结论。其他类型的语言，函数的返回值往往与系统状态有关，不同的状态之下，返回值是不一样的。这就叫”引用不透明”，很不利于观察和理解程序的行为。</p>
+<h4 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xs = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 纯的</span></span><br><span class="line">xs.slice(<span class="number">0</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//=&gt; [1,2,3]</span></span><br><span class="line"></span><br><span class="line">xs.slice(<span class="number">0</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//=&gt; [1,2,3]</span></span><br><span class="line"></span><br><span class="line">xs.slice(<span class="number">0</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//=&gt; [1,2,3]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 不纯的</span></span><br><span class="line">xs.splice(<span class="number">0</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//=&gt; [1,2,3]</span></span><br><span class="line"></span><br><span class="line">xs.splice(<span class="number">0</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//=&gt; [4,5]</span></span><br><span class="line"></span><br><span class="line">xs.splice(<span class="number">0</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//=&gt; []</span></span><br></pre></td></tr></table></figure>
+
+<p>只要是跟函数外部环境发生的交互就都是副作用——这一点可能会让你怀疑无副作用编程的可行性。函数式编程的哲学就是假定副作用是造成不正当行为的主要原因。</p>
+<h4 id="使用纯函数的优势"><a href="#使用纯函数的优势" class="headerlink" title="使用纯函数的优势"></a>使用纯函数的优势</h4><ol>
+<li>可缓存性（Cacheable）</li>
+</ol>
+<p>由于纯函数在输入相同的情况下总是能返回相同的输出，因此我们可以用一个 memoize 函数做缓存，以输入为 key, 返回值为 value 的字典来记录这个缓存：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">memoize</span>(<span class="params">fn</span> :<span class="keyword">@escaping</span> (<span class="type">Int</span>) -&gt; <span class="type">Int</span>)</span> -&gt; (<span class="type">Int</span>) -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> cache <span class="operator">=</span> [<span class="type">Int</span>:<span class="type">Int</span>]()</span><br><span class="line">    <span class="keyword">return</span> &#123; (val : <span class="type">Int</span>) -&gt; <span class="type">Int</span> <span class="keyword">in</span></span><br><span class="line">        <span class="keyword">let</span> value <span class="operator">=</span> cache[val]</span><br><span class="line">        <span class="keyword">if</span> value <span class="operator">!=</span> <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> value<span class="operator">!</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> newValue <span class="operator">=</span> fn(val)</span><br><span class="line">            cache[val] <span class="operator">=</span> newValue</span><br><span class="line">            <span class="keyword">return</span> newValue</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add1</span>(<span class="params">a</span>: <span class="type">Int</span>)</span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> sum <span class="operator">=</span> a <span class="operator">+</span> <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(a, <span class="string">&quot; + 1&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> sum</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> add1UseCache <span class="operator">=</span> memoize(fn: add1)</span><br><span class="line">add1UseCache(<span class="number">1</span>) <span class="comment">// return 2, 打印出 1 + 1</span></span><br><span class="line">add1UseCache(<span class="number">1</span>) <span class="comment">// return 2, 什么都不打印</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><h5 id="移植性／自文档化（Portable-Self-Documenting）"><a href="#移植性／自文档化（Portable-Self-Documenting）" class="headerlink" title="移植性／自文档化（Portable / Self-Documenting）"></a>移植性／自文档化（Portable / Self-Documenting）</h5></li>
+</ol>
+<ul>
+<li>由于固定的输入一定是固定的输出，并且函数不依赖外部变量，因此每个纯函数是高度内聚的，高度内聚的代码就意味着可移植性好；<ul>
+<li>可移植性甚至可以把函数序列化（serializing）并通过 socket 发送，想象一下通过一个网络请求获取一个函数的场景？</li>
+</ul>
+</li>
+<li>因为不依赖外部变量，所以任何影响输出的值都会被显式地传入，查看代码是也不必到处查看某个数据的来源，或者什么会其他的外部结果，因此纯函数的代码基本可以不用写注释和文档。</li>
+</ul>
+<ol start="3">
+<li><h5 id="可测试性（Testable）"><a href="#可测试性（Testable）" class="headerlink" title="可测试性（Testable）"></a>可测试性（Testable）</h5><p>因为固定的输入一定是固定的输出，测试的结果也很容易得到验证。</p>
+<p>QuickCheck 一个为函数式环境量身定制的测试工具，最早是一个用于随机测试的 Haskell 库。相较于独立的单元测试中每个部分都依赖特定输入来测试函数是否正确，QuickCheck 允许你描述函数的抽象特性并生成测试来验证这些特性。QuickCheck 现在已经是作为函数式编程语言测试的标配框架。</p>
+<p>QuickCheck 的大致流程如下：</p>
+<ul>
+<li>生成随机数</li>
+<li>实现 check 函数</li>
+<li>缩小范围</li>
+<li>反复缩小范围</li>
+</ul>
+</li>
+<li><p>并行性 (Concurrent)</p>
+<p>因为纯函数根本不需要访问共享的内存，而且根据其定义，纯函数也不会因副作用而进入竞争态(race condition),  所以也就不需要用<strong>锁</strong>来保护可变状态，也就不会出现<strong>死锁</strong>，Haskell 语言在一些需要高性能地处理并发问题的场景能够很好的解决问题的原因也是因为这个。</p>
+</li>
+</ol>
+<h3 id="6、高阶函数"><a href="#6、高阶函数" class="headerlink" title="6、高阶函数"></a>6、高阶函数</h3><p>前面说到了诸多函数式编程的特性，但是我们实际开发中，很难保证自己写的函数是没有副作用的，尤其是客户端业务开发，上面副作用中提到的网络请求，磁盘写入，UI 操作等，可以说我们的代码中大部分的函数都包含了这些副作用操作。如果要用函数式编程来写业务代码，那还能干活么？</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewController</span>: <span class="title">UIViewController</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> color:<span class="type">UIColor</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">refresh</span>(<span class="params">color</span>: <span class="type">UIColor</span>)</span> &#123;</span><br><span class="line">        setColor(color: color)</span><br><span class="line">        updateUI(color: color)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">setColor</span>(<span class="params">color</span>: <span class="type">UIColor</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.color <span class="operator">=</span> color</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">updateUI</span>(<span class="params">color</span>: <span class="type">UIColor</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.view.backgroundColor <span class="operator">=</span> color</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面这个例子中，refresh, setColor, updateUI 都不是纯函数，但是我们可以通过高阶函数，最小化副作用的影响：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">bind</span>(<span class="params">color</span>: <span class="type">UIColor</span>, <span class="keyword">_</span> <span class="params">fn1</span>:(<span class="type">UIColor</span>) -&gt; (), <span class="keyword">_</span> <span class="params">fn2</span>:(<span class="type">UIColor</span>) -&gt; ())</span> &#123;</span><br><span class="line">  fn1(color)</span><br><span class="line">  fn2(color)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> refresh <span class="operator">=</span> bind(color, setColor, updateUI)</span><br><span class="line">refresh(color)</span><br></pre></td></tr></table></figure>
+
+<p>通过声明一个高阶函数 bind，接收外部传入的另外两个函数，这样这个 bind 函数就变成了纯函数，把副作用收敛在了 setColor 和 updateUI 中。</p>
+<h3 id="7、柯里化-Currying"><a href="#7、柯里化-Currying" class="headerlink" title="7、柯里化(Currying)"></a>7、柯里化(Currying)</h3><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch2.html#%E4%B8%BA%E4%BD%95%E9%92%9F%E7%88%B1%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91">函数式编程</a></p>
+<p><a target="_blank" rel="noopener" href="https://codewords.recurse.com/issues/one/an-introduction-to-functional-programming">an-introduction-to-functional-programming</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/06/16/【021】JavaScript篇12-异步实现方案/" data-toggle="tooltip" data-placement="top" title="JavaScript篇12-异步实现方案">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/06/07/【019】JavaScript篇10-EvenLoop/" data-toggle="tooltip" data-placement="top" title="JavaScript篇10—EvenLoop">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/06/15/%E3%80%90020%E3%80%91JavaScript%E7%AF%8711-%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/";
+    var disqus_url = "http://yoursite.com/2021/06/15/%E3%80%90020%E3%80%91JavaScript%E7%AF%8711-%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

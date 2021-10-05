@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          JavaScript篇2—执行上下文 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/05/13/【011】JavaScript篇2-执行上下文/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                    <h1>JavaScript篇2—执行上下文</h1>
+                    <h2 class="subheading">作用域、作用域链、闭包</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-05-13
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="一、作用域"><a href="#一、作用域" class="headerlink" title="一、作用域"></a>一、作用域</h2><h3 id="1-作用域"><a href="#1-作用域" class="headerlink" title="1. 作用域"></a>1. 作用域</h3><blockquote>
+<p>作用域是指程序中变量定义的区域，该位置决定了变量的生命周期。通俗地说，作用域就是变量与函数的可访问范围，作用域控制着变量和函数的可见性和生命周期。</p>
+</blockquote>
+<p>JavaScript在设计之初并未想过这门语言会如此受欢迎，所以只是按照最简单的方式来设计，只保留全局作用域和函数作用域。</p>
+<p><strong>全局作用域</strong> 中对象和变量在任何地方都能访问，其生命周期同页面的生命周期。</p>
+<p><strong>函数作用域</strong> 是在函数内部定义的变量或函数，只能在函数内部被访问。函数执行结束之后，函数内部定义的变量会被销毁。</p>
+<h3 id="2-变量提升"><a href="#2-变量提升" class="headerlink" title="2. 变量提升"></a>2. 变量提升</h3><p>JavaScript在执行前会先进行编译，编译阶段会将变量和函数存放在执行上下文的变量环境中，值设为<code>undefined</code>。编译完成进入执行阶段，使用变量时从变量环境中读取，在执行变量的赋值代码前，读取该变量时值均为默认值 <code>undefined</code>。</p>
+<p><strong>变量容易在不被察觉的情况下被覆盖掉</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myname = <span class="string">&quot;JavaScript&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showName</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">     <span class="built_in">console</span>.log(myname); <span class="comment">// undefined</span></span><br><span class="line">     <span class="keyword">if</span>(<span class="number">0</span>)&#123;</span><br><span class="line">     		<span class="keyword">var</span> myname = <span class="string">&quot;Go&quot;</span></span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">console</span>.log(myname);</span><br><span class="line">&#125;</span><br><span class="line">showName();</span><br></pre></td></tr></table></figure>
+
+<p><strong>本应销毁的变量没有被销毁</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">7</span>; i++) &#123;</span><br><span class="line">     &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(i); <span class="comment">// for循环结束后i变量没有被销魂</span></span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-块级作用域"><a href="#3-块级作用域" class="headerlink" title="3. 块级作用域"></a>3. 块级作用域</h3><p>为了解决变量提升等问题、打造JavaScript为企业级的开发语言，ES6引入了 <code>let</code> 和 <code>const</code> 关键字，从而使 JavaScript 也能像其他语言一样拥有了块级作用域。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span>;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> b = <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">var</span> c = <span class="number">4</span>;</span><br><span class="line">        <span class="keyword">let</span> d = <span class="number">5</span>;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">        <span class="built_in">console</span>.log(b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(b);</span><br><span class="line">    <span class="built_in">console</span>.log(c);</span><br><span class="line">    <span class="built_in">console</span>.log(d)</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<p>当执行上面这段代码的时候，JavaScript 引擎会先对其进行编译并创建执行上下文，然后再按照顺序执行代码，现在我们引入了 <code>let</code> 关键字，<code>let</code> 关键字会创建块级作用域，那么 let 关键字是如何影响执行上下文的呢？</p>
+<p><strong>第一步是编译并创建执行上下文</strong>，执行上下文如下图所示：</p>
+<p>函数内部通过 <code>var</code> <strong>声明的变量</strong>，在编译阶段会被存放到<strong>变量环境</strong>中；通过 <code>let</code> <strong>声明的变量</strong>，在编译阶段会存放到<strong>词法环境</strong>中。在函数的作用域内部，通过 <code>let</code> 声明的变量并没有被存放到词法环境中。</p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%871.png" alt="执行上下文"></p>
+<p><strong>第二步是执行代码</strong>，当执行到函数代码块里面时(第4行)，当执行到代码块里面时，变量环境中 a 的值已经被设置成了 1，词法环境中 b 的值已经被设置成了 2，这时候函数的执行上下文就如下图所示：</p>
+<p><img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%872.png" alt="执行上下文"></p>
+<p>从图中可以看出，当进入函数的作用域块时，作用域块中通过 <code>let</code> 声明的变量，会被存放在词法环境的一个单独的区域中，这个区域中的变量并不影响作用域块外面的变量，比如在作用域外面声明了变量 b，在该作用域块内部也声明了变量 b，当执行到作用域内部时，它们都是独立的存在。</p>
+<p>其实，<strong>在词法环境内部，维护了一个小型栈结构，栈底是函数最外层的变量，进入一个作用域块后，就会把该作用域块内部的变量压到栈顶；当作用域执行完成之后，该作用域的信息就会从栈顶弹出，这就是词法环境的结构。</strong>需要注意下，我这里所讲的变量是指通过 <code>let</code> 或者 <code>const</code> 声明的变量。</p>
+<p>再接下来，当执行到作用域块中的 <code>console.log(a)</code> 这行代码时，就需要在词法环境和变量环境中查找变量 a 的值了，具体查找方式是：<strong>沿着词法环境的栈顶向下查询，如果在词法环境中的某个块中查找到了，就直接返回给 JavaScript 引擎，如果没有查找到，那么继续在变量环境中查找。</strong></p>
+<p><strong>当作用域块执行结束之后</strong>，其内部定义的变量就会从词法环境的栈顶弹出，最终执行上下文如下图所示</p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%873.png" alt="执行上下文"></p>
+<p>总结一下，块级作用域就是通过词法环境的栈结构来实现的，而变量提升是通过变量环境来实现，通过这两者的结合，JavaScript 引擎也就同时支持了变量提升和块级作用域了。</p>
+<h2 id="二、作用域链-amp-闭包"><a href="#二、作用域链-amp-闭包" class="headerlink" title="二、作用域链 &amp; 闭包"></a>二、作用域链 &amp; 闭包</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(myName);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;Tom&quot;</span>;</span><br><span class="line">    bar();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myName = <span class="string">&quot;Linda&quot;</span>;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-作用域链"><a href="#1-作用域链" class="headerlink" title="1. 作用域链"></a>1. 作用域链</h3><p>在每个执行上下文的变量环境中，都包含了一个外部引用，用来指向外部的执行上下文，我们把这个外部引用称为 <code>outer</code>。</p>
+<p>当一段代码使用了一个变量时，JavaScript 引擎首先会在“当前的执行上下文”中查找该变量。</p>
+<p>比如上面那段代码在查找 myName 变量时，如果在当前的变量环境中没有查找到，那么 JavaScript 引擎会继续在 outer 所指向的执行上下文中查找。为了直观理解，你可以看下面这张图：</p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%874.png" alt="执行上下文"></p>
+<p>从图中可以看出，bar 函数和 foo 函数的 outer 都是指向全局上下文的，这也就意味着如果在 bar 函数或者 foo 函数中使用了外部变量，那么 JavaScript 引擎会去全局执行上下文中查找。我们把这个查找的链条就称为<strong>作用域链</strong>。</p>
+<p>现在我们知道变量是通过作用域链来查找的了，不过还有一个疑问没有解开，foo 函数调用的 bar 函数，那为什么 bar 函数的外部引用是全局执行上下文，而不是 foo 函数的执行上下文？</p>
+<p>要回答这个问题，你还需要知道什么是词法作用域。这是因为<strong>在 JavaScript 执行过程中，其作用域链是由词法作用域决定的。</strong></p>
+<h3 id="2-词法作用域"><a href="#2-词法作用域" class="headerlink" title="2. 词法作用域"></a>2. 词法作用域</h3><p>词法作用域就是指作用域是由代码中函数声明的位置来决定的，所以词法作用域是静态的作用域，通过它就能够预测代码在执行过程中如何查找标识符。</p>
+<p>从图中可以看出，词法作用域就是根据代码的位置来决定的，其中 main 函数包含了 bar 函数，bar 函数中包含了 foo 函数，因为 JavaScript 作用域链是由词法作用域决定的，所以整个词法作用域链的顺序是：<strong>foo 函数作用域—&gt;bar 函数作用域—&gt;main 函数作用域—&gt; 全局作用域</strong></p>
+<p><strong>直白地说，词法作用域是代码编译阶段就决定好的，和函数是怎么调用的没有关系。</strong></p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%875.png" alt="执行上下文"></p>
+<h3 id="3-块级作用域中的变量查找"><a href="#3-块级作用域中的变量查找" class="headerlink" title="3. 块级作用域中的变量查找"></a>3. 块级作用域中的变量查找</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;Firefox&quot;</span>;</span><br><span class="line">    <span class="keyword">let</span> test1 = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> myName = <span class="string">&quot;Chrome&quot;</span>;</span><br><span class="line">        <span class="built_in">console</span>.log(test);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;Safari&quot;</span>;</span><br><span class="line">    <span class="keyword">let</span> test = <span class="number">2</span>;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> test = <span class="number">3</span>;</span><br><span class="line">        bar();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myName = <span class="string">&quot;IE&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> test = <span class="number">1</span>;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<p>要想得出其执行结果，那接下来我们就得站在作用域链和词法环境的角度来分析下其执行过程。下图是我画的执行到 <code>console.log(test)</code> 时调用栈的情况：</p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%876.png" alt="执行上下文"></p>
+<p>现在需要打印出来变量 test，那么就需要查找到 test 变量的值，其查找过程我已经在上图中使用序号 1、2、3、4、5 标记出来了。首先是在 bar 函数的执行上下文中查找，但因为 bar 函数的执行上下文中没有定义 test 变量，所以根据词法作用域的规则，下一步就在 bar 函数的外部作用域中查找，也就是全局作用域。</p>
+<h3 id="4-闭包"><a href="#4-闭包" class="headerlink" title="4. 闭包"></a>4. 闭包</h3><p>当理解变量环境、词法环境和作用域链等概念后，再来理解JavaScript中的闭包会容易很多，下面看看这段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;IE&quot;</span>;</span><br><span class="line">    <span class="keyword">let</span> test1 = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">const</span> test2 = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">var</span> innerBar = &#123;</span><br><span class="line">        <span class="attr">getName</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(test1);</span><br><span class="line">            <span class="keyword">return</span> myName;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">setName</span>:<span class="function"><span class="keyword">function</span>(<span class="params">newName</span>)</span>&#123;</span><br><span class="line">            myName = newName;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> innerBar;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> bar = foo();</span><br><span class="line">bar.setName(<span class="string">&quot;Chrome&quot;</span>);</span><br><span class="line">bar.getName();</span><br><span class="line"><span class="built_in">console</span>.log(bar.getName());</span><br></pre></td></tr></table></figure>
+
+<p>首先我们看看当执行到 foo 函数内部的 return innerBar 这行代码时的调用栈情况，如下图:</p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%877.png" alt="执行上下文"></p>
+<p>从上面的代码可以看出，innerBar 是一个对象，包含了 getName 和 setName 的两个方法（通常我们把对象内部的函数称为方法）。你可以看到，这两个方法都是在 foo 函数内部定义的，并且这两个方法内部都使用了 myName 和 test1 两个变量。</p>
+<p><strong>根据词法作用域的规则，内部函数getName 和 setName 总是可以访问它们的外部函数 foo 中的变量</strong>，所以当 innerBar对象被返回并赋值给全局变量bar时，虽然foo函数已经执行结束，但是getName 和setName函数总是可以使用foo 函数中的变量myName 和 test1。所以当foo函数执行完成后调用栈的状态如下:</p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%878.png" alt="执行上下文"></p>
+<p>从上图可以看出，foo 函数执行完成之后，其执行上下文从栈顶弹出了，但是由于返回的 setName 和 getName 方法中使用了 foo 函数内部的变量 myName 和 test1，所以这两个变量依然保存在内存中。这像极了 setName 和 getName 方法背的一个专属背包，无论在哪里调用了 setName 和 getName 方法，它们都会背着这个 foo 函数的专属背包。</p>
+<p>之所以是<strong>专属</strong>背包，是因为除了 setName 和 getName 函数之外，其他任何地方都是无法访问该背包的，我们就可以把这个背包称为 foo 函数的<strong>闭包</strong>。</p>
+<p>看到这里，是时候搬出闭包的正式定义：<strong>在 JavaScript 中，根据词法作用域的规则，内部函数总是可以访问其外部函数中声明的变量，当通过调用一个外部函数返回一个内部函数后，即使该外部函数已经执行结束了，但是内部函数引用外部函数的变量依然保存在内存中，我们就把这些变量的集合称为闭包。比如外部函数是 foo，那么这些变量的集合就称为 foo 函数的闭包。</strong></p>
+<p>下面我们接着分析，代码执行到 bar.setName 方法中的 myName = ‘Chrome’ 时，JavaScript 引擎会沿着“<strong>当前执行上下文–&gt;foo 函数闭包–&gt; 全局执行上下文</strong>”的顺序来查找 myName 变量，你可以参考下面的调用栈状态图</p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%879.png" alt="执行上下文"></p>
+<p>从图中可以看出，setName 的执行上下文中没有 myName 变量，foo 函数的闭包中包含了变量 myName，所以调用 setName 时，会修改 foo 闭包中的 myName 变量的值。</p>
+<p>同样的流程，当调用 bar.getName 的时候，所访问的变量 myName 也是位于 foo 函数闭包中的。</p>
+<p>我们可以通过Chrome的开发者工具来看看闭包的情况，在getName函数内部加上断点查看:</p>
+<p>从图中可以看出来，当调用 bar.getName 的时候，右边 Scope 项就体现出了作用域链的情况：Local 就是当前的 getName 函数的作用域，Closure(foo) 是指 foo 函数的闭包，最下面的 Global 就是指全局作用域，从“Local–&gt;Closure(foo)–&gt;Global”就是一个完整的作用域链。</p>
+<p> <img src="/img/post/011/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%8710.png" alt="执行上下文"></p>
+<h3 id="5-闭包回收"><a href="#5-闭包回收" class="headerlink" title="5. 闭包回收"></a>5. 闭包回收</h3><p>通常，如果引用闭包的函数是一个全局变量，那么闭包会一直存在直到页面关闭；但如果这个闭包以后不再使用的话，就会造成内存泄漏。</p>
+<p>如果引用闭包的函数是个局部变量，等函数销毁后，在下次 JavaScript 引擎执行垃圾回收时，判断闭包这块内容如果已经不再被使用了，那么 JavaScript 引擎的垃圾回收器就会回收这块内存。</p>
+<p>所以在使用闭包的时候，你要尽量注意一个原则：<strong>如果该闭包会一直使用，那么它可以作为全局变量而存在；但如果使用频率不高，而且占用内存又比较大的话，那就尽量让它成为一个局部变量。</strong></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/05/15/【012】JavaScript篇3-this/" data-toggle="tooltip" data-placement="top" title="JavaScript篇3—this">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/05/11/【010】JavaScript篇1-基础/" data-toggle="tooltip" data-placement="top" title="JavaScript篇1-基础">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/05/13/%E3%80%90011%E3%80%91JavaScript%E7%AF%872-%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/";
+    var disqus_url = "http://yoursite.com/2021/05/13/%E3%80%90011%E3%80%91JavaScript%E7%AF%872-%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

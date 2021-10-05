@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>CXP&#39;s Blog</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">阳光下永远做小朋友</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+            
+                <!-- Main Content -->
+
+
+<div class="post-preview">
+
+    <a href="/2021/10/05/【103】终端配置/">
+        <h2 class="post-title">
+            终端配置
+        </h2>
+        <h3 class="post-subtitle">
+            工欲善其事，必先利其器
+        </h3>
+        <div class="post-content-preview">
+            终端配置工欲善其事，必先利其器
+一、brew 安装官方安装 由于是没有连外网
+1234/bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;//报错SSL_ERROR_SYSCALL in connection to raw.github......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-10-05
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/30/【038】设计模式/">
+        <h2 class="post-title">
+            设计模式
+        </h2>
+        <h3 class="post-subtitle">
+            单例模式、策略模式、发布订阅模式、状态模式
+        </h3>
+        <div class="post-content-preview">
+            1、单例模式（单一职责）：ES5：使用闭包
+123456789101112131415161718var getSingle = function(fn)&#123;  var result  return function()&#123;    return result || (result = fn.apply(this, arguments))  &#125;&#125;var cr......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-30
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/28/【037】性能优化/">
+        <h2 class="post-title">
+            性能优化
+        </h2>
+        <h3 class="post-subtitle">
+            性能优化大集合
+        </h3>
+        <div class="post-content-preview">
+            
+一、 网络传输1. 开启HTTP/2
+多路复用：多个请求复用一次网络连接，实现真正意义的并发
+二进制传输：解析更高效、体积更小、不易出错
+消息头压缩：压缩消息头体积，建立”字典”，用索引号表示重复的字符串
+服务端推送：在用户请求HTML时，一并把页面其他资源主动推送过来（一般不开启）
+
+2. 使用CDN静态部署
+全局负载均衡
+
+缓存系统（命中率—越高越好 &amp; 回源率—越低越好，一般......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-28
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/28/【036】继承/">
+        <h2 class="post-title">
+            继承
+        </h2>
+        <h3 class="post-subtitle">
+            原型链继承、构造函数继承、组合式继承、寄生式组合式继承、ES6继承
+        </h3>
+        <div class="post-content-preview">
+            原型链继承123456789101112131415function Parent()&#123;  this.name = [&#x27;陈&#x27;]&#125;Parent.prototype.getName = function() &#123;  return this.name&#125;function Child()&#123;&#125;Child.prototype =......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-28
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/25/【102】Vue面试题/">
+        <h2 class="post-title">
+            Vue前端面试
+        </h2>
+        <h3 class="post-subtitle">
+            面试题收集
+        </h3>
+        <div class="post-content-preview">
+            Vue框架1. vue的优点
+轻量级框架：只关注视图层，是一个构建数据的视图集合，大小只有几十kb；
+
+简单易学：国人开发，中文文档，不存在语言障碍 ，易于理解和学习；
+
+双向数据绑定：保留了angular的特点，在数据操作方面更为简单；
+
+组件化：保留了react的优点，实现了html的封装和重用，在构建单页面应用方面有着独特的优势；
+
+视图，数据，结构分离：使数据的更改更为简单，不需要进......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-25
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/22/【035】跨域/">
+        <h2 class="post-title">
+            前端跨域
+        </h2>
+        <h3 class="post-subtitle">
+            websocket、postMessage、iframe，cors，node代理，Nginx反向代理、jsonp
+        </h3>
+        <div class="post-content-preview">
+            转自：10种跨域解决方案、九种跨域方式实现原理
+只有当「protocol（协议）、domain（域名）、port（端口）三者一致。」才是同源。
+这里你或许有个疑问：请求跨域了，那么请求到底发出去没有？
+跨域并不是请求发不出去，请求能发出去，服务端能收到请求并正常返回结果，只是结果被浏览器拦截了。你可能会疑问明明通过表单的方式可以发起跨域请求，为什么 Ajax 就不会?因为归根结底，跨域是为了......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-22
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/21/【034】前端安全/">
+        <h2 class="post-title">
+            前端安全
+        </h2>
+        <h3 class="post-subtitle">
+            XSS、CSRF、SQL注入，OS注入，爬虫，DDOS、运营商劫持、点击拦截
+        </h3>
+        <div class="post-content-preview">
+            转自：你应该知道的前端安全
+1. XSSXSS的英文是Cross Site Scripting也就是常说的跨站脚本攻击，因为缩写和CSS重叠，所以只能叫XSS，跨站脚本攻击是指通过存在安全漏洞的Web网站注册用户的浏览器内运行非法的HTML标签或JavaScript进行的一种攻击。
+那么XSS一般是如何进行攻击的呢？假设我们页面中存在一个input或者textarea用来收集用户输入的数据，......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-21
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/20/【033】React_diff算法/">
+        <h2 class="post-title">
+            React2.0_diff算法
+        </h2>
+        <h3 class="post-subtitle">
+            diff算法
+        </h3>
+        <div class="post-content-preview">
+            Diff的瓶颈以及React如何应对由于 Diff 操作本身也会带来性能损耗，React文档中提到，即使在最前沿的算法中，将前后两棵树完全比对的算法的复杂程度为 O(n 3 )，其中 n 是树中元素的数量。
+为了降低算法复杂度，React的diff会预设三个限制：
+
+只对同级元素进行Diff。如果一个DOM节点在前后两次更新中跨越了层级，那么React不会尝试复用他。
+两个不同类型的元素会产......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-20
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/19/【032】Vue2.0_diff算法/">
+        <h2 class="post-title">
+            Vue2.0_diff算法
+        </h2>
+        <h3 class="post-subtitle">
+            diff算法
+        </h3>
+        <div class="post-content-preview">
+            虚拟节点（Virtual Dom）首先要明白，在 vue 中会维护一个和 DOM 节点对应的 vnode 对象
+例如
+1&lt;div key=&quot;1&quot;&gt;123&lt;/div&gt;
+
+在 vue 中就会有个 vnode 对象与之对应，我们列举了其中几个关键属性
+1234567&#123;  elm: el, // 对应真实的DOM节点  tag: &#x27;di......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-19
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/12/【101】chrome插件开发指南/">
+        <h2 class="post-title">
+            chrome插件开发指南
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+丰富的 chrome 插件极大的提升我们的工作效率和辛福感，比如大名鼎鼎的 adblock 广告屏蔽、GoFullPage 网页长截图、evernote web clipper 收藏网页。一般来说，插件的原理是向页面中注入 javascript 脚本，对页面进行处理，比如屏蔽页面中可能的广告元素，改变某些元素的样式，增加一些 UI。注意：chrome 插件机制本身也在更新，本文讲述的是目前......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-12
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/07/05/【031】React篇5-生态/">
+        <h2 class="post-title">
+            React篇5-生态
+        </h2>
+        <h3 class="post-subtitle">
+            Hooks
+        </h3>
+        <div class="post-content-preview">
+            React的生态比其它框架更加复杂，它没有公认的统一的最佳实践，往往有两个甚至更多的方案供你选择。本章稍作介绍和分析，各方案利弊还是要实践才能了解。
+1. 状态管理所谓状态管理主要包含着两部分：管理状态-数据如何共享，管理状态-数据如何变动。此外还有一些TS支持、异步支持等部分，这和库的具体实现有关。管理状态如何变动
+
+不需要共享的方法写在组件内部，需要抽象的方法写到外部导入。
+如果方法需要......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-05
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/28/【030】React篇4-Hooks/">
+        <h2 class="post-title">
+            React篇3-Hooks
+        </h2>
+        <h3 class="post-subtitle">
+            Hooks
+        </h3>
+        <div class="post-content-preview">
+            Hooks为函数组件赋予处理副作用（状态）的能力，也为复用代码提供另一种方式。以下两篇文章阐述了一些背景和目的：源码解析React Hook构建过程：没有设计就是最好的设计  React系列-Mixin、HOC、Render Props(上)
+（有一个词也值得记住：代数效应（Algebraic Effects），这是React团队背后的设计思想。理解代数效应为什么叫“代数”需要很深的数学背景......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-28
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/25/【100】Commit规范总结/">
+        <h2 class="post-title">
+            Commit规范总结
+        </h2>
+        <h3 class="post-subtitle">
+            规范
+        </h3>
+        <div class="post-content-preview">
+            背景Git 是现在市面上最流行的版本控制工具，书写良好的 Commit message 和保持良好的 Commit 习惯能大大提高代码维护的效率。但是在日常开发中由于缺少对于Commit message 的约束，导致填写内容随意、质量参差不齐，可读性低亦难以维护，遵循项目规范才能提高团队协作效率
+1、Commit Message 规范借鉴业界比较流行的 Conventional Commit......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-25
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/23/【029】React篇3-调度/">
+        <h2 class="post-title">
+            React篇3-调度
+        </h2>
+        <h3 class="post-subtitle">
+            调度
+        </h3>
+        <div class="post-content-preview">
+            重写reconciler的结果就是能够支持异步可中断的更新。我们刚刚说重写的目的是流畅的渲染，那和异步可中断有什么关系呢？React团队认为优化不同任务的执行顺序(调度)可以大幅度降低响应延迟，而调度就必须要任务是可中断的。
+更根本地说，之所以调度能够优化，是因为现代前端的交互足够复杂：浏览器本身就是一个小型操作系统，有输入有输出有内核有数量庞大的应用和用户（还有安全隐患）。大部分其它需要调......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-23
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/22/【028】React篇2-虚拟DOM/">
+        <h2 class="post-title">
+            React篇2-虚拟DOM
+        </h2>
+        <h3 class="post-subtitle">
+            虚拟DOM
+        </h3>
+        <div class="post-content-preview">
+            
+vDOM是一个concept，指JS内存中和DOM对应的东西，在React的语境下可以指React element，也可以指Fiber。一个React element就是JSX组件被解析后的对象，可以看官网JSX解析的最后两段代码。而Fiber就是有更多运行上下文信息的React element。
+它的好处是跨平台、优化性能还有提升开发体验。
+
+注意，对应可以不是网页DOM，譬如React......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-22
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/21/【027】React篇1/">
+        <h2 class="post-title">
+            React篇1-基础思想
+        </h2>
+        <h3 class="post-subtitle">
+            基础思想
+        </h3>
+        <div class="post-content-preview">
+            一、React是什么官方文档宣称是一个快速构建UI的库。但是实际上我们口中的
+
+React = React库 + 生态周边 + 心智/编程模型React库 ≈ react + react-dom/react-native (+ react分裂出来的其他库)。其中react为核心库，提供跨平台的基本功能，而react-dom是针对网页前端的实现，react-native是针对移动端的实现。（如......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-21
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/20/【026】浏览器原理篇4-导航流程/">
+        <h2 class="post-title">
+            浏览器原理篇4-导航流程
+        </h2>
+        <h3 class="post-subtitle">
+            导航流程
+        </h3>
+        <div class="post-content-preview">
+            前言用户发出 URL 请求到页面开始解析的这个过程，就叫做导航。导航的整个流程需要各个进程间的配合，所以我们要先了解浏览器进程、渲染进程和网络进程的主要职责。
+
+浏览器进程主要负责用户交互、子进程管理和文件储存等功能。
+网络进程是面向渲染进程和浏览器进程等提供网络下载功能。
+渲染进程的主要职责是把从网络下载的 HTML、JavaScript、CSS、图片等资源解析为可以显示和交互的页面。因为......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-20
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/19/【025】浏览器原理篇3-浏览器存储/">
+        <h2 class="post-title">
+            浏览器原理篇3-存储
+        </h2>
+        <h3 class="post-subtitle">
+            浏览器存储
+        </h3>
+        <div class="post-content-preview">
+            前言浏览器存储主要有cookie、WebStorage、IndexedDB这三种，主要区别如图：
+
+一、Cookie​        HTTP Cookie，通常直接叫做 cookie，最初是在客户端用于存储会话信息的。该标准要求服务器对 任意 HTTP 请求发送 Set-Cookie HTTP 头作为响应的一部分，其中包含会话信息。例如，这种服务器响 应的头可能如下：
+1234HTTP/1......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-19
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/17/【024】浏览器原理篇2-浏览器缓存/">
+        <h2 class="post-title">
+            浏览器原理篇2-缓存
+        </h2>
+        <h3 class="post-subtitle">
+            浏览器缓存
+        </h3>
+        <div class="post-content-preview">
+            概述浏览器的缓存机制也就是我们说的HTTP缓存机制，其机制是根据HTTP报文的缓存标识进行的，所以在分析浏览器缓存机制之前，我们先使用图文简单介绍一下HTTP报文，HTTP报文分为两种：
+HTTP请求(Request)报文，报文格式为：请求行 – HTTP头(通用信息头，请求头，实体头) – 请求报文主体(只有POST才有报文主体)，如下图
+
+HTTP响应(Response)报文，报文格式为......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-17
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/06/16/【022】JavaScript篇13-手写API/">
+        <h2 class="post-title">
+            JavaScript篇13—手写代码
+        </h2>
+        <h3 class="post-subtitle">
+            节流、防抖
+        </h3>
+        <div class="post-content-preview">
+            防抖12345678910111213141516171819function debounce(fn, delay = 500) &#123;    let timer = null;    return function() &#123;        if(timer)&#123;            clearTimeout(timer)        &#125;        ......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-06-16
+    </p>
+
+</div>
+<hr>
+
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    
+        <li class="next">
+            <a href="/page/2/">Older Posts &rarr;</a>
+        </li>
+    
+</ul>
+
+
+
+                <!-- 如果开启评论功能 -->
+                
+
+            </div>
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#React" title="React" rel="10">React</a>
+                            
+                        
+                            
+                            <a href="/tags/#TypeScript" title="TypeScript" rel="4">TypeScript</a>
+                            
+                        
+                            
+                            <a href="/tags/#others" title="others" rel="4">others</a>
+                            
+                        
+                            
+                            <a href="/tags/#面试" title="面试" rel="2">面试</a>
+                            
+                        
+                            
+                            <a href="/tags/#大数据" title="大数据" rel="2">大数据</a>
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#JavaScript" title="JavaScript" rel="17">JavaScript</a>
+                            
+                        
+                            
+                            <a href="/tags/#浏览器原理" title="浏览器原理" rel="4">浏览器原理</a>
+                            
+                        
+                            
+                            <a href="/tags/#Vue" title="Vue" rel="2">Vue</a>
+                            
+                        
+                            
+                            <a href="/tags/#前端安全" title="前端安全" rel="2">前端安全</a>
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+
+                        
+                            <img src="/img/avatar.jpg" />
+                        
+
+                        
+                            <p>人是因为失去激情才变老的</p>
+                        
+
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            
+                            
+
+                            
+
+                            
+
+                            
+                            
+                            
+                            
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Friends Blog -->
+                
+            </div>
+        
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

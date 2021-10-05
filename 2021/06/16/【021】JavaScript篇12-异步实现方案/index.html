@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          JavaScript篇12-异步实现方案 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/06/16/【021】JavaScript篇12-异步实现方案/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                    <h1>JavaScript篇12-异步实现方案</h1>
+                    <h2 class="subheading">异步实现方案</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-06-16
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在了解异步方案前，需要了解的是执行上下文和EvenLoop部分。</p>
+<p>简单了解EvenLoop的运行机制：</p>
+<blockquote>
+<ol>
+<li>所有同步任务都在主线程上执行，形成一个执行栈(execution context stack）。</li>
+<li>主线程之外，还存在一个”task queue”。只要异步任务有了运行结果，就在”task queue”之中放置一个事件。</li>
+<li>一旦”执行栈”中的所有同步任务执行完毕，系统就会读取”task queue”，看看里面有哪些事件。那些对应的异步任务，于是结束等待状态，进入执行栈，开始执行。</li>
+<li>主线程不断重复上面的第三步。</li>
+</ol>
+</blockquote>
+<h2 id="1、回调函数（Callback）"><a href="#1、回调函数（Callback）" class="headerlink" title="1、回调函数（Callback）"></a>1、回调函数（Callback）</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">    <span class="attr">url</span>: <span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">    <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">res =&gt; &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="regexp">//</span> callback 函数体</span></span></span><br><span class="line"><span class="params"><span class="function">        $.ajax(&#123;</span></span></span><br><span class="line"><span class="params"><span class="function">            url: <span class="string">&#x27;xxx&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">            success: <span class="keyword">function</span>(res =&gt; &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">            <span class="regexp">//</span> callback 函数体</span></span></span><br><span class="line"><span class="params"><span class="function">            &#125;)</span></span></span><br><span class="line"><span class="params"><span class="function">        &#125;)</span></span></span><br><span class="line"><span class="params"><span class="function">    &#125;</span>)</span></span><br><span class="line"><span class="function">&#125;)</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li>优点: 代码简单明了</li>
+<li>缺点: 回调地狱,代码不易维护,不能try-catch，不能直接 return</li>
+</ol>
+</blockquote>
+<h2 id="2、Promise"><a href="#2、Promise" class="headerlink" title="2、Promise"></a>2、Promise</h2><p>Promise本意是承诺，在程序中的意思就是承诺我过一段时间后会给你一个结果。 什么时候会用到过一段时间？答案是异步操作，异步是指可能比较长时间才有结果的才做，例如网络请求、读取本地文件等</p>
+<p><strong>1. Promise的三种状态</strong></p>
+<ul>
+<li>Pending—-Promise对象实例创建时候的初始状态</li>
+<li>Fulfilled—-可以理解为成功的状态</li>
+<li>Rejected—-可以理解为失败的状态</li>
+</ul>
+<p><strong>这个承诺一旦从等待状态变成为其他状态就永远不能更改状态了</strong>，比如说一旦状态变为 resolved 后，就不能再次改变为Fulfilled</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  reject(<span class="string">&#x27;reject&#x27;</span>)</span><br><span class="line">  resolve(<span class="string">&#x27;success&#x27;</span>)<span class="comment">//无效代码不会执行</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">p.then(</span><br><span class="line">  <span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="params">reason</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(reason)<span class="comment">//reject</span></span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>当我们在构造 Promise 的时候，构造函数内部的代码是立即执行的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;new Promise&#x27;</span>)</span><br><span class="line">  resolve(<span class="string">&#x27;success&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;end&#x27;</span>)</span><br><span class="line"><span class="comment">// new Promise =&gt; end</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2.promise的链式调用</strong></p>
+<ul>
+<li><p>每次调用返回的都是一个新的Promise实例(这就是then可用链式调用的原因)</p>
+</li>
+<li><p>如果then中返回的是一个结果的话会把这个结果传递下一次then中的成功回调</p>
+</li>
+<li><p>如果then中出现异常,会走下一个then的失败回调</p>
+</li>
+<li><p>在 then中使用了return，那么 return 的值会被Promise.resolve() 包装(见例1，2)</p>
+</li>
+<li><p>then中可以不传递参数，如果不传递会透到下一个then中(见例3)</p>
+</li>
+<li><p>catch 会捕获到没有捕获的异常</p>
+</li>
+</ul>
+<h2 id="3、生成器Generators-yield"><a href="#3、生成器Generators-yield" class="headerlink" title="3、生成器Generators/ yield"></a>3、生成器Generators/ yield</h2><p>Generator 函数是 ES6 提供的一种异步编程解决方案，语法行为与传统函数完全不同，Generator 最大的特点就是可以控制函数的执行</p>
+<ul>
+<li><p>语法上，首先可以把它理解成，Generator 函数是一个状态机，封装了多个内部状态。</p>
+</li>
+<li><p><strong>Generator 函数除了状态机，还是一个遍历器对象生成函数</strong>。</p>
+</li>
+<li><p><strong>可暂停函数, yield可暂停，next方法可启动，每次返回的是yield后的表达式结果</strong>。</p>
+</li>
+<li><p>yield表达式本身没有返回值，或者说总是返回undefined。<strong>next方法可以带一个参数，该参数就会被当作上一个yield表达式的返回值</strong>。</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> *<span class="title">foo</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> y = <span class="number">2</span> * (<span class="keyword">yield</span> (x + <span class="number">1</span>))</span><br><span class="line">  <span class="keyword">let</span> z = <span class="keyword">yield</span> (y / <span class="number">3</span>)</span><br><span class="line">  <span class="keyword">return</span> (x + y + z)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> it = foo(<span class="number">5</span>)</span><br><span class="line"><span class="built_in">console</span>.log(it.next())   <span class="comment">// =&gt; &#123;value: 6, done: false&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(it.next(<span class="number">12</span>)) <span class="comment">// =&gt; &#123;value: 8, done: false&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(it.next(<span class="number">13</span>)) <span class="comment">// =&gt; &#123;value: 42, done: true&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>可能结果跟你想象不一致，接下来我们逐行代码分析：</p>
+<ul>
+<li>首先 Generator 函数调用和普通函数不同，它会返回一个迭代器</li>
+<li>当执行第一次 next 时，传参会被忽略，并且函数暂停在 yield (x + 1) 处，所以返回 5 + 1 = 6</li>
+<li>当执行第二次 next 时，传入的参数12就会被当作上一个yield表达式的返回值，如果你不传参，yield 永远返回 undefined。此时 let y = 2 * 12，所以第二个 yield 等于 2 * 12 / 3 = 8</li>
+<li>当执行第三次 next 时，传入的参数13就会被当作上一个yield表达式的返回值，所以 z = 13, x = 5, y = 24，相加等于 42</li>
+</ul>
+<p>我们再来看个例子：有三个本地文件，分别1.txt,2.txt和3.txt，内容都只有一句话，下一个请求依赖上一个请求的结果，想通过Generator函数依次调用三个文件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">read</span>(<span class="params">file</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    fs.readFile(file, <span class="string">&#x27;utf8&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) reject(err)</span><br><span class="line">      resolve(data)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">r</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> r1 = <span class="keyword">yield</span> read(<span class="string">&#x27;./1.txt&#x27;</span>)</span><br><span class="line">  <span class="keyword">let</span> r2 = <span class="keyword">yield</span> read(r1)</span><br><span class="line">  <span class="keyword">let</span> r3 = <span class="keyword">yield</span> read(r2)</span><br><span class="line">  <span class="built_in">console</span>.log(r1)</span><br><span class="line">  <span class="built_in">console</span>.log(r2)</span><br><span class="line">  <span class="built_in">console</span>.log(r3)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> it = r()</span><br><span class="line"><span class="keyword">let</span> &#123; value, done &#125; = it.next()</span><br><span class="line">value.then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123; <span class="comment">// value是个promise</span></span><br><span class="line">  <span class="built_in">console</span>.log(data) <span class="comment">//data=&gt;2.txt</span></span><br><span class="line">  <span class="keyword">let</span> &#123; value, done &#125; = it.next(data)</span><br><span class="line">  value.then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data) <span class="comment">//data=&gt;3.txt</span></span><br><span class="line">    <span class="keyword">let</span> &#123; value, done &#125; = it.next(data)</span><br><span class="line">    value.then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(data) <span class="comment">//data=&gt;结束</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 2.txt=&gt;3.txt=&gt;结束</span></span><br></pre></td></tr></table></figure>
+
+<p>从上例中我们看出手动迭代<code>Generator</code> 函数很麻烦，实现逻辑有点绕，而实际开发一般会配合 <code>co</code> 库去使用。**<code>co</code>是一个为Node.js和浏览器打造的基于生成器的流程控制工具，借助于Promise，你可以使用更加优雅的方式编写非阻塞代码**。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">r</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> r1 = <span class="keyword">yield</span> read(<span class="string">&#x27;./1.txt&#x27;</span>)</span><br><span class="line">  <span class="keyword">let</span> r2 = <span class="keyword">yield</span> read(r1)</span><br><span class="line">  <span class="keyword">let</span> r3 = <span class="keyword">yield</span> read(r2)</span><br><span class="line">  <span class="built_in">console</span>.log(r1)</span><br><span class="line">  <span class="built_in">console</span>.log(r2)</span><br><span class="line">  <span class="built_in">console</span>.log(r3)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> co = <span class="built_in">require</span>(<span class="string">&#x27;co&#x27;</span>)</span><br><span class="line">co(r()).then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 2.txt=&gt;3.txt=&gt;结束=&gt;undefined</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以通过 Generator 函数解决回调地狱的问题，可以把之前的回调地狱例子改写为如下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> *<span class="title">fetch</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> ajax(url, <span class="function">() =&gt;</span> &#123;&#125;)</span><br><span class="line">    <span class="keyword">yield</span> ajax(url1, <span class="function">() =&gt;</span> &#123;&#125;)</span><br><span class="line">    <span class="keyword">yield</span> ajax(url2, <span class="function">() =&gt;</span> &#123;&#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> it = fetch()</span><br><span class="line"><span class="keyword">let</span> result1 = it.next()</span><br><span class="line"><span class="keyword">let</span> result2 = it.next()</span><br><span class="line"><span class="keyword">let</span> result3 = it.next()</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、async-await"><a href="#4、async-await" class="headerlink" title="4、async/await"></a>4、async/await</h2><p>使用async/await，你可以轻松地达成之前使用生成器和co函数所做到的工作,它有如下特点：</p>
+<ul>
+<li>async/await是基于Promise实现的，它不能用于普通的回调函数。</li>
+<li>async/await与Promise一样，是非阻塞的。</li>
+<li>async/await使得异步代码看起来像同步代码，这正是它的魔力所在。</li>
+</ul>
+<p><strong>一个函数如果加上 async ，那么该函数就会返回一个 Promise</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&quot;1&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(async1()) <span class="comment">// -&gt; Promise &#123;&lt;resolved&gt;: &quot;1&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Generator函数依次调用三个文件那个例子用async/await写法，只需几句话便可实现</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">read</span>(<span class="params">file</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    fs.readFile(file, <span class="string">&#x27;utf8&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) reject(err)</span><br><span class="line">      resolve(data)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">readResult</span>(<span class="params">params</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> p1 = <span class="keyword">await</span> read(params, <span class="string">&#x27;utf8&#x27;</span>)<span class="comment">//await后面跟的是一个Promise实例</span></span><br><span class="line">    <span class="keyword">let</span> p2 = <span class="keyword">await</span> read(p1, <span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line">    <span class="keyword">let</span> p3 = <span class="keyword">await</span> read(p2, <span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;p1&#x27;</span>, p1)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;p2&#x27;</span>, p2)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;p3&#x27;</span>, p3)</span><br><span class="line">    <span class="keyword">return</span> p3</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">readResult(<span class="string">&#x27;1.txt&#x27;</span>).then( <span class="comment">// async函数返回的也是个promise</span></span><br><span class="line">  <span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.log(err)</span><br><span class="line">)</span><br><span class="line"><span class="comment">// p1 2.txt</span></span><br><span class="line"><span class="comment">// p2 3.txt</span></span><br><span class="line"><span class="comment">// p3 结束</span></span><br><span class="line"><span class="comment">// 结束</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Async/Await并发请求</strong></p>
+<p>如果请求两个文件，毫无关系，可以通过并发请求</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">read</span>(<span class="params">file</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    fs.readFile(file, <span class="string">&#x27;utf8&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) reject(err)</span><br><span class="line">      resolve(data)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readAll</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  read1()</span><br><span class="line">  read2()<span class="comment">//这个函数同步执行</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">read1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> r = <span class="keyword">await</span> read(<span class="string">&#x27;1.txt&#x27;</span>,<span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(r)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">read2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> r = <span class="keyword">await</span> read(<span class="string">&#x27;2.txt&#x27;</span>,<span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(r)</span><br><span class="line">&#125;</span><br><span class="line">readAll() <span class="comment">// 2.txt 3.txt</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="5、总结"><a href="#5、总结" class="headerlink" title="5、总结"></a>5、总结</h2><p><strong>1. JS 异步编程进化史：callback -&gt; promise -&gt; generator -&gt; async + await</strong></p>
+<p><strong>2. async/await 函数的实现，就是将 Generator 函数和自动执行器，包装在一个函数里。</strong></p>
+<p><strong>3. async/await可以说是异步终极解决方案了。</strong></p>
+<p>​    <strong>async/await函数相对于Promise，优势体现在</strong></p>
+<p>​    处理 then 的调用链，能够更清晰准确的写出代码</p>
+<p>​    并且也能优雅地解决回调地狱问题</p>
+<p>​    当然async/await函数也存在一些缺点，因为 await 将异步代码改造成了同步代码，如果多个异步代码没有依赖性却使用了 await 会导致性能上的降低，代码没有依赖性的话，完全可以使用 Promise.all 的方式。</p>
+<p>​    <strong>async/await函数对 Generator 函数的改进，体现在以下三点</strong>：</p>
+<p>​    内置执行器。 Generator 函数的执行必须靠执行器，所以才有了 co 函数库，而 async 函数自带执行器。也就是说，<strong>async 函数的执行，与普通函数一模一样，只要一行</strong>。</p>
+<p>​    更广的适用性。 co 函数库约定，yield 命令后面只能是 Thunk 函数或 Promise 对象，而 <strong>async 函数的 await 命令后面，可以跟 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时等同于同步操作）</strong>。</p>
+<p>​    更好的语义。 async 和 await，比起星号和 yield，语义更清楚了。async 表示函数里有异步操作，await 表示紧跟在后面的表达式需要等待结果。</p>
+<h2 id="衍生阅读："><a href="#衍生阅读：" class="headerlink" title="衍生阅读："></a>衍生阅读：</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903760280420366#heading-6">JS异步编程6种方案</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903501315719176">Promise 流程控制</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/06/16/【023】浏览器原理篇1-渲染流程/" data-toggle="tooltip" data-placement="top" title="浏览器原理篇1-渲染流程">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/06/15/【020】JavaScript篇11-函数式编程/" data-toggle="tooltip" data-placement="top" title="JavaScript篇11—函数式编程">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/06/16/%E3%80%90021%E3%80%91JavaScript%E7%AF%8712-%E5%BC%82%E6%AD%A5%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/";
+    var disqus_url = "http://yoursite.com/2021/06/16/%E3%80%90021%E3%80%91JavaScript%E7%AF%8712-%E5%BC%82%E6%AD%A5%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

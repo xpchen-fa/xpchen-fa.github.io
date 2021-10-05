@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Vue前端面试 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/07/25/【102】Vue面试题/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#面试" title="面试">面试</a>
+                        
+                          <a class="tag" href="/tags/#Vue" title="Vue">Vue</a>
+                        
+                    </div>
+                    <h1>Vue前端面试</h1>
+                    <h2 class="subheading">面试题收集</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-07-25
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="Vue框架"><a href="#Vue框架" class="headerlink" title="Vue框架"></a>Vue框架</h2><h3 id="1-vue的优点"><a href="#1-vue的优点" class="headerlink" title="1. vue的优点"></a>1. vue的优点</h3><ol>
+<li><p>轻量级框架：只关注视图层，是一个构建数据的视图集合，大小只有几十kb；</p>
+</li>
+<li><p>简单易学：国人开发，中文文档，不存在语言障碍 ，易于理解和学习；</p>
+</li>
+<li><p>双向数据绑定：保留了angular的特点，在数据操作方面更为简单；</p>
+</li>
+<li><p>组件化：保留了react的优点，实现了html的封装和重用，在构建单页面应用方面有着独特的优势；</p>
+</li>
+<li><p>视图，数据，结构分离：使数据的更改更为简单，不需要进行逻辑代码的修改，只需要操作数据就能完成相关操作；</p>
+</li>
+<li><p>虚拟DOM：dom操作是非常耗费性能的，不再使用原生的dom操作节点，极大解放dom操作，但具体操作的还是dom不过是换了另一种方式；</p>
+</li>
+<li><p>运行速度更快:相比较与react而言，同样是操作虚拟dom，就性能而言，vue存在很大的优势。</p>
+</li>
+<li><p>Model变更触发View更新必须通过VewModel (Vue实例)。—– set时触发依赖，异步更新模板；而View变更后触发Model也必须通过VewMode。 ———利用v-model指令 ， input中用户手动输入监听@input事件，更改数据。以上是MVVM的思想。</p>
+<p>当然，Vue也是按照这样的设计的，但是vue中添加了一个属性ref，通过ref可以拿到dom对象，通过ref直接去操作视图。这一点上，违背了MVVM。</p>
+</li>
+</ol>
+<h3 id="2-请详细说下你对vue生命周期的理解？"><a href="#2-请详细说下你对vue生命周期的理解？" class="headerlink" title="2. 请详细说下你对vue生命周期的理解？"></a>2. 请详细说下你对vue生命周期的理解？</h3><p>总共分为8个阶段创建前/后，载入前/后，更新前/后，销毁前/后。</p>
+<ol>
+<li>创建前/后： 在beforeCreate阶段，初始化了部分参数，如果有相同的参数，做了参数合并，vue实例的挂载元素el和数据对象data都为undefined，还未初始化；created ：初始化了 <code>Inject</code> 、<code>Provide</code> 、 <code>props</code> 、<code>methods</code> 、<code>data</code> 、<code>computed</code> 和 <code>watch</code></li>
+<li>载入前/后：在beforeMount阶段，检查是否存在 <code>el</code> 属性，存在的话进行渲染 <code>dom</code> 操作。</li>
+<li>在beforeMount阶段，vue实例的$el和data都初始化了，但还是挂载之前为虚拟的dom节点，data.message还未替换。在mounted阶段，vue实例挂载完成，data.message成功渲染。</li>
+<li>更新前/后：当data变化时，会触发beforeUpdate和updated方法</li>
+<li>销毁前/后：在执行destroy方法后，对data的改变不会再触发周期函数，说明此时vue实例已经解除了事件监听以及和dom的绑定，但是dom结构依然存在</li>
+</ol>
+<h3 id="3-为什么vue组件中data必须是一个函数？"><a href="#3-为什么vue组件中data必须是一个函数？" class="headerlink" title="3. 为什么vue组件中data必须是一个函数？"></a>3. 为什么vue组件中data必须是一个函数？</h3><p>对象为引用类型，当复用组件时，由于数据对象都指向同一个data对象，当在一个组件中修改data时，其他重用的组件中的data会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象（Object的实例），引用地址不同，则不会出现这个问题。</p>
+<h3 id="4-vue中v-if和v-show有什么区别？"><a href="#4-vue中v-if和v-show有什么区别？" class="headerlink" title="4. vue中v-if和v-show有什么区别？"></a>4. vue中v-if和v-show有什么区别？</h3><p>v-if和v-show看起来似乎差不多，当条件不成立时，其所对应的标签元素都不可见，但是这两个选项是有区别的:</p>
+<p>1、v-if在条件切换时，会对标签进行适当的创建和销毁，而v-show则仅在初始化时加载一次，因此v-if的开销相对来说会比v-show大。</p>
+<p>2、v-if是惰性的，只有当条件为真时才会真正渲染标签；如果初始条件不为真，则v-if不会去渲染标签。v-show则无论初始条件是否成立，都会渲染标签，它仅仅做的只是简单的CSS切换。</p>
+<h3 id="5-computed和watch的区别"><a href="#5-computed和watch的区别" class="headerlink" title="5. computed和watch的区别"></a>5. computed和watch的区别</h3><ol>
+<li>计算属性computed：</li>
+</ol>
+<ul>
+<li>支持缓存，只有依赖数据发生改变，才会重新进行计算</li>
+<li>不支持异步，当computed内有异步操作时无效，无法监听数据的变化</li>
+<li>computed 属性值会默认走缓存，计算属性是基于它们的响应式依赖进行缓存的，也就是基于data中声明过或者父组件传递的props中的数据通过计算得到的值</li>
+<li>如果一个属性是由其他属性计算而来的，这个属性依赖其他属性，是一个多对一或者一对一，一般用computed</li>
+<li>如果computed属性属性值是函数，那么默认会走get方法；函数的返回值就是属性的属性值；在computed中的，属性都有一个get和一个set方法，当数据变化时，调用set方法。</li>
+</ul>
+<ol start="2">
+<li>侦听属性watch：</li>
+</ol>
+<ul>
+<li>不支持缓存，数据变，直接会触发相应的操作；</li>
+<li>watch支持异步；</li>
+<li>监听的函数接收两个参数，第一个参数是最新的值；第二个参数是输入之前的值；</li>
+<li>当一个属性发生变化时，需要执行对应的操作；一对多；</li>
+<li>监听数据必须是data中声明过或者父组件传递过来的props中的数据，当数据变化时，触发其他操作，函数有两个参数：<ul>
+<li>immediate：组件加载立即触发回调函数执行</li>
+<li>deep:  deep的意思就是深入观察，监听器会一层层的往下遍历，给对象的所有属性都加上这个监听器，但是这样性能开销就会非常大了，任何修改obj里面任何一个属性都会触发这个监听器里的 handler</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-nextTick是什么？"><a href="#6-nextTick是什么？" class="headerlink" title="6. $nextTick是什么？"></a>6. $nextTick是什么？</h3><p>vue实现响应式并不是数据发生变化后dom立即变化，而是按照一定的策略来进行dom更新。nextTick 是在下次 DOM 更新循环结束之后执行延迟回调，在修改数据之后使用nextTick，则可以在回调中获取更新后的 DOM。主要思路就是采用微任务优先的方式调用异步方法去执行 nextTick 包装的方法。</p>
+<p>优雅降级：如果支持promise =&gt;mutationObserver =&gt; setImmediate =&gt; setTimeout</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> callbacks = [];</span><br><span class="line"><span class="keyword">let</span> pending = <span class="literal">false</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">flushCallbacks</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  pending = <span class="literal">false</span>; <span class="comment">//把标志还原为false</span></span><br><span class="line">  <span class="comment">// 依次执行回调</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; callbacks.length; i++) &#123;</span><br><span class="line">    callbacks[i]();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> timerFunc; <span class="comment">//定义异步方法  采用优雅降级</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">Promise</span> !== <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">  <span class="comment">// 如果支持promise</span></span><br><span class="line">  <span class="keyword">const</span> p = <span class="built_in">Promise</span>.resolve();</span><br><span class="line">  timerFunc = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    p.then(flushCallbacks);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> MutationObserver !== <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">  <span class="comment">// MutationObserver 主要是监听dom变化 也是一个异步方法</span></span><br><span class="line">  <span class="keyword">let</span> counter = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> observer = <span class="keyword">new</span> MutationObserver(flushCallbacks);</span><br><span class="line">  <span class="keyword">const</span> textNode = <span class="built_in">document</span>.createTextNode(<span class="built_in">String</span>(counter));</span><br><span class="line">  observer.observe(textNode, &#123;</span><br><span class="line">    <span class="attr">characterData</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">  timerFunc = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    counter = (counter + <span class="number">1</span>) % <span class="number">2</span>;</span><br><span class="line">    textNode.data = <span class="built_in">String</span>(counter);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> setImmediate !== <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">  <span class="comment">// 如果前面都不支持 判断setImmediate</span></span><br><span class="line">  timerFunc = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    setImmediate(flushCallbacks);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="comment">// 最后降级采用setTimeout</span></span><br><span class="line">  timerFunc = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(flushCallbacks, <span class="number">0</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">nextTick</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 除了渲染watcher  还有用户自己手动调用的nextTick 一起被收集到数组</span></span><br><span class="line">  callbacks.push(cb);</span><br><span class="line">  <span class="keyword">if</span> (!pending) &#123;</span><br><span class="line">    <span class="comment">// 如果多次调用nextTick  只会执行一次异步 等异步队列清空之后再把标志变为false</span></span><br><span class="line">    pending = <span class="literal">true</span>;</span><br><span class="line">    timerFunc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-v-for-key的作用"><a href="#7-v-for-key的作用" class="headerlink" title="7. v-for key的作用"></a>7. v-for key的作用</h3><p>key 的特殊属性主要用在Vue的虚拟DOM算法，在新旧nodes对比时辨识VNodes。如果不使用 key，Vue会使用一种最大限度减少动态元素并且尽可能的尝试修复/再利用相同类型元素的算法。使用key，它会基于key的变化重新排列元素顺序，并且会移除 key 不存在的元素。</p>
+<p><strong>更准确</strong>：因为带 key 就不是就地复用了，在 sameNode 函数 a.key === b.key 对比中可以避免就地复用的情况。所以会更加准确。</p>
+<p><strong>更快速</strong>：利用 key 的唯一性生成 map 对象来获取对应节点，比遍历方式更快</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断两个vnode的标签和key是否相同 如果相同 就可以认为是同一节点就地复用</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isSameVnode</span>(<span class="params">oldVnode, newVnode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> oldVnode.tag === newVnode.tag &amp;&amp; oldVnode.key === newVnode.key;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据key来创建老的儿子的index映射表  类似 &#123;&#x27;a&#x27;:0,&#x27;b&#x27;:1&#125; 代表key为&#x27;a&#x27;的节点在第一个位置 key为&#x27;b&#x27;的节点在第二个位置</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeIndexByKey</span>(<span class="params">children</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> map = &#123;&#125;;</span><br><span class="line">  children.forEach(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">    map[item.key] = index;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 生成的映射表</span></span><br><span class="line"><span class="keyword">let</span> map = makeIndexByKey(oldCh);</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-Vue的双向数据绑定原理是什么？"><a href="#8-Vue的双向数据绑定原理是什么？" class="headerlink" title="8. Vue的双向数据绑定原理是什么？"></a>8. Vue的双向数据绑定原理是什么？</h3><p>对象内部通过 defineReactive 方法，使用 Object.defineProperty 将属性进行劫持（只会劫持已经存在的属性），数组则是通过重写数组方法来实现。当页面使用对应属性时，每个属性都拥有自己的 dep 属性，存放他所依赖的 watcher（依赖收集），当属性变化后会通知自己对应的 watcher 去更新(派发更新)。</p>
+<p>主要分为以下几个步骤：</p>
+<ol>
+<li>需要observe的数据对象进行递归遍历，包括子属性对象的属性，都加上setter和getter这样的话，给这个对象的某个值赋值，就会触发setter，那么就能监听到了数据变化</li>
+<li>compile解析模板指令，将模板中的变量替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，更新视图</li>
+<li>Watcher订阅者是Observer和Compile之间通信的桥梁，主要做的事情是: ①在自身实例化时往属性订阅器(dep)里面添加自己 ②自身必须有一个update()方法 ③待属性变动dep.notice()通知时，能调用自身的update()方法，并触发Compile中绑定的回调，则功成身退。</li>
+<li>MVVM作为数据绑定的入口，整合Observer、Compile和Watcher三者，通过Observer来监听自己的model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化 -&gt; 视图更新；视图交互变化(input) -&gt; 数据model变更的双向绑定效果。</li>
+</ol>
+<h3 id="9-组件传值"><a href="#9-组件传值" class="headerlink" title="9. 组件传值"></a>9. 组件传值</h3><ol>
+<li>父传子：通过props传递</li>
+<li>子传父：子组件通过$emit()触发该事件并传值</li>
+<li>兄弟组件传值：通过事件总线evenBus  let bus = new Vue()</li>
+<li>通过vuex</li>
+<li>$parent,$children 获取当前组件的父组件和当前组件的子组件</li>
+<li>$refs 获取组件实例</li>
+<li>父组件中通过 provide 来提供变量，然后在子组件中通过 inject 来注入变量。(官方不推荐在实际业务中使用，但是写组件库时很常用)</li>
+<li>$attrs 和$listeners A-&gt;B-&gt;C。Vue 2.4 开始提供了$attrs 和$listeners 来解决这个问题</li>
+</ol>
+<h3 id="10-请说下封装-vue-组件的过程"><a href="#10-请说下封装-vue-组件的过程" class="headerlink" title="10. 请说下封装 vue 组件的过程"></a>10. 请说下封装 vue 组件的过程</h3><p>首先，组件可以提升整个项目的开发效率。能够把页面抽象成多个相对独立的模块，解决了我们传统项目开发：效率低、难维护、复用性等问题。</p>
+<p>然后，使用Vue.extend方法创建一个组件，然后使用Vue.component方法注册组件。子组件需要数据，可以在props中接受定义。而子组件修改好数据后，想把数据传递给父组件。可以采用emit方法。</p>
+<p>最好是符合开闭原则。</p>
+<h3 id="11-开发VUE使用第三库，发现有bug怎么办？"><a href="#11-开发VUE使用第三库，发现有bug怎么办？" class="headerlink" title="11. 开发VUE使用第三库，发现有bug怎么办？"></a>11. 开发VUE使用第三库，发现有bug怎么办？</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39037804/article/details/101421346">开发VUE使用第三库，发现有bug怎么办</a> 没有错，就是重写代码。vue在提供了extends和mixins提供重写代码的方式。</p>
+<p>举个例子：使用mint-ui Swipe组件过程中发现存在的bug。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  Swipe</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&#x27;mint-ui&#x27;</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">components</span>: &#123;</span><br><span class="line">    <span class="attr">imageSwipe</span>: &#123;</span><br><span class="line">      <span class="attr">extends</span>: Swipe,</span><br><span class="line">      <span class="attr">watch</span>: &#123;</span><br><span class="line">        defaultIndex (val) &#123;</span><br><span class="line">          <span class="built_in">this</span>.reInitPages()</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-Vue-js的template编译"><a href="#12-Vue-js的template编译" class="headerlink" title="12. Vue.js的template编译"></a>12. Vue.js的template编译</h3><p>简而言之，就是先转化成AST树，再得到的render函数返回VNode（Vue的虚拟DOM节点），详细步骤如下：</p>
+<ol>
+<li>首先，通过compile编译器把template编译成AST语法树（abstract syntax tree 即 源代码的抽象语法结构的树状表现形式），compile是createCompiler的返回值，createCompiler是用以创建编译器的。另外compile还负责合并option。</li>
+<li>然后，AST会经过generate（将AST语法树转化成render funtion字符串的过程）得到render函数，render的返回值是VNode，VNode是Vue的虚拟DOM节点，里面有（标签名、子节点、文本等等）</li>
+</ol>
+<h3 id="13-vue如何监听对象或者数组某个属性的变化"><a href="#13-vue如何监听对象或者数组某个属性的变化" class="headerlink" title="13. vue如何监听对象或者数组某个属性的变化"></a>13. vue如何监听对象或者数组某个属性的变化</h3><p>当在项目中直接设置数组的某一项的值，或者直接设置对象的某个属性值，这个时候，你会发现页面并没有更新。这是因为Object.defineProperty()限制，监听不到变化。</p>
+<p>解决方式：</p>
+<ul>
+<li>this.$set(你要改变的数组/对象，你要改变的位置/key，你要改成什么value)</li>
+<li>调用以下几个数组的方法：splice()、 push()、pop()、shift()、unshift()、sort()、reverse()</li>
+</ul>
+<h3 id="14-常用的事件修饰符"><a href="#14-常用的事件修饰符" class="headerlink" title="14. 常用的事件修饰符"></a>14. 常用的事件修饰符</h3><ul>
+<li>.stop:阻止冒泡</li>
+<li>.prevent:阻止默认行为</li>
+<li>.self:仅绑定元素自身触发</li>
+<li>.once: 2.1.4 新增,只触发一次</li>
+<li>passive: 2.3.0 新增,滚动事件的默认行为 (即滚动行为) 将会立即触发,不能和.prevent 一起使用</li>
+<li>.sync 修饰符</li>
+</ul>
+<p>从 2.3.0 起vue重新引入了.sync修饰符，但是这次它只是作为一个编译时的语法糖存在。它会被扩展为一个自动更新父组件属性的 v-on 监听器。示例代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">comp</span> <span class="attr">:foo.sync</span>=<span class="string">&quot;bar&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">comp</span>&gt;</span></span><br><span class="line">// 会被扩展为：</span><br><span class="line"><span class="tag">&lt;<span class="name">comp</span> <span class="attr">:foo</span>=<span class="string">&quot;bar&quot;</span> @<span class="attr">update:foo</span>=<span class="string">&quot;val =&gt; bar = val&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">comp</span>&gt;</span></span><br><span class="line">//当子组件需要更新 foo 的值时，它需要显式地触发一个更新事件：</span><br><span class="line">this.$emit(&#x27;update:foo&#x27;, newValue)</span><br></pre></td></tr></table></figure>
+
+<h3 id="15-vue如何获取dom"><a href="#15-vue如何获取dom" class="headerlink" title="15. vue如何获取dom"></a>15. vue如何获取dom</h3><p>先给标签设置一个ref值，再通过this.$refs.domName获取，例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ref</span>=<span class="string">&quot;test&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">const dom = this.$refs.test</span><br></pre></td></tr></table></figure>
+
+<h3 id="16-v-on可以监听多个方法吗？"><a href="#16-v-on可以监听多个方法吗？" class="headerlink" title="16. v-on可以监听多个方法吗？"></a>16. v-on可以监听多个方法吗？</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-on</span>=<span class="string">&quot;&#123; input:onInput,focus:onFocus,blur:onBlur &#125;&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="17-assets和static的区别"><a href="#17-assets和static的区别" class="headerlink" title="17. assets和static的区别"></a>17. assets和static的区别</h3><p>这两个都是用来存放项目中所使用的静态资源文件。两者的区别：</p>
+<ul>
+<li>assets中的文件在运行npm run build的时候会打包，简单来说就是会被压缩体积，代码格式化之类的。打包之后也会放到static中。</li>
+<li>static中的文件则不会被打包。</li>
+</ul>
+<p>建议：将图片等未处理的文件放在assets中，打包减少体积。而对于第三方引入的一些资源文件如iconfont.css等可以放在static中，因为这些文件已经经过处理了。</p>
+<h3 id="18-slot插槽"><a href="#18-slot插槽" class="headerlink" title="18. slot插槽"></a>18. slot插槽</h3><p>很多时候，我们封装了一个子组件之后，在父组件使用的时候，想添加一些dom元素，这个时候就可以使用slot插槽了，但是这些dom是否显示以及在哪里显示，则是看子组件中slot组件的位置了。</p>
+<h3 id="19-vue初始化页面闪动问题"><a href="#19-vue初始化页面闪动问题" class="headerlink" title="19. vue初始化页面闪动问题"></a>19. vue初始化页面闪动问题</h3><p>使用vue开发时，在vue初始化之前，由于div是不归vue管的，所以我们写的代码在还没有解析的情况下会容易出现花屏现象，看到类似于的字样，虽然一般情况下这个时间很短暂，但是我们还是有必要让解决这个问题的。</p>
+<p>首先：在css里加上以下代码</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[v-cloak]</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果没有彻底解决问题，则在根元素加上style=”display: none;” :style=”{display: ‘block’}”</p>
+<h3 id="20-异步组件"><a href="#20-异步组件" class="headerlink" title="20. 异步组件"></a>20. 异步组件</h3><p>在引入子组件时采用异步加载的方法，import()方法是由es6提出的，动态加载返回一个Promise对象，then方法的参数是加载到的模块。类似于Node.js的require方法，主要import()方法是异步加载的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">	<span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> &#123;&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">components</span>: &#123;</span><br><span class="line">		<span class="attr">Test</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./components/Test&#x27;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="21-keep-alive"><a href="#21-keep-alive" class="headerlink" title="21. keep-alive"></a>21. keep-alive</h3><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904178926485511">https://juejin.cn/post/6844904178926485511</a></p>
+<h3 id="22-Vue2生命周期和Vue3生命周期的区别"><a href="#22-Vue2生命周期和Vue3生命周期的区别" class="headerlink" title="22. Vue2生命周期和Vue3生命周期的区别"></a>22. Vue2生命周期和Vue3生命周期的区别</h3><ul>
+<li>beforeMount =&gt; onBeforeMount</li>
+<li>mounted =&gt; onMounted</li>
+<li>beforeUpdate =&gt; onBeforeUpdate</li>
+<li>updated =&gt; onUpdated</li>
+<li>beforeDestory =&gt; onBeforeUnmount</li>
+<li>destoryed =&gt; onUnmounted</li>
+<li>vue3中新增了onRenderTracked生命周期函数 指的是每次渲染之后收集页面响应式的依赖的时候会自动执行的函数</li>
+</ul>
+<p>在composition API 中不存在beforeCreate和created这两个生命周期函数 因为setup函数的执行时间在beforeCreate和created之间，有需要执行的内容可以直接在setup函数中执行，没必要再写在beforeCreate和created中</p>
+<p>当页面渲染的时候，vue都会重新收集响应式的依赖，响应式的依赖一旦重新渲染需要重新收集的时候onRenderTracked便会自动执行一次 页面首次渲染便会执行 页面再次重新渲染也会执行 与onRenderTracked对应的函数是onRenderTriggered 指每次重新渲染被触发的时候，首次页面加载不会触发，当数据改变，页面重新渲染的时候触发，onRenderTracked也会再次触发</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; onBeforeMount, onRenderTracked, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onRenderTriggered &#125;</span><br><span class="line"><span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">	onBeforeMount(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">&#x27;onBeforeMount&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    onMounted(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">&#x27;onMounted&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    onBeforeMount(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">&#x27;onBeforeMount&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    onBeforeUpdate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">&#x27;onBeforeUpdate&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    updated(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">&#x27;updated&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    beforeUnmount(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">&#x27;beforeUnmount&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 每次渲染后重新收集响应式依赖</span></span><br><span class="line">    onRenderTracked(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">&#x27;onRenderTracked&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 每次触发页面重新渲染时自动执行</span></span><br><span class="line">    onRenderTriggered(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">&#x27;onRenderTriggered&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="23-v-if-与-v-for-为什么不建议一起使用"><a href="#23-v-if-与-v-for-为什么不建议一起使用" class="headerlink" title="23. v-if 与 v-for 为什么不建议一起使用"></a>23. v-if 与 v-for 为什么不建议一起使用</h3><p>v-for 和 v-if 不要在同一个标签中使用,因为解析时先解析 v-for 再解析 v-if。如果遇到需要同时使用时可以考虑写成计算属性的方式。</p>
+<h3 id="24-Vue-的父子组件生命周期钩子函数执行顺序"><a href="#24-Vue-的父子组件生命周期钩子函数执行顺序" class="headerlink" title="24. Vue 的父子组件生命周期钩子函数执行顺序"></a>24. Vue 的父子组件生命周期钩子函数执行顺序</h3><ul>
+<li><p>加载渲染过程</p>
+<p>父 beforeCreate-&gt;父 created-&gt;父 beforeMount-&gt;子 beforeCreate-&gt;子 created-&gt;子 beforeMount-&gt;子 mounted-&gt;父 mounted</p>
+</li>
+<li><p>子组件更新过程</p>
+<p>父 beforeUpdate-&gt;子 beforeUpdate-&gt;子 updated-&gt;父 updated</p>
+</li>
+<li><p>父组件更新过程</p>
+<p>父 beforeUpdate-&gt;父 updated</p>
+</li>
+<li><p>销毁过程</p>
+<p>父 beforeDestroy-&gt;子 beforeDestroy-&gt;子 destroyed-&gt;父 destroyed</p>
+</li>
+</ul>
+<h3 id="25-虚拟-DOM-是什么-有什么优缺点"><a href="#25-虚拟-DOM-是什么-有什么优缺点" class="headerlink" title="25. 虚拟 DOM 是什么 有什么优缺点"></a>25. 虚拟 DOM 是什么 有什么优缺点</h3><p>由于在浏览器中操作 DOM 是很昂贵的。频繁的操作 DOM，会产生一定的性能问题。这就是虚拟 Dom 的产生原因。Vue2 的 Virtual DOM 借鉴了开源库 snabbdom 的实现。Virtual DOM 本质就是用一个原生的 JS 对象去描述一个 DOM 节点，是对真实 DOM 的一层抽象。</p>
+<p><strong>优点</strong></p>
+<ol>
+<li><p>保证性能下限： 框架的虚拟 DOM 需要适配任何上层 API 可能产生的操作，它的一些 DOM 操作的实现必须是普适的，所以它的性能并不是最优的；但是比起粗暴的 DOM 操作性能要好很多，因此框架的虚拟 DOM 至少可以保证在你不需要手动优化的情况下，依然可以提供还不错的性能，即保证性能的下限；</p>
+</li>
+<li><p>无需手动操作 DOM： 我们不再需要手动去操作 DOM，只需要写好 View-Model 的代码逻辑，框架会根据虚拟 DOM 和 数据双向绑定，帮我们以可预期的方式更新视图，极大提高我们的开发效率；</p>
+</li>
+<li><p>跨平台： 虚拟 DOM 本质上是 JavaScript 对象,而 DOM 与平台强相关，相比之下虚拟 DOM 可以进行更方便地跨平台操作，例如服务器渲染、weex 开发等等。</p>
+</li>
+</ol>
+<p><strong>缺点</strong></p>
+<ol>
+<li>无法进行极致优化： 虽然虚拟 DOM + 合理的优化，足以应对绝大部分应用的性能需求，但在一些性能要求极高的应用中虚拟 DOM 无法进行针对性的极致优化。</li>
+<li>首次渲染大量 DOM 时，由于多了一层虚拟 DOM 的计算，会比 innerHTML 插入慢</li>
+</ol>
+<h3 id="26-v-model-原理"><a href="#26-v-model-原理" class="headerlink" title="26. v-model 原理"></a>26. v-model 原理</h3><p>v-model 只是语法糖而已</p>
+<p>v-model 在内部为不同的输入元素使用不同的 property 并抛出不同的事件：</p>
+<ul>
+<li>text 和 textarea 元素使用 value property 和 input 事件；</li>
+<li>checkbox 和 radio 使用 checked property 和 change 事件；</li>
+<li>select 字段将 value 作为 prop 并将 change 作为事件</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">currency-input</span> <span class="attr">v-model</span>=<span class="string">&quot;price&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">currentcy-input</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--上行代码是下行的语法糖</span></span><br><span class="line"><span class="comment"> &lt;currency-input :value=&quot;price&quot; @input=&quot;price = arguments[0]&quot;&gt;&lt;/currency-input&gt;</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 子组件定义 --&gt;</span></span><br><span class="line">Vue.component(&#x27;currency-input&#x27;, &#123;</span><br><span class="line"> template: `</span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ref</span>=<span class="string">&quot;input&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:value</span>=<span class="string">&quot;value&quot;</span></span></span><br><span class="line"><span class="tag">    @<span class="attr">input</span>=<span class="string">&quot;$emit(&#x27;input&#x27;, $event.target.value)&quot;</span></span></span><br><span class="line"><span class="tag">   &gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"> `,</span><br><span class="line"> props: [&#x27;value&#x27;],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="27-Vue-模板编译原理"><a href="#27-Vue-模板编译原理" class="headerlink" title="27. Vue 模板编译原理"></a>27. Vue 模板编译原理</h3><p>Vue 的编译过程就是将 template 转化为 render 函数的过程 分为以下三步</p>
+<ol>
+<li>是将 模板字符串 转换成 element ASTs（解析器）</li>
+<li>是对 AST 进行静态节点标记，主要用来做虚拟DOM的渲染优化（优化器）</li>
+<li>使用 element ASTs 生成 render 函数代码字符串（代码生成器）</li>
+</ol>
+<h2 id="vue插件篇"><a href="#vue插件篇" class="headerlink" title="vue插件篇"></a>vue插件篇</h2><h3 id="状态管理（vuex）"><a href="#状态管理（vuex）" class="headerlink" title="状态管理（vuex）"></a>状态管理（vuex）</h3><h4 id="1-怎么使用vuex"><a href="#1-怎么使用vuex" class="headerlink" title="1. 怎么使用vuex"></a>1. 怎么使用vuex</h4><p>第一步安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install vuex -S</span><br></pre></td></tr></table></figure>
+
+<p>第二步创建store</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> Vuex <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span>;</span><br><span class="line">Vue.use(Vuex);</span><br><span class="line"><span class="comment">//不是在生产环境debug为true</span></span><br><span class="line"><span class="keyword">const</span> debug = process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span>;</span><br><span class="line"><span class="comment">//创建Vuex实例对象</span></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">    <span class="attr">strict</span>:debug,<span class="comment">//在不是生产环境下都开启严格模式</span></span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">getters</span>:&#123;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">mutations</span>:&#123;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">actions</span>:&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> store;</span><br></pre></td></tr></table></figure>
+
+<p>第三步注入vuex</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App.vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">&#x27;./store&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    <span class="attr">store</span>:store,</span><br><span class="line">    <span class="attr">render</span>: <span class="function"><span class="params">h</span> =&gt;</span> h(App)</span><br><span class="line">&#125;).$mount(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-vuex中有几个核心属性，分别是什么？"><a href="#2-vuex中有几个核心属性，分别是什么？" class="headerlink" title="2. vuex中有几个核心属性，分别是什么？"></a>2. vuex中有几个核心属性，分别是什么？</h4><ul>
+<li><p>state 唯一数据源,Vue 实例中的 data 遵循相同的规则</p>
+</li>
+<li><p>getters 可以认为是 store 的计算属性,就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来，且只有当它的依赖值发生了改变才会被重新计算。Getter 会暴露为 store.getters 对象，你可以以属性的形式访问这些值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">todos</span>: [</span><br><span class="line">      &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">text</span>: <span class="string">&#x27;...&#x27;</span>, <span class="attr">done</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">text</span>: <span class="string">&#x27;...&#x27;</span>, <span class="attr">done</span>: <span class="literal">false</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">getters</span>: &#123;</span><br><span class="line">    <span class="attr">doneTodos</span>: <span class="function"><span class="params">state</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> state.todos.filter(<span class="function"><span class="params">todo</span> =&gt;</span> todo.done)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">store.getters.doneTodos <span class="comment">// -&gt; [&#123; id: 1, text: &#x27;...&#x27;, done: true &#125;]</span></span><br></pre></td></tr></table></figure></li>
+<li><p>mutation 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation,非常类似于事件,通过store.commit 方法触发</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">count</span>: <span class="number">1</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mutations</span>: &#123;</span><br><span class="line">    increment (state) &#123;</span><br><span class="line">      <span class="comment">// 变更状态</span></span><br><span class="line">      state.count++</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">store.commit(<span class="string">&#x27;increment&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+<li><p>action Action 类似于 mutation，不同在于Action 提交的是 mutation，而不是直接变更状态，Action 可以包含任意异步操作</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">count</span>: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mutations</span>: &#123;</span><br><span class="line">    increment (state) &#123;</span><br><span class="line">      state.count++</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">actions</span>: &#123;</span><br><span class="line">    increment (context) &#123;</span><br><span class="line">      context.commit(<span class="string">&#x27;increment&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
+<li><p>module 由于使用单一状态树，应用的所有状态会集中到一个比较大的对象。当应用变得非常复杂时，store 对象就有可能变得相当臃肿。为了解决以上问题，Vuex 允许我们将 store 分割成模块（module）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">const moduleA = &#123;</span><br><span class="line">  state: () =&gt; (&#123; ... &#125;),</span><br><span class="line">  mutations: &#123; ... &#125;,</span><br><span class="line">  actions: &#123; ... &#125;,</span><br><span class="line">  getters: &#123; ... &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const moduleB = &#123;</span><br><span class="line">  state: () =&gt; (&#123; ... &#125;),</span><br><span class="line">  mutations: &#123; ... &#125;,</span><br><span class="line">  actions: &#123; ... &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const store = new Vuex.Store(&#123;</span><br><span class="line">  modules: &#123;</span><br><span class="line">    a: moduleA,</span><br><span class="line">    b: moduleB</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">store.state.a // -&gt; moduleA 的状态</span><br><span class="line">store.state.b // -&gt; moduleB 的状态</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-请求代码应该写在组件中还是vuex的actions中"><a href="#3-请求代码应该写在组件中还是vuex的actions中" class="headerlink" title="3. 请求代码应该写在组件中还是vuex的actions中"></a>3. 请求代码应该写在组件中还是vuex的actions中</h4><p>如果请求来的数据是不是要被其他组件公用，仅仅在请求的组件内使用，就不需要放入vuex 的state里</p>
+<p>如果被其他地方复用，这个很大几率上是需要的，如果需要，请将请求放入action里，方便复用。</p>
+<h4 id="4-从vuex中获取的数据能直接更改吗？"><a href="#4-从vuex中获取的数据能直接更改吗？" class="headerlink" title="4. 从vuex中获取的数据能直接更改吗？"></a>4. 从vuex中获取的数据能直接更改吗？</h4><p>从vuex中取的数据，不能直接更改，需要浅拷贝对象之后更改，否则报错</p>
+<h4 id="5-vuex中的数据在页面刷新后数据消失"><a href="#5-vuex中的数据在页面刷新后数据消失" class="headerlink" title="5. vuex中的数据在页面刷新后数据消失"></a>5. vuex中的数据在页面刷新后数据消失</h4><p>用sessionstorage 或者 localstorage 存储数据</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sessionStorage.setItem( <span class="string">&#x27;名&#x27;</span>, <span class="built_in">JSON</span>.stringify(值) ) <span class="comment">//存储：</span></span><br><span class="line">sessionStorage.getItem(<span class="string">&#x27;名&#x27;</span>) <span class="comment">// 使用：---得到的值为字符串类型，用JSON.parse()去引号；</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以引入插件vuex-persist，它就是为 Vuex 持久化存储而生的一个插件。不需要你手动存取 storage ，而是直接将状态保存至 cookie 或者 localStorage 中</p>
+<h4 id="6-Vuex的严格模式是什么-有什么作用-怎么开启？"><a href="#6-Vuex的严格模式是什么-有什么作用-怎么开启？" class="headerlink" title="6. Vuex的严格模式是什么,有什么作用,怎么开启？"></a>6. Vuex的严格模式是什么,有什么作用,怎么开启？</h4><p>在严格模式下，无论何时发生了状态变更且不是由mutation函数引起的，将会抛出错误。这能保证所有的状态变更都能被调试工具跟踪到。在Vuex.Store 构造器选项中开启,如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">    <span class="attr">strict</span>:<span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-怎么在组件中批量使用Vuex的getter属性"><a href="#7-怎么在组件中批量使用Vuex的getter属性" class="headerlink" title="7. 怎么在组件中批量使用Vuex的getter属性"></a>7. 怎么在组件中批量使用Vuex的getter属性</h4><p>使用mapGetters辅助函数, 利用对象展开运算符将getter混入computed 对象中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;mapGetters&#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span>&#123;</span><br><span class="line">    <span class="attr">computed</span>:&#123;</span><br><span class="line">        ...mapGetters([<span class="string">&#x27;total&#x27;</span>,<span class="string">&#x27;discountTotal&#x27;</span>])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-组件中重复使用mutation"><a href="#8-组件中重复使用mutation" class="headerlink" title="8. 组件中重复使用mutation"></a>8. 组件中重复使用mutation</h4><p>使用mapMutations辅助函数,在组件中这么使用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; mapMutations &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"><span class="attr">methods</span>:&#123;</span><br><span class="line">    ...mapMutations(&#123;</span><br><span class="line">        <span class="attr">setNumber</span>:<span class="string">&#x27;SET_NUMBER&#x27;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后调用this.setNumber(10)相当调用this.$store.commit(‘SET_NUMBER’,10)</p>
+<h4 id="9-mutation和action有什么区别"><a href="#9-mutation和action有什么区别" class="headerlink" title="9. mutation和action有什么区别"></a>9. mutation和action有什么区别</h4><ul>
+<li><p>action 提交的是 mutation，而不是直接变更状态。mutation可以直接变更状态</p>
+</li>
+<li><p>action 可以包含任意异步操作。mutation只能是同步操作</p>
+</li>
+<li><p>提交方式不同</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//action 是用dispatch来提交。</span></span><br><span class="line"><span class="built_in">this</span>.store.dispatch(<span class="string">&#x27;ACTION_NAME&#x27;</span>,data)</span><br><span class="line"><span class="comment">//mutation是用commit来提交</span></span><br><span class="line"><span class="built_in">this</span>.$store.commit(<span class="string">&#x27;SET_NUMBER&#x27;</span>,<span class="number">10</span>)</span><br></pre></td></tr></table></figure></li>
+<li><p>接收参数不同，mutation第一个参数是state，而action第一个参数是context，其包含了</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    state,      <span class="comment">// 等同于 `store.state`，若在模块中则为局部状态</span></span><br><span class="line">    rootState,  <span class="comment">// 等同于 `store.state`，只存在于模块中</span></span><br><span class="line">    commit,     <span class="comment">// 等同于 `store.commit`</span></span><br><span class="line">    dispatch,   <span class="comment">// 等同于 `store.dispatch`</span></span><br><span class="line">    getters,    <span class="comment">// 等同于 `store.getters`</span></span><br><span class="line">    rootGetters <span class="comment">// 等同于 `store.getters`，只存在于模块中</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="10-在v-model上怎么用Vuex中state的值？"><a href="#10-在v-model上怎么用Vuex中state的值？" class="headerlink" title="10. 在v-model上怎么用Vuex中state的值？"></a>10. 在v-model上怎么用Vuex中state的值？</h4><p>需要通过computed计算属性来转换。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;input v-model=<span class="string">&quot;message&quot;</span>&gt;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">computed: &#123;</span><br><span class="line">    <span class="attr">message</span>: &#123;</span><br><span class="line">        get () &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>.$store.state.message</span><br><span class="line">        &#125;,</span><br><span class="line">        set (value) &#123;</span><br><span class="line">            <span class="built_in">this</span>.$store.commit(<span class="string">&#x27;updateMessage&#x27;</span>, value)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="路由页面管理（vue-router）"><a href="#路由页面管理（vue-router）" class="headerlink" title="路由页面管理（vue-router）"></a>路由页面管理（vue-router）</h3><h4 id="1-什么是vue-router"><a href="#1-什么是vue-router" class="headerlink" title="1. 什么是vue-router"></a>1. 什么是vue-router</h4><p>Vue Router 是 Vue.js 官方的路由管理器。它和 Vue.js 的核心深度集成，让构建单页面应用变得易如反掌。包含的功能有：</p>
+<ul>
+<li>嵌套的路由/视图表</li>
+<li>模块化的、基于组件的路由配置</li>
+<li>路由参数、查询、通配符</li>
+<li>基于 Vue.js 过渡系统的视图过渡效果</li>
+<li>细粒度的导航控制</li>
+<li>带有自动激活的 CSS class 的链接</li>
+<li>HTML5 历史模式或 hash 模式，在 IE9 中自动降级</li>
+<li>自定义的滚动条行为</li>
+</ul>
+<h4 id="2-怎么使用vue-router"><a href="#2-怎么使用vue-router" class="headerlink" title="2. 怎么使用vue-router"></a>2. 怎么使用vue-router</h4><p>第一步安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install vue-router -S</span><br></pre></td></tr></table></figure>
+
+<p>第二步在main.js中使用Vue Router组件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App.vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> VueRouter <span class="keyword">from</span> <span class="string">&#x27;./vue-router&#x27;</span>;</span><br><span class="line">Vue.use(VueRouter)</span><br><span class="line"><span class="keyword">const</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    <span class="attr">store</span>:store,</span><br><span class="line">    <span class="attr">render</span>: <span class="function"><span class="params">h</span> =&gt;</span> h(App)</span><br><span class="line">&#125;).$mount(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>第三步配置路由</p>
+<ul>
+<li>定义 (路由) 组件</li>
+<li>定义路由对象数组。对象的path是自定义的路径（即使用这个路径可以找到对应的组件），component是指该路由对应的组件</li>
+<li>实例化Vue Router对象</li>
+<li>挂载根实例</li>
+</ul>
+<p>第四步在App.vue中使用路由</p>
+<h4 id="3-怎么定义vue-router的动态路由？怎么获取传过来的动态参数？"><a href="#3-怎么定义vue-router的动态路由？怎么获取传过来的动态参数？" class="headerlink" title="3. 怎么定义vue-router的动态路由？怎么获取传过来的动态参数？"></a>3. 怎么定义vue-router的动态路由？怎么获取传过来的动态参数？</h4><p>在router目录下的index.js文件中，对path属性加上/:id。使用router对象的params.id获取动态参数</p>
+<h4 id="4-vue-router的导航钩子"><a href="#4-vue-router的导航钩子" class="headerlink" title="4. vue-router的导航钩子"></a>4. vue-router的导航钩子</h4><p>常用的是router.beforeEach(to,from,next)，在跳转前进行权限判断。一共有三种：</p>
+<ul>
+<li>全局导航钩子：router.beforeEach(to,from,next)</li>
+<li>组件内的钩子</li>
+<li>单独路由独享组件</li>
+</ul>
+<h4 id="5-vue路由传参"><a href="#5-vue路由传参" class="headerlink" title="5. vue路由传参"></a>5. vue路由传参</h4><ul>
+<li>使用query方法传入的参数使用this.$route.query接受</li>
+<li>使用params方式传入的参数使用this.$route.params接受</li>
+</ul>
+<h4 id="6-router和route的区别"><a href="#6-router和route的区别" class="headerlink" title="6. router和route的区别"></a>6. router和route的区别</h4><ul>
+<li>route为当前router跳转对象里面可以获取name、path、query、params等</li>
+<li>router为VueRouter实例，想要导航到不同URL，则使用router.push方法</li>
+</ul>
+<h4 id="7-路由按需加载"><a href="#7-路由按需加载" class="headerlink" title="7. 路由按需加载"></a>7. 路由按需加载</h4><p>随着项目功能模块的增加，引入的文件数量剧增。如果不做任何处理，那么首屏加载会相当的缓慢，这个时候，路由按需加载就闪亮登场了。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//webpack&lt; 2.4 时</span></span><br><span class="line">&#123; </span><br><span class="line">    path:&#x27;/&#x27;, </span><br><span class="line">    name:&#x27;home&#x27;,</span><br><span class="line">    components:resolve=&gt;require([&#x27;@/components/home&#x27;],resolve)</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//webpack&gt; 2.4 时</span></span><br><span class="line">&#123; </span><br><span class="line">    path:&#x27;/&#x27;, </span><br><span class="line">    name:&#x27;home&#x27;, </span><br><span class="line">    components:()=&gt;import(&#x27;@/components/home&#x27;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>import()方法是由es6提出的，动态加载返回一个Promise对象，then方法的参数是加载到的模块。类似于Node.js的require方法，主要import()方法是异步加载的。</p>
+<h4 id="8-Vue里面router-link在电脑上有用，在安卓上没反应怎么解决"><a href="#8-Vue里面router-link在电脑上有用，在安卓上没反应怎么解决" class="headerlink" title="8. Vue里面router-link在电脑上有用，在安卓上没反应怎么解决"></a>8. Vue里面router-link在电脑上有用，在安卓上没反应怎么解决</h4><p>Vue路由在Android机上有问题，babel问题，安装babel polypill插件解决</p>
+<h4 id="9-Vue2中注册在router-link上事件无效解决方法"><a href="#9-Vue2中注册在router-link上事件无效解决方法" class="headerlink" title="9. Vue2中注册在router-link上事件无效解决方法"></a>9. Vue2中注册在router-link上事件无效解决方法</h4><p>使用@click.native。原因：router-link会阻止click事件，.native指直接监听一个原生事件</p>
+<h4 id="10-RouterLink在IE和Firefox中不起作用（路由不跳转）的问题"><a href="#10-RouterLink在IE和Firefox中不起作用（路由不跳转）的问题" class="headerlink" title="10. RouterLink在IE和Firefox中不起作用（路由不跳转）的问题"></a>10. RouterLink在IE和Firefox中不起作用（路由不跳转）的问题</h4><ul>
+<li>只用a标签，不使用button标签</li>
+<li>使用button标签和Router.navigate方法</li>
+</ul>
+<h4 id="11-vue-router-路由钩子函数是什么-执行顺序是什么"><a href="#11-vue-router-路由钩子函数是什么-执行顺序是什么" class="headerlink" title="11. vue-router 路由钩子函数是什么 执行顺序是什么"></a>11. vue-router 路由钩子函数是什么 执行顺序是什么</h4><p>路由钩子的执行流程, 钩子函数种类有:全局守卫、路由守卫、组件守卫</p>
+<p><strong>完整的导航解析流程:</strong></p>
+<ol>
+<li>导航被触发。</li>
+<li>在失活的组件里调用 beforeRouteLeave 守卫。</li>
+<li>调用全局的 beforeEach 守卫。</li>
+<li>在重用的组件里调用 beforeRouteUpdate 守卫 (2.2+)。</li>
+<li>在路由配置里调用 beforeEnter。</li>
+<li>解析异步路由组件。</li>
+<li>在被激活的组件里调用 beforeRouteEnter。</li>
+<li>调用全局的 beforeResolve 守卫 (2.5+)。</li>
+<li>导航被确认。</li>
+<li>调用全局的 afterEach 钩子。</li>
+<li>触发 DOM 更新。</li>
+<li>调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。</li>
+</ol>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/07/28/【036】继承/" data-toggle="tooltip" data-placement="top" title="继承">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/07/22/【035】跨域/" data-toggle="tooltip" data-placement="top" title="前端跨域">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#面试" title="面试">面试</a>
+                        
+                          <a class="tag" href="/tags/#Vue" title="Vue">Vue</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/07/25/%E3%80%90102%E3%80%91Vue%E9%9D%A2%E8%AF%95%E9%A2%98/";
+    var disqus_url = "http://yoursite.com/2021/07/25/%E3%80%90102%E3%80%91Vue%E9%9D%A2%E8%AF%95%E9%A2%98/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          React篇5-生态 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/07/05/【031】React篇5-生态/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                    <h1>React篇5-生态</h1>
+                    <h2 class="subheading">Hooks</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-07-05
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>React的生态比其它框架更加复杂，它没有公认的统一的最佳实践，往往有两个甚至更多的方案供你选择。本章稍作介绍和分析，各方案利弊还是要实践才能了解。</p>
+<h2 id="1-状态管理"><a href="#1-状态管理" class="headerlink" title="1. 状态管理"></a>1. 状态管理</h2><p>所谓状态管理主要包含着两部分：管理状态-数据如何共享，管理状态-数据如何变动。此外还有一些TS支持、异步支持等部分，这和库的具体实现有关。<br><strong>管理状态如何变动</strong></p>
+<ul>
+<li>不需要共享的方法写在组件内部，需要抽象的方法写到外部导入。</li>
+<li>如果方法需要共享的范围比较小，可以考虑当作prop传给子组件。</li>
+<li>如果方法依赖组件内部属性，没法很好的导入，那么就可以看Hooks的历史：用高阶组件、render props或者Hooks来复用这类方法。</li>
+</ul>
+<p><strong>管理状态如何共享</strong><br>技术手段：<br>现在来看，技术手段是有限的几种：</p>
+<ul>
+<li>状态向上提升，由祖先组件当作prop透传给需要的组件<br>弊端：如果组件树层次关系超过三代，变量透传一万层；改动起来相当麻烦</li>
+<li>使用Context API订阅<br>弊端：Conext创建了额外的组件，在共享的内容多起来之后会导致超多层的嵌套，难以阅读和理解，也降低了性能；如果不恰当隔离，Context会导致订阅组件不必要的渲染</li>
+<li>使用全局变量订阅<br>弊端：需要做一层让组件订阅相关状态后自动更新的适配；全局变量会很多，可能会导致冲突</li>
+</ul>
+<p>综合来看，全局变量是适应性最广的手段，它的两个弊端相对也更容易解决一些。不过，在特定情况下，其它方法依然是可用的：</p>
+<ul>
+<li>共享范围很小，只在父子间，或者透传的prop非常稳定（譬如官网中说的传递某个组件作为prop），那状态提升并不太麻烦</li>
+<li>如果要共享的内容比较稳定、单一，或者是某些真正的全局状态，可以用Context，参见官网文档的考虑</li>
+</ul>
+<p>设计思想<br>思想1：尽量不共享（恰当的组件化+状态提升）<br>这是一个很容易被忽视的思想，因为当你尝试了解某个状态管理库时它不会强调这一点，但是如果你去搜如何做状态管理时，就能看到不少人在提local了。<br>尽量不共享的本质是做恰当的组件化。除了那些父子间的状态，其实没有那么多状态需要跨组件通信，如果有，那可能是你的组件化抽象有问题。组件本身就是用来复用的独立的单位，它不应该对外界有那么多通信的需要。<br>但是这要求写代码的人站在重构代码的位置上。有时你接手了一个组件化不好的项目，其中逻辑相当复杂，而时间和重构价值又有限，重新梳理恰当的抽象是不现实的。</p>
+<p>思想2：共享所有状态<br>该思想以Redux为代表：所有状态都存在全局，组件按需订阅相关的状态来重新渲染。<br>这是尽量不共享思想的反面，相当于说所有状态都共享。有些文章批评一些程序员，将那些私有的状态也放到全局状态，滥用了Redux。但这真不能怪程序员，Redux就是这样的思想：全局的store里存在决定UI的所有状态。你不能需要共享的就放，不需要共享的就不放。而且，现在是私有的，保不准哪天就抽象了一个子组件需要用这些状态。同样重要的是，Redux也没指导我们应该在store里保存决定UI的最小状态集合——它强调的就是所有状态呀。<br>共享所有状态从概念上来说非常简单。所以我们也能很快发现它的一个缺点：有些状态真没必要放到全局；而且状态在全局还要重新组织一遍，结果可能和原先组件的结构一模一样，只是有些局部的状态被挪到了全局——那为什么不保留组件化内部状态的方式呢？<br>但共享所有状态是和其它思想一起出现的：UI=f(state)。因此我们需要一个保有所有state的全局store，不仅如此，我们还应该有一个纯函数f，也写成全局的吧。这被Redux归为三个基本原则：</p>
+<ul>
+<li>单一的状态来源</li>
+<li>状态是只读的</li>
+<li>改变由纯函数来执行<br>Redux还为这个纯函数f又增加了一层抽象，将其拆成声明式的一部分（action）和具体的实现（reducer）。前三个原则是Redux流行的原因（吻合React的函数式思想），后一层action和reducer的抽象是Redux惹人厌的原因——有许多库封装这几乎没必要的一层抽象。</li>
+</ul>
+<p>思想3：订阅-发布模式<br>该思想以mobx为代表：将某些待共享的状态标记为observable，需要该状态的组件则订阅该状态使用。<br>从共享的角度来说我认为这比共享所有状态更合理，仅关注需要共享的状态。不过mobx依赖于可变的数据对象，和React不可变的宣传格格不入，现在已经不太流行了。<br>话虽如此，订阅-发布模式的思想却是普遍的。Context API是一例，2020年Facebook内部的Recoil也可以说是应用了订阅-发布模式，只是它是以不可变对象和Hooks的形式出现的。</p>
+<p>现在你可以自行挑选合适的方案了。Redux派可以看dva，rematch等优化API、支持异步处理的改进方案；mobx可以看看学习了Redux配套出的mobx-state-tree；还有不少利用Context API和Hooks的轻量级方案，如unstated-next，reactn、smox、react-model等，当然还有FB当家的Recoil。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57423535">参考一</a>、<a target="_blank" rel="noopener" href="https://blog.staleclosure.com/react-state-mangement/">参考二</a>、<a target="_blank" rel="noopener" href="https://www.tangshuang.net/7862.html">参考三</a></p>
+<h2 id="样式"><a href="#样式" class="headerlink" title="样式"></a>样式</h2><p>有两种思路：在CSS里加强CSS；在JS里写CSS。后者是React all-in-js思路的延续，反正我们都已经在JS里写html了，再写个css不是顺理成章？<br>不过也有相当多的人激励反对css-in-js，认为这终究还是违背关注点分离的原则。其实这是老的争论的延续：写template还是写JSX一样？我认为两派不分胜负就说明其实无所谓，是个理念问题胜过是个实践问题。我们就follow团队或者项目实践就可以了。</p>
+<p>具体有几种方案你可能需要了解一下：</p>
+<ul>
+<li>import引入css, 或者加强的less,sass（通过loader和模块编译）：样式作用于全局</li>
+<li>CSS Modules：利用className来处理样式，无法处理动态css</li>
+<li>JS内联CSS：部分伪元素选择器不支持</li>
+<li>CSS in JS：styled-components等，缺点主要是无可读性的类名、动态生成CSS性能差<br><a target="_blank" rel="noopener" href="https://www.infoq.cn/article/95ojp6upti9vsyfsw2xz">参考</a></li>
+</ul>
+<h2 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h2><p><a target="_blank" rel="noopener" href="https://reactrouter.com/web/guides/quick-start">React router</a></p>
+<h2 id="自动化测试"><a href="#自动化测试" class="headerlink" title="自动化测试"></a>自动化测试</h2><p><strong>要不要测试？</strong><br>测试的目的是为了保障代码质量，不仅是一种编码的规范和限制，也是程序员可以放心重构、尝试不稳定功能/库的定心丸。同时，撰写用例还有梳理逻辑、保留文档等额外的好处。<br>但是维护用例也需要人力成本，尤其是前端的测试与后端的测试有很大不同：后端的测试主要是API测试，前端的测试主要是UI测试。而UI测试比API测试困难许多：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/GUI%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95#3">参考一</a>、<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/60564125">参考二</a><br>这种情况导致前端几乎不可能做完整的测试，只能是有选择、有针对性地进行测试。</p>
+<p><strong>针对性的测试</strong><br>我们需要根据项目以及代码的性质，选择适合它们的测试或者决定不测试。<br>受限于编写一个用例的成本较高，只能选择测试收益也较高的场景：</p>
+<ul>
+<li>用例使用次数多<ul>
+<li>用例需求稳定、持续时间较长</li>
+<li>用例实现不稳定，经常需要测试</li>
+</ul>
+</li>
+<li>用例代码重要<ul>
+<li>被测试代码是许多代码的依赖（事实上这种代码天然地趋向于稳定的需求）</li>
+<li>被测试代码处理的是核心需求（一般这种业务会有严格的把关机制吧？）<br>比较典型的实践场景有：</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>公共库、公共组件、服务层的开发维护（代码依赖，需求稳定）</li>
+<li>长期项目中后期迭代、重构（需求稳定）</li>
+<li>第三方依赖不可控（实现不稳定）<br>当然，如果（1）有足够的测试团队和测试时间，（2）业务开发时间紧张，前端测试的必要性又大大降低。</li>
+</ol>
+<p>不过用例的成本虽然比后端高，但是不同类型的测试也还有相对高低之分，先看一下各种类型：</p>
+<ul>
+<li>单元测试：最小的代码单元进行测试，譬如说函数或者组件，对应集成测试</li>
+<li>集成测试：将同一系统/子系统内的多个代码单元一起测试，有时特指将系统内所有代码一起测试的情况。</li>
+<li>UI测试：对UI进行测试，对应的主要是接口测试，可以包括UI单元测试和UI集成测试。但有些人认为UI测试=UI集成测试≈接下来要说的E2E测试</li>
+<li>E2E测试（end-to-end）：对产品进行真实环境下完整流程的测试。比集成测试要求多了一个真实环境。<br>实施成本从小到大排：单元测试-子系统集成测试-系统系统测试-E2E测试<br>对单元测试，上一段所谈收益的标准可以放宽，如果不是确定需求不稳定、开发时间很紧张，你几乎总是可以写单元测试；而对E2E测试，考虑收益就要更加慎重。</li>
+</ul>
+<p><strong>实施测试</strong><br>在React组件化的条件下，单元测试-子系统集成测试-系统集成测试可以都以组件测试的形式展开。所以我们可以只考虑组件测试和E2E测试两种类型。<br>组件测试官方主推使用jest和@testing-library/react。<br>你可以阅读<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/testing.html">官方文档</a><br>或者<a target="_blank" rel="noopener" href="https://www.codenong.com/j5e21674ce51d451ccf6/">他人经验</a>、<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903983098626056#heading-1">二</a>、<a target="_blank" rel="noopener" href="https://juejin.cn/post/6894234532224958478">三</a></p>
+<p><strong>E2E测试</strong><br>如果写到可以先在<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903983098626056#heading-4%E8%BF%99%E9%87%8C%E7%9C%8B%E7%9C%8B%E5%8F%AF%E9%80%89%E7%9A%84%E5%B7%A5%E5%85%B7%E5%86%8D%E6%90%9C%E6%90%9C%E7%9B%B8%E5%85%B3%E7%9A%84%E8%B5%84%E6%96%99%E3%80%82">https://juejin.cn/post/6844903983098626056#heading-4这里看看可选的工具再搜搜相关的资料。</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/07/12/【101】chrome插件开发指南/" data-toggle="tooltip" data-placement="top" title="chrome插件开发指南">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/06/28/【030】React篇4-Hooks/" data-toggle="tooltip" data-placement="top" title="React篇3-Hooks">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/07/05/%E3%80%90031%E3%80%91React%E7%AF%875-%E7%94%9F%E6%80%81/";
+    var disqus_url = "http://yoursite.com/2021/07/05/%E3%80%90031%E3%80%91React%E7%AF%875-%E7%94%9F%E6%80%81/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

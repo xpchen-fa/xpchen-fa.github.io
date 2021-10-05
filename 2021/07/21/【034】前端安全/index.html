@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          前端安全 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/07/21/【034】前端安全/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#前端安全" title="前端安全">前端安全</a>
+                        
+                    </div>
+                    <h1>前端安全</h1>
+                    <h2 class="subheading">XSS、CSRF、SQL注入，OS注入，爬虫，DDOS、运营商劫持、点击拦截</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-07-21
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>转自：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6910473905723408391">你应该知道的前端安全</a></p>
+<h2 id="1-XSS"><a href="#1-XSS" class="headerlink" title="1. XSS"></a>1. XSS</h2><p>XSS的英文是Cross Site Scripting也就是常说的跨站脚本攻击，因为缩写和CSS重叠，所以只能叫XSS，跨站脚本攻击是指通过存在安全漏洞的Web网站注册用户的浏览器内运行非法的HTML标签或JavaScript进行的一种攻击。</p>
+<p>那么XSS一般是如何进行攻击的呢？假设我们页面中存在一个input或者textarea用来收集用户输入的数据，正常情况下不会有什么问题，假设用户输入的内容为 <code>&lt;script&gt;alert(1)&lt;/script&gt;</code>。当我们将用户输入的这段内容通过innnerHTML添加到页面中时，就会运行该段代码，弹出alert。</p>
+<p>可以发现，用户输入的js脚本是可以被执行的，这样的话就形成了一个安全漏洞，很多黑客都是先通过alert的方式先去试验网站是否可以被XSS，这也就意味着可以运行js里面的任何脚本。用户在不知情的情况下输入的账号密码会被黑客记录发送给自己，也可以通过js改写页面显示非法图片，将用户的登录状态复制到黑客的电脑上黑客可以使用用户的身份进行操作等等。</p>
+<p>一般XSS的攻击方式有两种，一种是上面介绍的通过input输入的方式进行攻击叫做存储型，就是用户输入的内容会存储到数据库，每次打开页面都会执行，另一种是通过url参数攻击叫做反射型，假设我们网站url中携带的内容会渲染到页面</p>
+<h4 id="XSS的危害有哪些"><a href="#XSS的危害有哪些" class="headerlink" title="XSS的危害有哪些?"></a><strong>XSS的危害有哪些?</strong></h4><ol>
+<li><p>获取页面数据</p>
+</li>
+<li><p>获取Cookies</p>
+</li>
+<li><p>修改前端逻辑</p>
+</li>
+<li><p>发送请求</p>
+</li>
+<li><p>获取用户的信息和登录态</p>
+</li>
+<li><p>欺骗用户</p>
+</li>
+</ol>
+<h4 id="如何防止XSS攻击呢"><a href="#如何防止XSS攻击呢" class="headerlink" title="如何防止XSS攻击呢"></a><strong>如何防止XSS攻击呢</strong></h4><ol>
+<li>可以在header中设置响应头 X-XSS-Protection，默认情况下禁止XSS攻击的，如果检测到url中存在XSS攻击，页面是拒绝访问的。但是他对存储型的攻击是无效的，只能拦截url中存在注入攻击的情况。</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ctx.set(<span class="string">&#x27;X-XSS-Protection&#x27;</span>, <span class="number">1</span>); <span class="comment">// 禁止XSS攻击</span></span><br><span class="line"><span class="comment">// 0 允许XSS攻击</span></span><br><span class="line"><span class="comment">// 1 禁止XSS攻击。如果检测到跨站脚本攻击，浏览器将清除页面(删除不安全的部分)</span></span><br><span class="line"><span class="comment">// 1;mode=block 启用XSS过滤，如果检测到攻击，浏览器将不会清除页面，而是阻止页面加载</span></span><br><span class="line"><span class="comment">// 1report= 启用XSS过滤，如果检测到跨站脚本攻击，浏览器将清除页面并使用CSP report-uri 指令的功能发送违规报告</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>CSP</p>
+<p>内容安全策略(CSP Content Security Policy) 是一个附加的安全层，用于帮助检测和缓解某些类型的攻击，包括XSS和数据注入等攻击。这些攻击可用于实现从数据窃取到网站破坏或作为恶意软件分发版本等用途。</p>
+<p>CSP本质上就是建立白名单，开发者明确告诉浏览器哪些外部资源可以加载和执行，我们只需要配置规则，如何拦截是浏览器自己实现的，我们可以通过这种方式来尽量减少XSS攻击。这个策略方式如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ctx.set(<span class="string">&#x27;Content-Security-Policy&#x27;</span>, <span class="string">&quot;default-src &#x27;self&#x27;&quot;</span>)</span><br><span class="line"><span class="comment">// 1. 只允许加载本站资源  Content-Security-Policy: default-src &#x27;self&#x27;</span></span><br><span class="line"><span class="comment">// 2. 只允许加载HTTPS协议图片 Content-Security-Policy: img-src https://*</span></span><br><span class="line"><span class="comment">// 3. 不允许加载任何来源框架 Content-Security-Policy: child-src &#x27;none&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 浏览器打开连接时4000端口的外部资源不能被加载</span></span><br><span class="line"><span class="comment">// https://127.0.0.1:3000?from=&lt;script src=&quot;http://127.0.0.1:4000/hack.js&quot;&gt;&lt;/script&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>一般被攻击是我们的网站执行了其他网站的js脚本，注入了黑客的js代码。假设我们的网站设置了只允许加载自己网站的代码，那么注入的js脚本就没办法执行了。</p>
+</li>
+<li><p>转译字符</p>
+<p>用户输入永远不可信任的，最普遍的做法就是转译输出的内容，对于引号，尖括号，斜杠进行转译，比如通过如下的函数，对用户输入的内容进行转译。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    str = str.replace(<span class="regexp">/&amp;/g</span>, <span class="string">&#x27;&amp;amp;&#x27;</span>);</span><br><span class="line">    str = str.replace(<span class="regexp">/&lt;/g</span>, <span class="string">&#x27;&amp;lt;&#x27;</span>);</span><br><span class="line">    str = str.replace(<span class="regexp">/&gt;/g</span>, <span class="string">&#x27;&amp;gt;&#x27;</span>);</span><br><span class="line">    str = str.replace(<span class="regexp">/&quot;/g</span>, <span class="string">&#x27;&amp;quto;&#x27;</span>);</span><br><span class="line">    str = str.replace(<span class="regexp">/&#x27;/g</span>, <span class="string">&#x27;&amp;#39;&#x27;</span>);</span><br><span class="line">    str = str.replace(<span class="regexp">/`/g</span>, <span class="string">&#x27;&amp;#96;&#x27;</span>);</span><br><span class="line">    str = str.replace(<span class="regexp">/\//g</span>, <span class="string">&#x27;&amp;#x2F;&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">escape</span>(<span class="string">&#x27;&lt;script&gt;alert(123)&lt;/script&gt;&#x27;</span>); <span class="comment">// &amp;lt;script&amp;gt;alert(123)&amp;lt;&amp;#x2F;script&amp;gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这种转译叫做黑名单注意，就是把不安全的东西进行转译，比如说&lt;&gt;, 但是有一种情况是不能进行黑名单转译的。</p>
+<p>有时我们要处理一些富文本，显然不能通过上面的办法来转译所有字符，因为这样会把需要的格式也过滤掉，对于这种情况，通常    采用白名单过滤的办法，当然也可以通过黑名单过滤，但是考虑到需要过滤的标签和标签属性实在太多，更加推荐使用白名单的方    式。</p>
+<p>白名单的方式就是允许一部分安全的字符通过，其他的字符全部转译，这里推荐使用xss的npm包来处理。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引入xss</span></span><br><span class="line"><span class="keyword">const</span> xss = <span class="built_in">require</span>(<span class="string">&#x27;xss&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> html = xss(<span class="string">&#x27;&lt;h1 id=&quot;title&quot;&gt;XSS Demo&lt;/h1&gt;&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(html); <span class="comment">// &lt;h1 id=&quot;title&quot;&gt;XSS Demo&lt;/h1&gt;&amp;lt;script&amp;gt;alert(&quot;xss&quot;)&amp;lt;/script&amp;gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里xss保留了h1标签，因为他是安全的，对script标签进行了转译，因为他是不全安的。</p>
+<p>一般情况用户输入的数据或者从url中获取的参数我们不建议直接使用innnerHTML插入到页面中，除了xss模块和escape方法还可    以引入html模板，常见的是ejs模板。react,vue,angular等框架默认已经帮我们处理了xss。</p>
+</li>
+<li><p>HttpOnly Cookie</p>
+<p>为什么用户的cookie可以被调取，原因是js是可以获取cookie的，我们可以通过禁止js访问cookie的方式防范这种攻击。</p>
+<p>这是预防XSS攻击窃取用户cookie最有效的防御手段，Web应用程序在设置cookie时，将其属性设为HttpOnly, 就可以避免该网页的cookie被客户端恶意javaScript窃取，保护用户cookie信息。也就是服务在设置cookie的时候跟上HttpOnly即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.addHeader(<span class="string">&#x27;Set-Cookie&#x27;</span>, <span class="string">&#x27;uid=112; path/; HttpOnly&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="2-CSRF"><a href="#2-CSRF" class="headerlink" title="2. CSRF"></a>2. CSRF</h2><p>CSRF( Cross Site Request Forgery)，即跨站请求伪造，是一种常见的web攻击，它利用用户已登录的身份，在用户毫不知情的情况下，以用户的名义来完成非法操作。简单来说攻击步骤也很简单。</p>
+<p>用户已经登录了站点A, 并且在A站点记录了登录状态(cookie)，再次进来不需要登录了。在用户没有登出站点A的情况下，也就是登录态还有效时，访问了恶意攻击者提供的引诱危险站点B, B站点调用A站点的某个接口，比如说提交接口。如果A站点没有做任何的CSRF防御，就会被攻击。</p>
+<p>原理也很简单，因为B站点调用了A站点的提交接口，根据cookie匹配原则，调用哪个站点的接口就会携带哪个站点的cookie，携带的就是用户存在A站点的cookie，这个时候提交接口传递的参数实际上是B站点提供的。在用户无意识的情况下以用户的身份调用了接口。</p>
+<p>很多人可能会觉得，B站点调用A站点的接口跨域了啊，那怎么行。这没什么，跨域只是一种说法而已一般的跨域是前端拿不到接口的返回值，但不代表请求发不出去，这种攻击只要请求发出去了就达到攻击的目的了，返回值什么的都无所谓了</p>
+<h4 id="防御CSRF的手段有三种。"><a href="#防御CSRF的手段有三种。" class="headerlink" title="防御CSRF的手段有三种。"></a>防御CSRF的手段有三种。</h4><ol>
+<li>是禁止第三方网站携带Cookie，但是有兼容性问题，</li>
+<li>第二个方式是验证请求传递过来的referrer，判断是不是一个合法的referrer。其实很多的防盗链都是验证referrer的方式。referrer就是发送请求的那个前端页面地址，可以通过referrer的方法进行屏蔽和过滤，但是他也有一个问题https是不发送referrer的，所以也算是兼容性的问题。</li>
+<li>目前最有效的方式还是验证码的方式或者人机交互的方式，以前可以通过CSRF调取用户资金，因为转账比较简单，但现在基本转账都会发送验证码之类的验证</li>
+</ol>
+<h2 id="3-点击劫持"><a href="#3-点击劫持" class="headerlink" title="3. 点击劫持"></a>3. 点击劫持</h2><p>点击劫持是一种视觉欺骗的攻击手段，攻击者将需要攻击的网站通过iframe嵌套的方式嵌入自己的网页中，并将iframe设置为透明，在页面中透出一个按钮诱导用户点击。</p>
+<p>当你点击这个按钮的时候实际上是点击到了iframe中的某个按钮上，触发iframe嵌入网站的功能，比如想要给一个页面点赞，就可以把这个页面通过iframe伪装。</p>
+<h4 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h4><p>要防御这个其实很简单，只需要设置X-FRAME-OPTIONS响应头，X-FRAME-OPTIONS是一个http响应头，在现在浏览器有一个很好的支持，这个http响应头就是为了防御用iframe嵌套的点击劫持攻击。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ctx.set(<span class="string">&#x27;X-FRAME-OPTIONS&#x27;</span>, <span class="string">&#x27;DENY&#x27;</span>)</span><br><span class="line"><span class="comment">// DENY 表示页面不允许通过iframe的方式展示</span></span><br><span class="line"><span class="comment">// SAMEORIGIN 表示页面可以在相同域名下通过iframe的方式展示</span></span><br><span class="line"><span class="comment">// ALLOW-FROM 表示页面可以在指定来源的iframe中展示</span></span><br></pre></td></tr></table></figure>
+
+<p>也可直接通过js判断是否在iframe中，不过该方法也有问题，跨域情况下内层的页面是无法操作外层的location的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (self !== top) &#123;</span><br><span class="line">    top.location.href = self.location.href; <span class="comment">// 将外层的location修改为内层的location</span></span><br><span class="line">    <span class="built_in">document</span>.body.innnerHTML = <span class="string">&#x27;&#x27;</span>; <span class="comment">// 清除页面内容</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-SQL注入"><a href="#4-SQL注入" class="headerlink" title="4. SQL注入"></a>4. SQL注入</h2><p>SQL注入是比较常见的网络攻击方式之一，它不是利用操作系统的BUG来实现攻击，而是针对程序员编写时的疏忽，通过SQL语句，实现无账号登录，甚至篡改数据库。SQL注入攻击比较偏向后端，前端同学了解即可。</p>
+<p>假设我们的sql是下面这个样子的，查询数据库用户表中是否存在用户名为userName变量，密码为password变量的用户。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sql = <span class="string">&#x27;select * from user_table where username= &quot;&#x27;</span>+ userName +<span class="string">&#x27;&quot; and password = &quot;&#x27;</span> + password + <span class="string">&#x27;&quot;&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>当用户输入了正确的用户名和密码的时候不会有什么问题，但是如果黑客输入的密码是1”or”1”=”1 就会出现问题, 这是一条永远可以执行成功的sql。username等于yd ，password等于或者1=1；恒成立的sql。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> userName = <span class="string">&#x27;yd&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> password = <span class="string">&#x27;1&quot;or&quot;1&quot;=&quot;1&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> sql = <span class="string">&#x27;select * from user_table where username= &quot;&#x27;</span>+ userName +<span class="string">&#x27;&quot; and password = &quot;&#x27;</span> + password + <span class="string">&#x27;&quot;&#x27;</span>;</span><br><span class="line"><span class="comment">// select * from user_table where username= &quot;yd&quot; and password = &quot;1&quot; or&quot;1&quot;=&quot;1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="防御-1"><a href="#防御-1" class="headerlink" title="防御"></a>防御</h4><ol>
+<li><p>一般情况下我们是不允许拼接sql的，所有的查询语句建议使用数据库提供的参数化查询接口，参数化的语句使用参数而不是将用户输入变量嵌入到SQL语句中，既不要直接拼接SQL语句，例如Node.js中的mysqljs库中的query方法。</p>
+</li>
+<li><p>除此之外，要严格限制web应用的数据库的操作权限，给此用户提供仅仅能够满足其工作的最低权限，从而最大限度的减少注入攻击对数据库的危害，后端代码检查输入的数据是否符合预期，严格限制变量的类型，例如使用正则表达式进行一些匹配处理。对进入数据库的特殊字符(‘,”,,&lt;,&gt;,&amp;,*,;)等，进行转译处理，或编码转换**。基本上所有的后端语言都有对字符串进行转译处理的方法，比如lodash的lodash._escapehtmlchar库</p>
+</li>
+</ol>
+<h2 id="5-OS命令注入"><a href="#5-OS命令注入" class="headerlink" title="5. OS命令注入"></a>5. OS命令注入</h2><p>OS命令注入和SQL注入差不多，只不过SQL注入的是针对数据库的，而OS命令注入是针对操作系统的，OS命令注入攻击指通过web应用，执行非法的操作系统命令达到攻击的目的，只要在能调用shell函数的地方就有存在被攻击的风险，倘若调用shell时存在疏漏，就可以执行插入的非法命令。</p>
+<p>以Node.js为例，加入在接口中需要从 github 下载用户指定的项目</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> exec = <span class="built_in">require</span>(<span class="string">&#x27;mz/child_process&#x27;</span>).exec;</span><br><span class="line"><span class="keyword">const</span> params = &#123; <span class="comment">/* 用户输入的参数 */</span>&#125;;</span><br><span class="line">exec(<span class="string">`git clone <span class="subst">$&#123;params.repo&#125;</span>/some/path`</span>);</span><br></pre></td></tr></table></figure>
+
+<p>如果传入的参数如下会怎样</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:<span class="comment">//github.com/xx/xx.git &amp;&amp; rm -rf /* &amp;&amp;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个时候如果用户的权限很大的话，就会执行rm -rf /*, 删掉服务器中所有内容</p>
+<h2 id="6-运营商劫持"><a href="#6-运营商劫持" class="headerlink" title="6. 运营商劫持"></a>6. 运营商劫持</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903713669283847">干货！防运营商劫持</a></p>
+<p>运营商劫持分为 DNS劫持、HTTP劫持、HTTPS劫持</p>
+<p>DNS劫持：这种劫持会把你重新定位到其它网站，我们所熟悉的钓鱼网站就是这个原理。但是因为它的违法性，现在被严厉的监管起来，已经很少见。</p>
+<p>HTTP劫持：虽然DNS劫持已经被监管了起来，但是还有HTTP劫持啊！你DNS解析的域名的IP地址不变，当运营商发现你的是HTTP请求时，就会在里面插入一些奇奇怪怪的广告（比如一些banner、浮标、更有甚把你你的商品位给劫持了 WTF…）并且这种现象十分常见，不信你可以试着随便打开一个网页，仔细看看你就会发现一些小尾巴，这就是被HTTP劫持了</p>
+<p>HTTPS劫持：安全的超文本传输协议，数据加密这也能劫持？答案是肯定的！该劫持方式有两种：</p>
+<ol>
+<li>伪造证书，通过病毒或者其他方式将伪造证书的根证书安装在用户系统中（较少）</li>
+<li>代理也有客户的证书与私钥，或者客户端与代理认证的时候不校验合法性，即可通过代理来与我们服务端进行数据交互（较多）</li>
+</ol>
+<h4 id="防运营商劫持"><a href="#防运营商劫持" class="headerlink" title="防运营商劫持"></a>防运营商劫持</h4><p>为了还用户一个干净安全的浏览环境，我们需要做好预防措施</p>
+<ol>
+<li>全站https，能防一部分</li>
+<li>加入防运营商劫持代码，能防大部分注入型劫持</li>
+<li>记录Log，记录证据，向工信部投诉</li>
+</ol>
+<h2 id="7-DDOS"><a href="#7-DDOS" class="headerlink" title="7. DDOS"></a>7. DDOS</h2><p>DDOS不是一种攻击，而是一大类攻击的总称，他有几十种类型，新的攻击方法还在不断发明出来，网站运行的各个环节，都可以是攻击目标。只要把一个环节攻破，使得整个流程跑不起来，就达到了瘫痪服务的目的。</p>
+<p>其中比较常见的一种攻击是CC攻击。他就是简单粗暴的送来大量正常的请求，超出服务器的最大承受量，导致宕机。</p>
+<p>我遭遇的就是CC攻击，最多的时候全世界大概20多个IP地址轮流发出请求，每个地址的请求在每秒200 ~ 300次，我看访问日志的时候，就觉得那些请求像洪水一样涌来，一眨眼就是一大堆，几分钟的时间，日志文件的体积就大了100MB。</p>
+<p>说实话，这是能算小攻击，但是我的个人网站没有任何防护，服务器还是跟其他人共享的，这种流量一来立刻就下线了。</p>
+<p>现在的这种DDOS攻击方式一般是不会到达你的服务器本身的，因为大量的请求来了以后很可能在机房路由器中就全部占满了，请求已经到不了服务器层了，一般这种情况运营商直接就会把服务器下线掉了。所以服务器层基本不容易做控制。</p>
+<p>我们可以备份网站，就是你要有一个备份网站，或者最低限度有一个临时主页。生产服务器万一下线了，可以立刻切换到备份网站，不至于毫无办法。</p>
+<p>备份网站不一定是全功能的，如果能做到全静态浏览，就能满足需求。最低限度应该可以显示公告，告诉用户，网站出了问题，正在全力抢修。这种临时主页建议放到带宽大，可以应对攻击的网站上。</p>
+<p>还可以通过HTTP请求的拦截，如果恶意请求有特征，对付起来很简单：直接拦截它就行了，可以在硬件，服务器，防火墙中进行拦截。</p>
+<p>HTTP 拦截有一个前提，就是请求必须有特征。但是，真正的 DDOS 攻击是没有特征的，它的请求看上去跟正常请求一样，而且来自不同的 IP 地址，所以没法拦截。这就是为什么 DDOS 特别难防的原因。</p>
+<p>DDOS 攻击的成本还是比较高的，我们可以通过宽带扩容 + CDN的方式来提高攻击成本。</p>
+<h2 id="8-爬虫"><a href="#8-爬虫" class="headerlink" title="8 . 爬虫"></a>8 . 爬虫</h2><p>爬虫可以爬取网站中的内容，Node中可以使用cheerio和https模块进行演示</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cheerio = <span class="built_in">require</span>(<span class="string">&#x27;cheerio&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> https = <span class="built_in">require</span>(<span class="string">&#x27;https&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> html = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> $ = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">https.get(<span class="string">&#x27;url&#x27;</span>, <span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    res.on(<span class="string">&#x27;data&#x27;</span>, <span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">        html += data; <span class="comment">// 保存返回的数据</span></span><br><span class="line">    &#125;);</span><br><span class="line">    res.on(<span class="string">&#x27;finish&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        $ = cheerio.load(html); <span class="comment">// cheerio解析数据</span></span><br><span class="line">        <span class="comment">// $就是拿到的dom树, 想jq一样。</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>cheerio用法类似于jquery，https可以发送https请求。在finish方法中表示获取到了页面的html</p>
+<h4 id="防御-2"><a href="#防御-2" class="headerlink" title="防御"></a>防御</h4><p>防御爬虫的方式比较多样。比如说验证浏览器的UA，referrer 或者验证码。还有比如查看单位时间的访问次数，访问量。</p>
+<p>还可以进行关键信息使用图片混淆，比如说有些文字我们直接让接口返回图片进行渲染。本身SPA单页面就是一种反爬取的手段，不过他最大的一个缺点就是对搜索引擎不友好。搜索引擎用的就是爬虫技术。所以后面又推出了SSR渲染来解决这个问题。</p>
+<p>还有一些比较高级的防御手段，就是前端的一些技术限制。</p>
+<p>字体乱序法，服务返回给前端的html中，文字和用户实际看到的不一致，比如说服务返回的div总内容是4998，而页面真正展示的是1995，他的做法也很简单，使用一个特殊的字体库，因为字体渲染的时候会去查找字体库，以字体库的样子渲染。在这个字体库中，4对应1，8对应5，就可以了。</p>
+<p>还可以将网站重要的字体，生成图片，通过iconfont的方式来渲染。</p>
+<p>还有一种canvas指纹反爬方法，canvas指纹的含义是，因为不同硬件对canvas支持不同，因此你只要画一个很复杂的canvas，那么得出的image，总是存在像素级别的误差。考虑到爬虫代码都是统一的，就算起selenium，也是ghost的，因此指纹一般都是一致的，因此绕过几率非常低。但事实上并不是如此，国内公司通常是IT统一装机，无论是软件还是硬件都惊人的一致。所以canvas指纹相似度特别高。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/07/22/【035】跨域/" data-toggle="tooltip" data-placement="top" title="前端跨域">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/07/20/【033】React_diff算法/" data-toggle="tooltip" data-placement="top" title="React2.0_diff算法">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#前端安全" title="前端安全">前端安全</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/07/21/%E3%80%90034%E3%80%91%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/";
+    var disqus_url = "http://yoursite.com/2021/07/21/%E3%80%90034%E3%80%91%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

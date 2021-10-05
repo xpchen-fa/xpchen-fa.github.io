@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          chrome插件开发指南 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/07/12/【101】chrome插件开发指南/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#others" title="others">others</a>
+                        
+                    </div>
+                    <h1>chrome插件开发指南</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-07-12
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>丰富的 chrome 插件极大的提升我们的工作效率和辛福感，比如大名鼎鼎的 adblock 广告屏蔽、GoFullPage 网页长截图、evernote web clipper 收藏网页。<br>一般来说，插件的原理是向页面中注入 javascript 脚本，对页面进行处理，比如屏蔽页面中可能的广告元素，改变某些元素的样式，增加一些 UI。<br>注意：chrome 插件机制本身也在更新，本文讲述的是目前普遍使用的 V2 插件的开发。</p>
+</blockquote>
+<h2 id="插件开发现状"><a href="#插件开发现状" class="headerlink" title="插件开发现状"></a>插件开发现状</h2><p><strong>原始方式</strong><br>由于浏览器厂商已经提供了强大api，开发者只是需要轻松玩转这些开发的api即可，如果只需要简单利用插件来换一下背景颜色，大可直接像上面说的，用最原生的方式js来切换background.color，如果稍微在负载一点，统计网页FP FCP FMP等各项性能指标，以面板的方式显示，用jQuery的方式也可以cover住。<br><strong>现代方式</strong><br>作为一个现代前端开发者，未免太过保守，React，Vue这类的框架诞生为的是解放生产力，让开发人员更加注重数据的体验，而非dom逻辑的重复存在。在github存在不少的boilerplates</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/martellaj/chrome-extension-react-typescript-boilerplate">chrome-extension-react-typescript-boilerplate</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate">chrome-extension-webpack-boilerplate</a></li>
+<li>…<br>上述两种方式都存在以下几个问题</li>
+</ul>
+<ol>
+<li>调试困难，每次必须开启三个窗口(inpected、popup、background)</li>
+<li>引用js文件和样式文件都必须手写文件清单，不能够享受打包工具的分块的优化</li>
+<li>各个浏览器的扩展API支持不完全一致，manifest.json 的内容也不完全相同</li>
+<li>浏览器对扩展页访问有限，故热更新以及框架的devtools不能够使用</li>
+<li>…</li>
+</ol>
+<h2 id="基本概念梳理"><a href="#基本概念梳理" class="headerlink" title="基本概念梳理"></a>基本概念梳理</h2><p>类似electron开发，基本资源索引通过manifest文件关联起来，无论你用何种方式开发，最终的项目结构都会类似呈现成为这样</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- _locales</span><br><span class="line">- src</span><br><span class="line">- manifest.json</span><br><span class="line">- popup.html</span><br><span class="line">- options.html</span><br><span class="line">- devtools.html</span><br><span class="line">- xxx.html</span><br></pre></td></tr></table></figure>
+
+<h3 id="文件清单"><a href="#文件清单" class="headerlink" title="文件清单"></a>文件清单</h3><p>每一个chrome插件都必须在根目录存放一个manifest.json文件清单，其中manifest_version、name、version3个是必不可少的，其他都是对扩展插件name的修饰。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    // 清单文件的版本，</span><br><span class="line">    &quot;manifest_version&quot;: 2,</span><br><span class="line">    // 插件的版本</span><br><span class="line">    &quot;version&quot;: &quot;1.0.0&quot;,</span><br><span class="line">    // 插件描述 </span><br><span class="line">    &quot;name&quot;: &quot;__MSG_extension_name__&quot;,</span><br><span class="line">    &quot;short_name&quot;: &quot;__MSG_extension_short_name__&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;__MSG_extension_description__&quot;,</span><br><span class="line">    &quot;default_locale&quot;: &quot;zh_CN&quot;,</span><br><span class="line">    // 图标，扩展程序系统将会调整您提供的图标，以适应用户显示器的像素密度</span><br><span class="line">    &quot;icons&quot;: &#123;</span><br><span class="line">        &quot;16&quot;: &quot;src/icon-16.png&quot;,</span><br><span class="line">        &quot;48&quot;: &quot;src/icon-48.png&quot;,</span><br><span class="line">        &quot;128&quot;: &quot;src/icon-48.png&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    // 常驻的后台JS或后台页面</span><br><span class="line">    &quot;background&quot;: &#123;</span><br><span class="line">        // 2种指定方式，如果指定JS，那么会自动生成一个背景页</span><br><span class="line">        // &quot;page&quot;: &quot;background.html&quot;</span><br><span class="line">        &quot;scripts&quot;: [&quot;src/background.js&quot;],</span><br><span class="line">        // 是否长久存在 （设置true即可）</span><br><span class="line">        &quot;persistent&quot;: true</span><br><span class="line">    &#125;,</span><br><span class="line">    // 浏览器右上角图标设置，browser_action、page_action、app必须三选一</span><br><span class="line">    &quot;browser_action&quot;: &#123;</span><br><span class="line">        &quot;default_icon&quot;: &#123;</span><br><span class="line">           &quot;16&quot;: &quot;src/icon-16.png&quot;,</span><br><span class="line">          &quot;19&quot;: &quot;src/icon-19.png&quot;,</span><br><span class="line">          &quot;24&quot;: &quot;src/icon-24.png&quot;,</span><br><span class="line">          &quot;38&quot;: &quot;src/icon-38.png&quot;,</span><br><span class="line">          &quot;48&quot;: &quot;src/icon-48.png&quot;,</span><br><span class="line">          &quot;128&quot;: &quot;src/icon-128.png&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        // 图标悬停时的标题，可选</span><br><span class="line">        // &quot;default_title&quot;: &quot;Translation of words&quot;,</span><br><span class="line">        &quot;default_popup&quot;: &quot;popup.html&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    // 当某些特定页面打开才显示的图标(一般用不到)</span><br><span class="line">   // &quot;page_action&quot;: &#123;</span><br><span class="line">     //   &quot;default_icon&quot;: &quot;img/icon.png&quot;,</span><br><span class="line">       // &quot;default_title&quot;: &quot;page title&quot;,</span><br><span class="line">        //&quot;default_popup&quot;: &quot;popup.html&quot;</span><br><span class="line">    //&#125;,</span><br><span class="line">    // 内容脚本</span><br><span class="line">    &quot;content_scripts&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            //&quot;matches&quot;: [&quot;http://*/*&quot;, &quot;https://*/*&quot;],</span><br><span class="line">            // &quot;&lt;all_urls&gt;&quot; 表示匹配所有地址</span><br><span class="line">            &quot;matches&quot;: [&quot;&lt;all_urls&gt;&quot;],</span><br><span class="line">            // 多个JS按顺序注入</span><br><span class="line">            &quot;js&quot;: [&quot;src/script1.js&quot;, &quot;src/script2.js&quot;],</span><br><span class="line">            // 注意: 内容脚本植入的css 权重高于浏览器的默认样式</span><br><span class="line">            &quot;css&quot;: [&quot;css/custom.css&quot;],</span><br><span class="line">            // 代码注入时机</span><br><span class="line">            &quot;run_at&quot;: &quot;document_end&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        // 支持多个规则</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;matches&quot;: [&quot;*://*.test.com/*&quot;],</span><br><span class="line">            &quot;js&quot;: [&quot;src/script3.js&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">],</span><br><span class="line">    // 插件权限</span><br><span class="line">    &quot;permissions&quot;: [</span><br><span class="line">        &quot;contextMenus&quot;, // 右键菜单</span><br><span class="line">        &quot;tabs&quot;, // 标签操作</span><br><span class="line">        &quot;notifications&quot;, // 通知</span><br><span class="line">        &quot;webRequest&quot;, // web请求</span><br><span class="line">        &quot;webRequestBlocking&quot;, // web阻塞请求(配合webRequest)</span><br><span class="line">        &quot;clipboardRead&quot;, // 剪切板读取</span><br><span class="line">        &quot;alarms&quot;, // 定时器</span><br><span class="line">        &quot;bookmarks&quot;, // 书签操作(一般不需要)</span><br><span class="line">        &quot;cookies&quot;, // cookie读取</span><br><span class="line">        &quot;storage&quot;, // 本地存储(插件的存储，而非网页的storage)</span><br><span class="line">        &quot;unlimitedStorage&quot;, // 配合storage</span><br><span class="line">        &quot;http://*/*&quot;, // 可以通过executeScript或者insertCSS访问的网站</span><br><span class="line">        &quot;https://*/*&quot; // 可以通过executeScript或者insertCSS访问的网站</span><br><span class="line">    ],</span><br><span class="line">    // 页面能够直接访问的插件资源列表</span><br><span class="line">    &quot;web_accessible_resources&quot;: [&quot;src/*&quot;],</span><br><span class="line">    // 插件主页</span><br><span class="line">    &quot;homepage_url&quot;: &quot;https://www.translation.com&quot;,</span><br><span class="line">    // 覆盖浏览器默认页面(例如掘金插件)</span><br><span class="line">    &quot;chrome_url_overrides&quot;: &#123;</span><br><span class="line">        &quot;newtab&quot;: &quot;newtab.html&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    // options页面</span><br><span class="line">    &quot;options_ui&quot;: &#123;</span><br><span class="line">       &quot;page&quot;: &quot;options.html&quot;,</span><br><span class="line">       &quot;open_in_tab&quot;: true,</span><br><span class="line">       &quot;chrome_style&quot;: false</span><br><span class="line">    &#125;,</span><br><span class="line">    // 地址栏触发监听，提供搜索建议(此时是icon-16.png)(一般不需要) </span><br><span class="line">    &quot;omnibox&quot;: &#123; &quot;keyword&quot; : &quot;translation&quot; &#125;,</span><br><span class="line">    // devtools页面</span><br><span class="line">    &quot;devtools_page&quot;: &quot;devtools.html&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="消息机制"><a href="#消息机制" class="headerlink" title="消息机制"></a>消息机制</h2><p>插件整体由不同的page页面构成，不同的page数据的互通是插件的灵魂所在<br>在理解各个page的消息机制之前，先来看一下相关的APIS<br>** chrome.runtime.* 和chrome.tabs.* **</p>
+<ul>
+<li><p>chrome.runtime.sendMessage(extensionId, message, object options, function(response) {…})<br>  如果省略指定扩展插件extensionId，消息就发送到您自己的扩展插件，此时每个网页中都会产生runtime.onMessage 事件，如果发送至另一个扩展程序则产生runtime.onMessageExternal事件，所以不能使用该方法向内容脚本(Content Scripts)单独发送消息。要向内容脚本发送消息，请使用 tabs.sendMessage</p>
+</li>
+<li><p>chrome.tabs.sendMessage(tabId, message, function(response) {…})<br>  向指定标签页中的内容脚本(Content Scripts)发送一个消息，当有响应时执行一个可选的回调函数</p>
+</li>
+<li><p>chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {…})<br>  在默认情况下sendResponse函数的执行是同步的，如果在这个监听消息的处理函数的同步执行流程里没有发现sendResponse，则默认返回undefined，假设我们是要经过一个异步处理之后才调用sendResponse，已经为时已晚了。因此，我们可能需要异步执行sendResponse，这时我们在这个监听函数里的添加return true就能实现了（这样，与另一端之间的消息通道将会保持打开状态，直到调用了 sendResponse）。<br>  <strong>注意：</strong> 如果多个页面都监听 onMessage 事件，对于某一次事件只有第一次调用 sendResponse() 能成功发出回应，所有其他回应将被忽略。</p>
+</li>
+</ul>
+<p>现在，利用上边的APIS已经可以实现一次性请求</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 从content scripts发出</span><br><span class="line">chrome.runtime.sendMessage(&#123;greeting: &quot;你好 IES&quot;&#125;, function(response) &#123;</span><br><span class="line">  console.log(response.feedback);</span><br><span class="line">&#125;);</span><br><span class="line">// 从popup or options page发出</span><br><span class="line">chrome.tabs.query(&#123;active: true, currentWindow: true&#125;, function(tabs) &#123;</span><br><span class="line">  chrome.tabs.sendMessage(tabs[0].id, &#123;greeting: &quot;你好 IES&quot;&#125;, function(response) &#123;</span><br><span class="line">    console.log(response.feedback);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// 在接收端</span><br><span class="line">chrome.runtime.onMessage.addListener(</span><br><span class="line">  function(request, sender, sendResponse) &#123;</span><br><span class="line">    console.log(sender.tab ?</span><br><span class="line">                &quot;from page：&quot; + sender.tab.url :</span><br><span class="line">                &quot;from scripts&quot;);</span><br><span class="line">    if (request.greeting == &quot;你好 IES&quot;)</span><br><span class="line">      sendResponse(&#123;feedback: &quot;很高兴遇见你&quot;&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>chrome.runtime.connect(extensionId, connectInfo)</li>
+<li>chrome.tabs.connect(tabId, connectInfo)</li>
+<li>chrome.runtime.onConnect.addListener(function callback(port) {…})<br>两者用法说明与sendMessage一致，有时候需要长时间的连接，而不是一次请求和回应。在这种情况下，可以分别使用 runtime.connect 或<code>tabs.connect</code>从内容脚本建立到插件（或者反过来）的长时间连接。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 不要混淆这里的port.postmessage 与window.postmessage</span><br><span class="line">// 需要指定连接到哪一个标签页, 调用替换为tabs.connect</span><br><span class="line">let port = chrome.runtime.connect(&#123;name: &quot;问好&quot;&#125;);</span><br><span class="line">port.postMessage(&#123;greeting: &quot;问好&quot;&#125;);</span><br><span class="line">port.onMessage.addListener(function(msg) &#123;</span><br><span class="line">  if (msg.question == &quot;是谁？&quot;)</span><br><span class="line">    port.postMessage(&#123;answer: &quot;同学&quot;&#125;);</span><br><span class="line">  else if (msg.question == &quot;哪位同学？&quot;)</span><br><span class="line">    port.postMessage(&#123;answer: &quot;Agile&quot;&#125;);</span><br><span class="line">&#125;);</span><br><span class="line">chrome.runtime.onConnect.addListener(function(port) &#123;</span><br><span class="line">  console.assert(port.name == &quot;问好&quot;);</span><br><span class="line">  port.onMessage.addListener(function(msg) &#123;</span><br><span class="line">    if (msg.greeting == &quot;问好&quot;)</span><br><span class="line">      port.postMessage(&#123;question: &quot;是谁？&quot;&#125;);</span><br><span class="line">    else if (msg.answer == &quot;同学&quot;)</span><br><span class="line">      port.postMessage(&#123;question: &quot;哪位同学？&quot;&#125;);</span><br><span class="line">    else if (msg.answer == &quot;Agile&quot;)</span><br><span class="line">      port.postMessage(&#123;question: &quot;我没听清楚。&quot;&#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>现在，利用上边的APIS已经可以实现建立长时间的连接<br>再回到上边的图，回答一下如何进行消息互通的</p>
+<ul>
+<li>(content scripts + devtools) &amp; background<br>   (chrome.tabs.sendMessage + chrome.runtime.sendMessage) &amp; chrome.runtime.onMessage</li>
+<li>(popup + options) &amp;  content scripts &amp; background<br>   (chrome.tabs.sendMessage + chrome.runtime.sendMessage) &amp; chrome.runtime.onMessage</li>
+<li>iframe&amp;(content scripts + inspected window)<br>这里为什么要提及iframe，是因为很多开发者为了方便采用传统的跨域方式iframe，将iframe的内容植入的inspected window，然后结合利用window的storage，实现一套完成的流程开发？挺hack的，也不是说不可行，因为插件的调试默认需要开三个窗口的。这里有个方法，可以采用:<br>发送请求(Iframe -&gt; content script -&gt; background) + 数据响应(background +  content script -&gt; iframe)<br>Iframe 和 content script之间的交互使用window.postmessage即可。</li>
+</ul>
+<h2 id="存储机制"><a href="#存储机制" class="headerlink" title="存储机制"></a>存储机制</h2><p>chrome.storage.*<br>设计扩展插件的存储需要而特别优化，它提供了与 localStorage API 相同的能力，但是具有如下几个重要的区别：</p>
+<ul>
+<li>用户数据可以通过 Chrome 浏览器的同步功能自动同步（使用 storage.sync）</li>
+<li>您的扩展程序的内容脚本可以直接访问用户数据，而不需要后台页面</li>
+<li>即使使用分离式隐身行为，用户的扩展程序设置也会保留</li>
+<li>它是异步的，并且能够进行大量的读写操作，因此比阻塞和串行化的 localStorage API 更快</li>
+<li>用户数据可以存储为对象（localStorage API 以字符串方式存储数据）<br>例如可以在插件安装的时候打开介绍页面或者设置页面，再次打开就不再出现<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">chrome.runtime.onInstalled.addListener(function (&#123;reason&#125;) &#123;</span><br><span class="line">   if (reason === &#x27;install&#x27;) &#123;</span><br><span class="line">       chrome.storage.local.get(&#x27;hasInstructionsShown&#x27;, function(info) &#123;</span><br><span class="line">        if(!info.hasInstructionsShown) &#123;</span><br><span class="line">          chrome.tabs.create(&#123; url: &#x27;chrome-extension://xxx/options.html&#x27; &#125;)</span><br><span class="line">          chrome.storage.sync.set(&#123; hasInstructionsShown: true &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="国际化"><a href="#国际化" class="headerlink" title="国际化"></a>国际化</h2><p>chrome.i18n.*<br>需要将字符串放在一个名为 messages.json 的文件中。每一次您增加新的语言时，您只要在名为 _locales/${localeCode} 的目录中添加一个消息文件，其中 localeCode 为语言代码，例如 en代表英语。chrome自带的i18n支持丰富的语言</p>
+<ul>
+<li>在 manifest.json 或者CSS 文件中，像这样引用名为 messagename 的字符__MSG_messagename__</li>
+<li>在代码脚本(scripts)里边这样引用名为 messagename 的字符串chrome.i18n.getMessage(“messagename”)<br>例如上边举例的manifest文件里边，是这样的<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">- _locales</span><br><span class="line">    - en</span><br><span class="line">        - message.json</span><br><span class="line">    - zh-CN</span><br><span class="line">        - message.json</span><br><span class="line"> // 如 en message.json</span><br><span class="line">&#123;</span><br><span class="line">  &quot;extension_name&quot;: &#123;</span><br><span class="line">    &quot;description&quot;: &quot;Extension name&quot;,</span><br><span class="line">    &quot;message&quot;: &quot;Translation of words&quot;&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;extension_short_name&quot;: &#123;</span><br><span class="line">    &quot;description&quot;: &quot;Extension short name&quot;,</span><br><span class="line">    &quot;message&quot;: &quot;Translation&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;extension_description&quot;: &#123;</span><br><span class="line">    &quot;description&quot;: &quot;Description of extension&quot;,</span><br><span class="line">    &quot;message&quot;: &quot;Translation available everywhere&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+另外结合chrome.webRequest.* 、chrome.contextMenus以及chrome.cookies.*等等其他APIS，可以创造更多的可能性~<br>更多相关信息查看<a target="_blank" rel="noopener" href="https://developer.chrome.com/docs/extensions/mv3/devguide/">官方文档</a></li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/07/19/【032】Vue2.0_diff算法/" data-toggle="tooltip" data-placement="top" title="Vue2.0_diff算法">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/07/05/【031】React篇5-生态/" data-toggle="tooltip" data-placement="top" title="React篇5-生态">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#others" title="others">others</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/07/12/%E3%80%90101%E3%80%91chrome%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/";
+    var disqus_url = "http://yoursite.com/2021/07/12/%E3%80%90101%E3%80%91chrome%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          搭建React+TypeScript项目(二) - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2020/03/06/【001】搭建react+typeScript项目(二)/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                          <a class="tag" href="/tags/#TypeScript" title="TypeScript">TypeScript</a>
+                        
+                    </div>
+                    <h1>搭建React+TypeScript项目(二)</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2020-03-06
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>在搭建项目（一）的基础上，学习一些常用的webpack目录结构模板，增加一些内容</p>
+</blockquote>
+<h2 id="一、安装依赖"><a href="#一、安装依赖" class="headerlink" title="一、安装依赖"></a>一、安装依赖</h2><ul>
+<li>用于npm、node版本检测插件  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev chalk semver shelljs</span><br></pre></td></tr></table></figure></li>
+<li>用于开发模式时终端漂亮的输出错误/警告  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev friendly-errors-webpack-plugin portfinder node-notifier</span><br></pre></td></tr></table></figure></li>
+<li>用于生产时终端漂亮的输出错误/警告  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev ora rimraf</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="二、添加-node、npm-版本检测，警告提示"><a href="#二、添加-node、npm-版本检测，警告提示" class="headerlink" title="二、添加 node、npm 版本检测，警告提示"></a>二、添加 node、npm 版本检测，警告提示</h2><blockquote>
+<p> 在./build/check-versions.js <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34645412/article/details/78818245">注释参考</a></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下面的插件是chalk插件，他的作用是在控制台中输出不同的颜色的字，</span></span><br><span class="line"><span class="comment">// 大致这样用chalk.blue(&#x27;Hello world&#x27;)，这款插件只能改变命令行中的字体颜色</span></span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">&#x27;chalk&#x27;</span>);</span><br><span class="line"><span class="comment">// 下面这个是semver插件，是用来对特定的版本号做判断的，</span></span><br><span class="line"><span class="comment">// 比如 semver.gt(&#x27;1.2.3&#x27;,&#x27;9.8.7&#x27;) false 1.2.3版本比9.8.7版本低</span></span><br><span class="line"><span class="comment">// semver.satisfies(&#x27;1.2.3&#x27;,&#x27;1.x || &gt;=2.5.0 || 5.0.0 - 7.2.3&#x27;) true 1.2.3的版本符合后面的规则</span></span><br><span class="line"><span class="keyword">const</span> semver = <span class="built_in">require</span>(<span class="string">&#x27;semver&#x27;</span>);</span><br><span class="line"><span class="comment">// 下面这个插件是shelljs，作用是用来执行Unix系统命</span></span><br><span class="line"><span class="keyword">const</span> shell = <span class="built_in">require</span>(<span class="string">&#x27;shelljs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> packageConfig = <span class="built_in">require</span>(<span class="string">&#x27;../package.json&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">exec</span>(<span class="params">cmd</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//脚本可以通过 child_process 模块新建子进程，从而执行 Unix 系统命令</span></span><br><span class="line">    <span class="comment">//下面这段代码实际就是把cmd这个参数传递的值转化成前后没有空格的字符串，也就是版本号</span></span><br><span class="line">    <span class="comment">//https://nodejs.org/api/child_process.html这是nodejs的子进程教程</span></span><br><span class="line">    <span class="comment">//require(&#x27;child_process&#x27;) node的模块，execSync(cmd)创建同步进程</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>).execSync(cmd).toString().trim();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> versionRequirements = [&#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;node&#x27;</span>,</span><br><span class="line">    <span class="comment">// 使用semver插件把版本信息转化成规定格式，也就是 &#x27; =v1.2.3 &#x27; -&gt; &#x27;1.2.3&#x27; 这种功能</span></span><br><span class="line">    <span class="attr">currentVersion</span>: semver.clean(process.version),</span><br><span class="line">    <span class="comment">// 这是规定的pakage.json中engines选项的node版本信息 &quot;node&quot;:&quot;&gt;= 4.0.0&quot;</span></span><br><span class="line">    <span class="attr">versionRequirement</span>: packageConfig.engines.node</span><br><span class="line">&#125;];</span><br><span class="line"><span class="comment">/*shell.which(&#x27;npm&#x27;)  返回：C:\PROGRAM FILES\NODEJS\NPM.CMD 返回绝对路径，否则返回null*/</span></span><br><span class="line"><span class="keyword">if</span> (shell.which(<span class="string">&#x27;npm&#x27;</span>)) &#123;</span><br><span class="line">    versionRequirements.push(&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;npm&#x27;</span>,</span><br><span class="line">        <span class="attr">currentVersion</span>: exec(<span class="string">&#x27;npm --version&#x27;</span>),</span><br><span class="line">        <span class="attr">versionRequirement</span>: packageConfig.engines.npm</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> warnings = [];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; versionRequirements.length; i++) &#123;</span><br><span class="line">        <span class="keyword">const</span> mod = versionRequirements[i];</span><br><span class="line">        <span class="comment">//上面这个判断就是如果版本号不符合package.json文件中指定的版本号，就执行下面的代码</span></span><br><span class="line">        <span class="comment">//把当前版本号用红色字体，符合要求的版本号用绿色字体，给用户提示具体合适的版本</span></span><br><span class="line">        <span class="keyword">if</span> (!semver.satisfies(mod.currentVersion, mod.versionRequirement)) &#123;</span><br><span class="line">        warnings.push(mod.name + <span class="string">&#x27;: &#x27;</span></span><br><span class="line">            + chalk.red(mod.currentVersion) + <span class="string">&#x27; should be &#x27;</span></span><br><span class="line">            + chalk.green(mod.versionRequirement));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提示用户更新版本</span></span><br><span class="line">    <span class="keyword">if</span> (warnings.length) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">        <span class="built_in">console</span>.log(chalk.yellow(<span class="string">&#x27;To use this template, you must update following to modules:&#x27;</span>));</span><br><span class="line">        <span class="built_in">console</span>.log();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; warnings.length; i++) &#123;</span><br><span class="line">        <span class="keyword">const</span> warning = warnings[i];</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;  &#x27;</span> + warning);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">console</span>.log();</span><br><span class="line">        process.exit(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;; </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、针对开发模式修改"><a href="#三、针对开发模式修改" class="headerlink" title="三、针对开发模式修改"></a>三、针对开发模式修改</h2><ul>
+<li><p>添加 ./build/utils.js</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> packageConfig = <span class="built_in">require</span>(<span class="string">&#x27;../package.json&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">exports</span>.createNotifierCallback = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> notifier = <span class="built_in">require</span>(<span class="string">&#x27;node-notifier&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">severity, errors</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (severity !== <span class="string">&#x27;error&#x27;</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> error = errors[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">const</span> filename = error.file &amp;&amp; error.file.split(<span class="string">&#x27;!&#x27;</span>).pop();</span><br><span class="line"></span><br><span class="line">        notifier.notify(&#123;</span><br><span class="line">        <span class="attr">title</span>: packageConfig.name,</span><br><span class="line">        <span class="attr">message</span>: severity + <span class="string">&#x27;: &#x27;</span> + error.name,</span><br><span class="line">        <span class="attr">subtitle</span>: filename || <span class="string">&#x27;&#x27;</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;; </span><br></pre></td></tr></table></figure></li>
+<li><p>添加文件 ./build/devServer.js</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;./check-versions&#x27;</span>)();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">&#x27;webpack&#x27;</span>);</span><br><span class="line"><span class="comment">// friendly-errors-webpack-plugin插件，把webpack的错误和日志收集起来，漂亮的展示给用户，方便调试</span></span><br><span class="line"><span class="comment">// 注意点，使用这个插件要遵守下点</span></span><br><span class="line"><span class="comment">// 您需要关闭所有的错误日志记录，将webpack配置静默选项设置为true</span></span><br><span class="line"><span class="comment">// 也就是遵循以下三点即可</span></span><br><span class="line"><span class="comment">// 在使用webpack-dev-middleware插件，关于这个插件的解释在我的dev-sever-js配置文件中有解释，设置以下内容</span></span><br><span class="line"><span class="comment">// app.use(require(&#x27;webpack-dev-middleware&#x27;)(compiler, &#123;</span></span><br><span class="line"><span class="comment">//   quiet: true, // 必须设置</span></span><br><span class="line"><span class="comment">//   publicPath: config.output.publicPath,</span></span><br><span class="line"><span class="comment">// &#125;));</span></span><br><span class="line"><span class="comment">// 使用webpack-dev-server时设置如下</span></span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//   devServer: &#123;</span></span><br><span class="line"><span class="comment">//     quiet: true</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="comment">// 使用webpack-hot-middleware中间件，关于这个插件的解释也在我的dev-server-js文章中</span></span><br><span class="line"><span class="comment">// app.use(require(&#x27;webpack-hot-middleware&#x27;)(compiler, &#123;</span></span><br><span class="line"><span class="comment">//   log: () =&gt; &#123;&#125;</span></span><br><span class="line"><span class="comment">// &#125;));</span></span><br><span class="line"><span class="keyword">const</span> FriendlyErrorsPlugin = <span class="built_in">require</span>(<span class="string">&#x27;friendly-errors-webpack-plugin&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> portfinder = <span class="built_in">require</span>(<span class="string">&#x27;portfinder&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> devWebpackConfig = <span class="built_in">require</span>(<span class="string">&#x27;./webpack.dev.conf&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> utils = <span class="built_in">require</span>(<span class="string">&#x27;./utils&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">&#x27;../config&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!process.env.NODE_ENV) &#123;</span><br><span class="line">process.env.NODE_ENV = <span class="built_in">JSON</span>.parse(config.dev.env.NODE_ENV);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    portfinder.basePort = process.env.PORT || config.dev.port;</span><br><span class="line">    portfinder.getPort(<span class="function">(<span class="params">err, port</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        reject(err);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// publish the new Port, necessary for e2e tests</span></span><br><span class="line">        process.env.PORT = port;</span><br><span class="line">        <span class="comment">// add port to devServer config</span></span><br><span class="line">        devWebpackConfig.devServer.port = port;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Add FriendlyErrorsPlugin</span></span><br><span class="line">        devWebpackConfig.plugins.push(<span class="keyword">new</span> FriendlyErrorsPlugin(&#123;</span><br><span class="line">            <span class="attr">compilationSuccessInfo</span>: &#123;</span><br><span class="line">            <span class="attr">messages</span>: [<span class="string">`Your application is running here: http://<span class="subst">$&#123;devWebpackConfig.devServer.host&#125;</span>:<span class="subst">$&#123;port&#125;</span>`</span>],</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">onErrors</span>: config.dev.notifyOnErrors</span><br><span class="line">            ? utils.createNotifierCallback()</span><br><span class="line">            : <span class="literal">undefined</span></span><br><span class="line">        &#125;));</span><br><span class="line"></span><br><span class="line">        resolve(devWebpackConfig);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);    </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>./build/webpack.dev.conf.js记得增加quiet: true</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">devServer: &#123;</span><br><span class="line">    ···</span><br><span class="line">    <span class="attr">quiet</span>: <span class="literal">true</span> <span class="comment">// necessary for FriendlyErrorsPlugin</span></span><br><span class="line">    ···</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p>package 脚本修改</p>
+<blockquote>
+<p>增加npm,node版本限制</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...,</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;start&quot;</span>: <span class="string">&quot;webpack-dev-server --config build/devServer.js&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;engines&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;node&quot;</span>: <span class="string">&quot;&gt;= 6.0.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;npm&quot;</span>: <span class="string">&quot;&gt;= 3.0.0&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="四、针对生产模式修改"><a href="#四、针对生产模式修改" class="headerlink" title="四、针对生产模式修改"></a>四、针对生产模式修改</h2><ul>
+<li>添加文件 build/build.js  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;./check-versions&#x27;</span>)();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ora = <span class="built_in">require</span>(<span class="string">&#x27;ora&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> rm = <span class="built_in">require</span>(<span class="string">&#x27;rimraf&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">&#x27;chalk&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">&#x27;webpack&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">&#x27;../config&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> webpackConfig = <span class="built_in">require</span>(<span class="string">&#x27;./webpack.prod.conf&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> spinner = ora(<span class="string">&#x27;building for production...&#x27;</span>);</span><br><span class="line">spinner.start();</span><br><span class="line"></span><br><span class="line">rm(config.prod.assetsRoot, <span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</span><br><span class="line">    webpack(webpackConfig, <span class="function">(<span class="params">err, stats</span>) =&gt;</span> &#123;</span><br><span class="line">        spinner.stop();</span><br><span class="line">        <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</span><br><span class="line">        process.stdout.write(stats.toString(&#123;</span><br><span class="line">        <span class="attr">colors</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">modules</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">children</span>: <span class="literal">false</span>, <span class="comment">// If you are using ts-loader, setting this to true will make TypeScript errors show up during build.</span></span><br><span class="line">        <span class="attr">chunks</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">chunkModules</span>: <span class="literal">false</span></span><br><span class="line">        &#125;) + <span class="string">&#x27;\n\n&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (stats.hasErrors()) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(chalk.red(<span class="string">&#x27;  Build failed with errors.\n&#x27;</span>));</span><br><span class="line">        process.exit(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(chalk.cyan(<span class="string">&#x27;  Build complete.\n&#x27;</span>));</span><br><span class="line">        <span class="built_in">console</span>.log(chalk.yellow(</span><br><span class="line">        <span class="string">&#x27;  Tip: built files are meant to be served over an HTTP server.\n&#x27;</span></span><br><span class="line">        + <span class="string">&#x27;  Opening index.html over file:// won\&#x27;t work.\n&#x27;</span></span><br><span class="line">        ));</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+<li>package 脚本修改<blockquote>
+<p>增加npm,node版本限制</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...,</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;build&quot;</span>: <span class="string">&quot;node build/build.js&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;engines&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;node&quot;</span>: <span class="string">&quot;&gt;= 6.0.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;npm&quot;</span>: <span class="string">&quot;&gt;= 3.0.0&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="五、分环境coss-env"><a href="#五、分环境coss-env" class="headerlink" title="五、分环境coss-env"></a>五、分环境coss-env</h2><blockquote>
+<p>在大部分企业开发的时候是不止开发生产，两套环境，一般还有有开发，甚至demo环境的情况；<br>多环境部署的时候，不同环境的前端分别调用的后端接口不同。使用cross-env插件在脚本入口处<br>传入环境变量用以区分不同环境，更加便捷。</p>
+</blockquote>
+<ol>
+<li>安装依赖 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev cross-env</span><br></pre></td></tr></table></figure></li>
+<li>package脚本修改 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...,</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;start&quot;</span>: <span class="string">&quot;cross-env webpack-dev-server --config build/devServer.js&quot;</span>, <span class="comment">// NODE_ENV=development为默认可加可不加</span></span><br><span class="line">    <span class="string">&quot;test&quot;</span>: <span class="string">&quot;cross-env NODE_ENV=test webpack-dev-server --config build/devServer.js&quot;</span>,    </span><br><span class="line">    <span class="string">&quot;build&quot;</span>: <span class="string">&quot; cross-env NODE_ENV=production node build/build.js&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>config文件修改 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  ./config/dev.env.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="attr">NODE_ENV</span>: <span class="built_in">JSON</span>.stringify(process.env.NODE_ENV)|| <span class="built_in">JSON</span>.stringify(<span class="string">&#x27;development&#x27;</span>)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ./config/dev.prod.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="attr">NODE_ENV</span>: <span class="built_in">JSON</span>.stringify(process.env.NODE_ENV)|| <span class="built_in">JSON</span>.stringify(<span class="string">&#x27;production&#x27;</span>)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="六、css、less处理"><a href="#六、css、less处理" class="headerlink" title="六、css、less处理"></a>六、css、less处理</h2><h3 id="css、less"><a href="#css、less" class="headerlink" title="css、less"></a>css、less</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">error  in ./src/assets/css/index.css</span><br><span class="line"></span><br><span class="line">Module parse failed: Unexpected token (1:0)</span><br><span class="line">You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> .container &#123;</span></span><br><span class="line">|     background-color: aquamarine</span><br><span class="line">| &#125;</span><br><span class="line"></span><br><span class="line"> @ ./src/index.tsx 3:0-32</span><br></pre></td></tr></table></figure>
+<ol>
+<li>安装依赖<ul>
+<li>css 添加style-loader、css-loader <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev style-loader css-loader</span><br></pre></td></tr></table></figure></li>
+<li>支持less 添加less、less-loader<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev less less-loader</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>添加loader配置 文件：build/webpack.base.conf.js <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ···</span><br><span class="line">    <span class="attr">module</span>: &#123;</span><br><span class="line">        <span class="attr">rules</span>: [</span><br><span class="line">            ···</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.css$/</span>,</span><br><span class="line">                use: [<span class="string">&quot;style-loader&quot;</span>, <span class="string">&quot;css-loader&quot;</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.less$/</span>,</span><br><span class="line">                use: [<span class="string">&quot;style-loader&quot;</span>, <span class="string">&quot;css-loader&quot;</span>, <span class="string">&quot;less-loader&quot;</span>]</span><br><span class="line">            &#125;</span><br><span class="line">            ···</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">    ···</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：</p>
+</blockquote>
+<ul>
+<li>css-loader：读取并编译 js 中引入的 css 文件</li>
+<li>style-loader： html 中创建一个 <style></style> 标签，里面是 css-loader 解析出的 css 样式。</li>
+<li>webpack 配置中，style-loader 必须在 css-loader 之前，顺序不可变，即必须先由 css-loader 处理，再由 style-loader 处理。</li>
+</ul>
+</li>
+</ol>
+<h3 id="postcss-loader-amp-autoprefixer"><a href="#postcss-loader-amp-autoprefixer" class="headerlink" title="postcss-loader &amp; autoprefixer"></a>postcss-loader &amp; autoprefixer</h3><blockquote>
+<p>autoprefixer 按照浏览器使用量决定需要添加哪些浏览器前缀，postcss-loader 按照 autoprefixer 的结果来添加浏览器前缀。</p>
+</blockquote>
+<ol>
+<li><p>安装依赖</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev postcss-loader autoprefixer</span><br></pre></td></tr></table></figure></li>
+<li><p>配置</p>
+<ul>
+<li>方式一 文件build/webpack.base.conf.js<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ···</span><br><span class="line">    <span class="attr">module</span>: &#123;</span><br><span class="line">        <span class="attr">rules</span>: [</span><br><span class="line">            ···</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.css$/</span>,</span><br><span class="line">                use: [</span><br><span class="line">                    <span class="string">&quot;style-loader&quot;</span>, </span><br><span class="line">                    <span class="string">&quot;css-loader&quot;</span>,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">loader</span>: <span class="string">&quot;postcss-loader&quot;</span>,</span><br><span class="line">                        <span class="attr">options</span>: &#123;</span><br><span class="line">                            <span class="attr">plugins</span>: [</span><br><span class="line">                                <span class="built_in">require</span>(<span class="string">&quot;autoprefixer&quot;</span>)()</span><br><span class="line">                            ]</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.less$/</span>,</span><br><span class="line">                use: [</span><br><span class="line">                    <span class="string">&quot;style-loader&quot;</span>, </span><br><span class="line">                    <span class="string">&quot;css-loader&quot;</span>, </span><br><span class="line">                    <span class="string">&quot;less-loader&quot;</span>,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">loader</span>: <span class="string">&quot;postcss-loader&quot;</span>,</span><br><span class="line">                        <span class="attr">options</span>: &#123;</span><br><span class="line">                            <span class="attr">plugins</span>: [</span><br><span class="line">                                <span class="built_in">require</span>(<span class="string">&quot;autoprefixer&quot;</span>)()</span><br><span class="line">                            ]</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;</span><br><span class="line">            ···</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">    ···</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p> 在package.json文件中添加</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;browserslist&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;defaults&quot;</span>,</span><br><span class="line">    <span class="string">&quot;not ie &lt; 11&quot;</span>,</span><br><span class="line">    <span class="string">&quot;last 2 versions&quot;</span>,</span><br><span class="line">    <span class="string">&quot;&gt; 1%&quot;</span>,</span><br><span class="line">    <span class="string">&quot;iOS 7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;last 3 iOS versions&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>遇到的问题：最早的时候添加方式如下：</p>
+</blockquote>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">test</span>: <span class="regexp">/\.less$/</span>,</span><br><span class="line">    use: [</span><br><span class="line">        <span class="string">&quot;style-loader&quot;</span>, </span><br><span class="line">        <span class="string">&quot;css-loader&quot;</span>, </span><br><span class="line">        <span class="string">&quot;less-loader&quot;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">loader</span>: <span class="string">&quot;postcss-loader&quot;</span>,</span><br><span class="line">            <span class="attr">options</span>: &#123;</span><br><span class="line">                <span class="attr">plugins</span>: [</span><br><span class="line">                    <span class="built_in">require</span>(<span class="string">&quot;autoprefixer&quot;</span>)(</span><br><span class="line">                        <span class="string">&quot;browsers&quot;</span>: [</span><br><span class="line">                        <span class="string">&quot;defaults&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;not ie &lt; 11&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;last 2 versions&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;&gt; 1%&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;iOS 7&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;last 3 iOS versions&quot;</span></span><br><span class="line">                    ])</span><br><span class="line">                ]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//如果不添加browsers则不生效</span></span><br><span class="line"><span class="comment">//如果按照上面方式添加的话会报警告</span></span><br><span class="line">Replace Autoprefixer browsers option to Browserslist config.</span><br><span class="line">Use browserslist key <span class="keyword">in</span> package.json or .browserslistrc file.</span><br><span class="line"></span><br><span class="line">Using browsers option cause some error. Browserslist config</span><br><span class="line">can be used <span class="keyword">for</span> Babel, Autoprefixer, postcss-normalize and other tools.</span><br><span class="line"></span><br><span class="line">If you really need to use option, rename it to overrideBrowserslist.</span><br><span class="line"></span><br><span class="line">Learn more at:</span><br><span class="line">https:<span class="comment">//github.com/browserslist/browserslist#readme</span></span><br><span class="line">https:<span class="comment">//twitter.com/browserslist</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方式二 在项目根目录下新建 postcss.config.js<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">        <span class="built_in">require</span>(<span class="string">&#x27;autoprefixer&#x27;</span>)()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+文件：build/webpack.base.conf.js<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ···</span><br><span class="line">    <span class="attr">module</span>: &#123;</span><br><span class="line">        <span class="attr">rules</span>: [</span><br><span class="line">            ···</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.css$/</span>,</span><br><span class="line">                use: [<span class="string">&quot;style-loader&quot;</span>, <span class="string">&quot;css-loader&quot;</span>,<span class="string">&quot;postcss-loader&quot;</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.less$/</span>,</span><br><span class="line">                use: [<span class="string">&quot;style-loader&quot;</span>, <span class="string">&quot;css-loader&quot;</span>, <span class="string">&quot;less-loader&quot;</span>,<span class="string">&quot;postcss-loader&quot;</span>]</span><br><span class="line">            &#125;</span><br><span class="line">            ···</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">    ···</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>总结：由于方式二需要新增文件，推荐选择方式一</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="七、图片和字体文件处理"><a href="#七、图片和字体文件处理" class="headerlink" title="七、图片和字体文件处理"></a>七、图片和字体文件处理</h2><blockquote>
+<p>url-loader内部需要用到file-loader,因此我们需要安装url-loader和file-loader。</p>
+</blockquote>
+<blockquote>
+<p>url-loader工作分两种情况：<br>    1. 文件大小小于limit参数，url-loader将会把文件转为DataURL;<br>    2. 文件大小大于limit，url-loader会调用file-loader进行处理，参数也会直接传给file-loader。</p>
+</blockquote>
+<ol>
+<li>配置 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev file-loader url-loader</span><br></pre></td></tr></table></figure></li>
+<li>添加loader配置 文件：build/webpack.base.conf.js <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ···</span><br><span class="line">    <span class="attr">module</span>: &#123;</span><br><span class="line">        <span class="attr">rules</span>: [</span><br><span class="line">            ···</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.(svg|png|jpe?g|gif|mp4|webm)(\?\S*)?$/</span>,</span><br><span class="line">                loader: <span class="string">&quot;url-loader?limit=8192&amp;name=img/[name].[hash:7].[ext]&quot;</span></span><br><span class="line">            &#125;,&#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.(eot|woff|woff2|ttf)(\?\S*)?$/</span>,</span><br><span class="line">                loader: <span class="string">&quot;url-loader?limit=8192&amp;name=fonts/[name].[hash:7].[ext]&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">            ···</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">    ···</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="八、ESlint"><a href="#八、ESlint" class="headerlink" title="八、ESlint"></a>八、ESlint</h2><blockquote>
+<p>我们通常使用lint工具来检查代码不规范的地方</p>
+</blockquote>
+<ol>
+<li>安装依赖<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev eslint eslint-loader</span><br><span class="line">yarn add --dev eslint-plugin-react @typescript-eslint/eslint-plugin @typescript-eslint/parser</span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li>eslint: ESLint的核心代码</li>
+<li>@typescript-eslint/parser：ESLint的解析器，用于解析typescript，从而检查和规范Typescript代码</li>
+<li>@typescript-eslint/eslint-plugin：这是一个ESLint插件，包含了各类定义好的检测Typescript代码的规范</li>
+<li>为了检测和规范React代码的书写必须安装插件eslint-plugin-react</li>
+</ul>
+<ol start="2">
+<li>添加文件在根目录下新建.eslintrc.js文件<ul>
+<li>在ts项目中必须执行解析器为@typescript-eslint/parser，才能正确的检测和规范TS代码</li>
+<li>env环境变量配置，形如console属性只有在browser环境下才会存在，如果没有设置支持browser,那么可能报console is undefined的错误。<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line"></span><br><span class="line">  <span class="attr">parser</span>:  <span class="string">&#x27;@typescript-eslint/parser&#x27;</span>,</span><br><span class="line">  <span class="attr">extends</span>: [</span><br><span class="line">      <span class="string">&#x27;plugin:react/recommended&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;plugin:@typescript-eslint/recommended&#x27;</span></span><br><span class="line">  ],                              <span class="comment">//使用推荐的React代码检测规范</span></span><br><span class="line">  <span class="attr">plugins</span>: [<span class="string">&#x27;@typescript-eslint&#x27;</span>],</span><br><span class="line">  <span class="attr">env</span>:&#123;                         </span><br><span class="line">      <span class="attr">browser</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">node</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">settings</span>: &#123;             <span class="comment">//自动发现React的版本，从而进行规范react代码</span></span><br><span class="line">      <span class="string">&quot;react&quot;</span>: &#123;</span><br><span class="line">          <span class="string">&quot;pragma&quot;</span>: <span class="string">&quot;React&quot;</span>,</span><br><span class="line">          <span class="string">&quot;version&quot;</span>: <span class="string">&quot;detect&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">  &#125;, </span><br><span class="line">  <span class="attr">parserOptions</span>: &#123;        <span class="comment">//指定ESLint可以解析JSX语法</span></span><br><span class="line">      <span class="string">&quot;ecmaVersion&quot;</span>: <span class="number">2019</span>,</span><br><span class="line">      <span class="string">&quot;sourceType&quot;</span>: <span class="string">&#x27;module&#x27;</span>,</span><br><span class="line">      <span class="string">&quot;ecmaFeatures&quot;</span>:&#123;</span><br><span class="line">          <span class="attr">jsx</span>:<span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">rules</span>: &#123;</span><br><span class="line">      <span class="comment">//自定义React代码编码规范</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>还需要配置webpack，才能在开发时启用eslint<br>build/webpack.base.conf.js<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ···</span><br><span class="line">    <span class="attr">module</span>: &#123;</span><br><span class="line">        <span class="attr">rules</span>: [</span><br><span class="line">            ···</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">enforce</span>: <span class="string">&#x27;pre&#x27;</span>,</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.tsx?$/</span>,</span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">                include: path.resolve(__dirname, <span class="string">&#x27;../src&#x27;</span>),</span><br><span class="line">                <span class="attr">loader</span>: <span class="string">&#x27;eslint-loader&#x27;</span>,</span><br><span class="line">                <span class="attr">options</span>: &#123;</span><br><span class="line">                    <span class="attr">emitWarning</span>: <span class="literal">true</span>, <span class="comment">// 这个配置需要打开，才能在控制台输出warning信息</span></span><br><span class="line">                    <span class="attr">emitError</span>: <span class="literal">true</span>, <span class="comment">// 这个配置需要打开，才能在控制台输出error信息</span></span><br><span class="line">                    <span class="attr">fix</span>: <span class="literal">true</span> <span class="comment">// 是否自动修复，如果是，每次保存时会自动修复可以修复的部分</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            ···</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">    ···</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>我们可能希望检查或不检查某些特定的文件，可以在根目录新建.eslintignore</li>
+</ol>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2020/03/07/【002】搭建react+typeScript项目(三)/" data-toggle="tooltip" data-placement="top" title="搭建React+TypeScript项目(三)">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2020/03/05/【000】搭建react+typeScript项目(一)/" data-toggle="tooltip" data-placement="top" title="搭建React+TypeScript项目(一)">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                          <a class="tag" href="/tags/#TypeScript" title="TypeScript">TypeScript</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2020/03/06/%E3%80%90001%E3%80%91%E6%90%AD%E5%BB%BAreact+typeScript%E9%A1%B9%E7%9B%AE(%E4%BA%8C)/";
+    var disqus_url = "http://yoursite.com/2020/03/06/%E3%80%90001%E3%80%91%E6%90%AD%E5%BB%BAreact+typeScript%E9%A1%B9%E7%9B%AE(%E4%BA%8C)/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

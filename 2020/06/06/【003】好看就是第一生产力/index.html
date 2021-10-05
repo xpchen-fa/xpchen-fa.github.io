@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          好看就是第一生产力 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2020/06/06/【003】好看就是第一生产力/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#others" title="others">others</a>
+                        
+                    </div>
+                    <h1>好看就是第一生产力</h1>
+                    <h2 class="subheading">微软小工具合集</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2020-06-06
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>微软的一些工具</p>
+</blockquote>
+<h2 id="Windows-Terminal"><a href="#Windows-Terminal" class="headerlink" title="Windows Terminal"></a>Windows Terminal</h2><ol>
+<li>直接进入Microsoft Store 寻找 Windows Terminal下载启动</li>
+<li>安装power Shell<blockquote>
+<p>安装参考<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7">document</a></p>
+</blockquote>
+</li>
+<li>美化：<ul>
+<li>字体安装，我使用的字体<a target="_blank" rel="noopener" href="https://github.com/microsoft/cascadia-code">cascadia-code</a></li>
+<li>安装posh-git  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Install-Module posh-git -Scope CurrentUser</span><br></pre></td></tr></table></figure></li>
+<li>设置 Powershell 的 profile  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">if (!(Test-Path -Path $PROFILE )) &#123; New-Item -Type File -Path $PROFILE -Force &#125;</span><br><span class="line">notepad $PROFILE</span><br></pre></td></tr></table></figure></li>
+<li>粘贴以下内容进 profile 文件  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">write-host &#x27;阳光下永远是小朋友🍦🍬🍔🍟&#x27;</span><br><span class="line"></span><br><span class="line">import-module posh-git</span><br><span class="line">import-module pure-pwsh</span><br></pre></td></tr></table></figure></li>
+<li>颜色主题：Nord Theme 快捷键：Ctrl+, 打开settings.json文件设置样式，我的配置文件：  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// To view the default settings, hold &quot;alt&quot; while clicking on the &quot;Settings&quot; button.</span></span><br><span class="line"><span class="comment">// For documentation on these settings, see: https://aka.ms/terminal-documentation</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;$schema&quot;</span>: <span class="string">&quot;https://aka.ms/terminal-profiles-schema&quot;</span>,</span><br><span class="line">    <span class="string">&quot;defaultProfile&quot;</span>: <span class="string">&quot;&#123;61c54bbd-c2c6-5271-96e7-009a87ff44bf&#125;&quot;</span>,</span><br><span class="line">    <span class="string">&quot;initialCols&quot;</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="string">&quot;initialRows&quot;</span>: <span class="number">30</span>,</span><br><span class="line">    <span class="string">&quot;requestedTheme&quot;</span>: <span class="string">&quot;dark&quot;</span>,</span><br><span class="line">    <span class="string">&quot;theme&quot;</span>: <span class="string">&quot;dark&quot;</span>,</span><br><span class="line">    <span class="string">&quot;profiles&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;defaults&quot;</span>: &#123;</span><br><span class="line">            <span class="comment">// Put settings here that you want to apply to all profiles</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;list&quot;</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// Make changes here to the powershell.exe profile</span></span><br><span class="line">                <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;&#123;61c54bbd-c2c6-5271-96e7-009a87ff44bf&#125;&quot;</span>,</span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;PowerShell&quot;</span>,</span><br><span class="line">                <span class="string">&quot;commandline&quot;</span>: <span class="string">&quot;pwsh.exe -nologo&quot;</span>,</span><br><span class="line">                <span class="string">&quot;hidden&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">                <span class="string">&quot;fontFace&quot;</span>: <span class="string">&quot;Cascadia Code&quot;</span>,</span><br><span class="line">                <span class="string">&quot;background&quot;</span>: <span class="string">&quot;#0c0c0c&quot;</span>,</span><br><span class="line">                <span class="string">&quot;useAcrylic&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="string">&quot;acrylicOpacity&quot;</span>: <span class="number">0.75</span>,</span><br><span class="line">                <span class="string">&quot;tabTitle&quot;</span>: <span class="string">&quot;PowerShell&quot;</span>,</span><br><span class="line">                <span class="string">&quot;colorScheme&quot;</span>: <span class="string">&quot;Nord&quot;</span>,</span><br><span class="line">                <span class="string">&quot;backgroundImage&quot;</span>: <span class="string">&quot;ms-appdata:///roaming/1.png&quot;</span>,</span><br><span class="line">                <span class="string">&quot;backgroundImageOpacity&quot;</span>: <span class="number">0.5</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// Make changes here to the cmd.exe profile</span></span><br><span class="line">                <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;&#123;0caa0dad-35be-5f56-a8ff-afceeeaa6101&#125;&quot;</span>,</span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Command&quot;</span>,</span><br><span class="line">                <span class="string">&quot;commandline&quot;</span>: <span class="string">&quot;cmd.exe&quot;</span>,</span><br><span class="line">                <span class="string">&quot;hidden&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">                <span class="string">&quot;fontFace&quot;</span>: <span class="string">&quot;Cascadia Code&quot;</span>,</span><br><span class="line">                <span class="string">&quot;background&quot;</span>: <span class="string">&quot;#0c0c0c&quot;</span>,</span><br><span class="line">                <span class="string">&quot;useAcrylic&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="string">&quot;acrylicOpacity&quot;</span>: <span class="number">0.75</span>,</span><br><span class="line">                <span class="string">&quot;tabTitle&quot;</span>: <span class="string">&quot;Command&quot;</span>,</span><br><span class="line">                <span class="string">&quot;colorScheme&quot;</span>: <span class="string">&quot;Nord&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;&#123;574e775e-4f2a-5b96-ac1e-a2962a402336&#125;&quot;</span>,</span><br><span class="line">                <span class="string">&quot;hidden&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;PowerShell&quot;</span>,</span><br><span class="line">                <span class="string">&quot;source&quot;</span>: <span class="string">&quot;Windows.Terminal.PowershellCore&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;&#123;b453ae62-4e3d-5e58-b989-0a998ec441b8&#125;&quot;</span>,</span><br><span class="line">                <span class="string">&quot;hidden&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Azure Cloud Shell&quot;</span>,</span><br><span class="line">                <span class="string">&quot;source&quot;</span>: <span class="string">&quot;Windows.Terminal.Azure&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;&#123;a3a2e83a-884a-5379-baa8-16f193a13b21&#125;&quot;</span>,</span><br><span class="line">                <span class="string">&quot;hidden&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;PowerShell 7 Preview&quot;</span>,</span><br><span class="line">                <span class="string">&quot;source&quot;</span>: <span class="string">&quot;Windows.Terminal.PowershellCore&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;&#123;2c4de342-38b7-51cf-b940-2309a097f518&#125;&quot;</span>,</span><br><span class="line">                <span class="string">&quot;hidden&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Ubuntu&quot;</span>,</span><br><span class="line">                <span class="string">&quot;commandline&quot;</span>: <span class="string">&quot;wsl.exe ~&quot;</span>,</span><br><span class="line">                <span class="string">&quot;source&quot;</span>: <span class="string">&quot;Windows.Terminal.Wsl&quot;</span>,</span><br><span class="line">                <span class="string">&quot;fontFace&quot;</span>: <span class="string">&quot;Cascadia Code&quot;</span>,</span><br><span class="line">                <span class="string">&quot;background&quot;</span>: <span class="string">&quot;#0c0c0c&quot;</span>,</span><br><span class="line">                <span class="string">&quot;useAcrylic&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="string">&quot;acrylicOpacity&quot;</span>: <span class="number">0.75</span>,</span><br><span class="line">                <span class="string">&quot;tabTitle&quot;</span>: <span class="string">&quot;Ubuntu&quot;</span>,</span><br><span class="line">                <span class="string">&quot;colorScheme&quot;</span>: <span class="string">&quot;Nord&quot;</span>,</span><br><span class="line">                <span class="string">&quot;backgroundImage&quot;</span>: <span class="string">&quot;ms-appdata:///roaming/1.png&quot;</span>,</span><br><span class="line">                <span class="string">&quot;backgroundImageOpacity&quot;</span>: <span class="number">0.5</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// Add custom color schemes to this array</span></span><br><span class="line">    <span class="string">&quot;schemes&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Nord&quot;</span>,</span><br><span class="line">            <span class="string">&quot;background&quot;</span>: <span class="string">&quot;#2e3440&quot;</span>,</span><br><span class="line">            <span class="string">&quot;foreground&quot;</span>: <span class="string">&quot;#d8dee9&quot;</span>,</span><br><span class="line">            <span class="string">&quot;black&quot;</span>: <span class="string">&quot;#3b4252&quot;</span>,</span><br><span class="line">            <span class="string">&quot;blue&quot;</span>: <span class="string">&quot;#81a1c1&quot;</span>,</span><br><span class="line">            <span class="string">&quot;brightBlack&quot;</span>: <span class="string">&quot;#4c566a&quot;</span>,</span><br><span class="line">            <span class="string">&quot;brightBlue&quot;</span>: <span class="string">&quot;#81a1c1&quot;</span>,</span><br><span class="line">            <span class="string">&quot;brightCyan&quot;</span>: <span class="string">&quot;#8fbcbb&quot;</span>,</span><br><span class="line">            <span class="string">&quot;brightGreen&quot;</span>: <span class="string">&quot;#a3be8c&quot;</span>,</span><br><span class="line">            <span class="string">&quot;brightPurple&quot;</span>: <span class="string">&quot;#b48ead&quot;</span>,</span><br><span class="line">            <span class="string">&quot;brightRed&quot;</span>: <span class="string">&quot;#bf616a&quot;</span>,</span><br><span class="line">            <span class="string">&quot;brightWhite&quot;</span>: <span class="string">&quot;#eceff4&quot;</span>,</span><br><span class="line">            <span class="string">&quot;brightYellow&quot;</span>: <span class="string">&quot;#ebcb8b&quot;</span>,</span><br><span class="line">            <span class="string">&quot;cyan&quot;</span>: <span class="string">&quot;#88c0d0&quot;</span>,</span><br><span class="line">            <span class="string">&quot;green&quot;</span>: <span class="string">&quot;#a3be8c&quot;</span>,</span><br><span class="line">            <span class="string">&quot;purple&quot;</span>: <span class="string">&quot;#b48ead&quot;</span>,</span><br><span class="line">            <span class="string">&quot;red&quot;</span>: <span class="string">&quot;#bf616a&quot;</span>,</span><br><span class="line">            <span class="string">&quot;white&quot;</span>: <span class="string">&quot;#e5e9f0&quot;</span>,</span><br><span class="line">            <span class="string">&quot;yellow&quot;</span>: <span class="string">&quot;#ebcb8b&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// Add any keybinding overrides to this array.</span></span><br><span class="line">    <span class="comment">// To unbind a default keybinding, set the command to &quot;unbound&quot;</span></span><br><span class="line">    <span class="string">&quot;keybindings&quot;</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="scoop——强大的Windows命令行包管理工具"><a href="#scoop——强大的Windows命令行包管理工具" class="headerlink" title="scoop——强大的Windows命令行包管理工具"></a>scoop——强大的Windows命令行包管理工具</h2>按照配置 <a target="_blank" rel="noopener" href="https://sspai.com/post/52496">链接</a><h2 id="截图工具Snipaste"><a href="#截图工具Snipaste" class="headerlink" title="截图工具Snipaste"></a>截图工具Snipaste</h2>Microsoft Store可下载<h2 id="好用的录屏工具screentogif"><a href="#好用的录屏工具screentogif" class="headerlink" title="好用的录屏工具screentogif"></a>好用的录屏工具screentogif</h2>scoop install screentogif<h2 id="Power-Toys"><a href="#Power-Toys" class="headerlink" title="Power Toys"></a>Power Toys</h2>需要什么软件直接搜索，使用感如下，这样就可以有好看的空桌面啦！<br><img src="/img/post/PowerToys.gif" alt="Power Toys"></li>
+</ul>
+</li>
+</ol>
+<p>——————————————————————————————————————————————————————————<br>🎉🎉🎉🎉🎉未完待续…</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2020/06/08/【004】前端面试-(HTML5+CSS3)/" data-toggle="tooltip" data-placement="top" title="前端面试-(HTML+CSS)">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2020/03/07/【002】搭建react+typeScript项目(三)/" data-toggle="tooltip" data-placement="top" title="搭建React+TypeScript项目(三)">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#others" title="others">others</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2020/06/06/%E3%80%90003%E3%80%91%E5%A5%BD%E7%9C%8B%E5%B0%B1%E6%98%AF%E7%AC%AC%E4%B8%80%E7%94%9F%E4%BA%A7%E5%8A%9B/";
+    var disqus_url = "http://yoursite.com/2020/06/06/%E3%80%90003%E3%80%91%E5%A5%BD%E7%9C%8B%E5%B0%B1%E6%98%AF%E7%AC%AC%E4%B8%80%E7%94%9F%E4%BA%A7%E5%8A%9B/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

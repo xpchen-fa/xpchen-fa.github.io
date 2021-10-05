@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          浏览器原理篇4-导航流程 - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/06/20/【026】浏览器原理篇4-导航流程/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#浏览器原理" title="浏览器原理">浏览器原理</a>
+                        
+                    </div>
+                    <h1>浏览器原理篇4-导航流程</h1>
+                    <h2 class="subheading">导航流程</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-06-20
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>用户发出 URL 请求到页面开始解析的这个过程，就叫做导航。</strong><br>导航的整个流程需要各个进程间的配合，所以我们要先了解浏览器进程、渲染进程和网络进程的主要职责。</p>
+<ol>
+<li>浏览器进程主要负责用户交互、子进程管理和文件储存等功能。</li>
+<li>网络进程是面向渲染进程和浏览器进程等提供网络下载功能。</li>
+<li>渲染进程的主要职责是把从网络下载的 HTML、JavaScript、CSS、图片等资源解析为可以显示和交互的页面。因为渲染进程所有的内容都是通过网络获取的，会存在一些恶意代码利用浏览器漏洞对系统进行攻击，所以运行在渲染进程里面的代码是不被信任的。这也是为什么 Chrome 会让渲染进程运行在安全沙箱里，就是为了保证系统的安全。</li>
+</ol>
+<p><strong>流程图</strong></p>
+<p><img src="/img/post/026/%E6%B5%81%E7%A8%8B.png" alt="流程"></p>
+<p><strong>完整的进程详细描述</strong></p>
+<ol>
+<li>用户输入URL，浏览器会根据用户输入的信息判断是搜索还是网址，如果是搜索内容，就将搜索内容+默认搜索引擎合成新的URL；如果用户输入的内容符合URL规则，浏览器就会根据URL协议，在这段内容上加上协议合成合法的URL</li>
+<li>用户输入完内容，按下回车键，浏览器导航栏显示loading状态，但是页面还是呈现前一个页面，这是因为新页面的响应数据还没有获得</li>
+<li>浏览器进程浏览器构建请求行信息，会通过进程间通信（IPC）将URL请求发送给网络进程 GET /index.html HTTP1.1</li>
+<li>网络进程获取到URL，先去本地缓存中查找是否有缓存文件，如果有，拦截请求，直接200返回；否则，进入网络请求过程</li>
+<li>网络进程请求DNS返回域名对应的IP和端口号，如果之前DNS数据缓存服务缓存过当前域名信息，就会直接返回缓存信息；否则，发起请求获取根据域名解析出来的IP和端口号，如果没有端口号，http默认80，https默认443。如果是https请求，还需要建立TLS连接。</li>
+<li>Chrome 有个机制，同一个域名同时最多只能建立 6 个TCP 连接，如果在同一个域名下同时有 10 个请求发生，那么其中 4 个请求会进入排队等待状态，直至进行中的请求完成。如果当前请求数量少于6个，会直接建立TCP连接。</li>
+<li>TCP三次握手建立连接，http请求加上TCP头部——包括源端口号、目的程序端口号和用于校验数据完整性的序号，向下传输</li>
+<li>网络层在数据包上加上IP头部——包括源IP地址和目的IP地址，继续向下传输到底层</li>
+<li>底层通过物理网络传输给目的服务器主机</li>
+<li>目的服务器主机网络层接收到数据包，解析出IP头部，识别出数据部分，将解开的数据包向上传输到传输层</li>
+<li>目的服务器主机传输层获取到数据包，解析出TCP头部，识别端口，将解开的数据包向上传输到应用层</li>
+<li>应用层HTTP解析请求头和请求体，如果需要重定向，HTTP直接返回HTTP响应数据的状态code301或者302，同时在请求头的Location字段中附上重定向地址，浏览器会根据code和Location进行重定向操作；如果不是重定向，首先服务器会根据 请求头中的If-None-Match 的值来判断请求的资源是否被更新，如果没有更新，就返回304状态码，相当于告诉浏览器之前的缓存还可以使用，就不返回新数据了；否则，返回新数据，200的状态码，并且如果想要浏览器缓存数据的话，就在相应头中加入字段：Cache-Control:Max-age=2000响应数据又顺着应用层——传输层——网络层——网络层——传输层——应用层的顺序返回到网络进程</li>
+<li>数据传输完成，TCP四次挥手断开连接。如果，浏览器或者服务器在HTTP头部加上如下信息，TCP就一直保持连接。保持TCP连接可以省下下次需要建立连接的时间，提示资源加载速度Connection:Keep-Alive</li>
+<li>网络进程将获取到的数据包进行解析，根据响应头中的Content-type来判断响应数据的类型，如果是字节流类型，就将该请求交给下载管理器，该导航流程结束，不再进行；如果是text/html类型，就通知浏览器进程获取到文档准备渲染</li>
+<li>浏览器进程获取到通知，根据当前页面B是否是从页面A打开的并且和页面A是否是同一个站点（根域名和协议一样就被认为是同一个站点），如果满足上述条件，就复用之前网页的进程，否则，新创建一个单独的渲染进程</li>
+<li>浏览器会发出“提交文档”的消息给渲染进程，渲染进程收到消息后，会和网络进程建立传输数据的“管道”，文档数据传输完成后，渲染进程会返回“确认提交”的消息给浏览器进程</li>
+<li>浏览器收到“确认提交”的消息后，会更新浏览器的页面状态，包括了安全状态、地址栏的 URL、前进后退的历史状态，并更新web页面，此时的web页面是空白页</li>
+<li>渲染进程对文档进行页面解析和子资源加载，HTML 通过HTM 解析器转成DOM Tree（二叉树类似结构的东西），CSS按照CSS 规则和CSS解释器转成CSSOM TREE，两个tree结合，形成render tree（不包含HTML的具体元素和元素要画的具体位置），通过Layout可以计算出每个元素具体的宽高颜色位置，结合起来，开始绘制，最后显示在屏幕中新页面显示出来</li>
+</ol>
+<h2 id="一、URL-到底是啥"><a href="#一、URL-到底是啥" class="headerlink" title="一、URL 到底是啥"></a>一、URL 到底是啥</h2><p>URL（Uniform Resource Locator），统一资源定位符，用于定位互联网上资源，俗称网址。<br>比如 <a target="_blank" rel="noopener" href="http://www.w3school.com.cn/html/index.asp%EF%BC%8C%E9%81%B5%E5%AE%88%E4%BB%A5%E4%B8%8B%E7%9A%84%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99%EF%BC%9A">http://www.w3school.com.cn/html/index.asp，遵守以下的语法规则：</a></p>
+<p><strong>scheme://host.domain:port/path/filename</strong><br>各部分解释如下：<br>scheme - 定义因特网服务的类型。常见的协议有 http、https、ftp、file，其中最常见的类型是 http，而 https 则是进行加密的网络传输。<br>host - 定义域主机（http 的默认主机是 www）<br>domain - 定义因特网<strong>域名</strong>，比如 w3school.com.cn<br>port - 定义主机上的端口号（http 的默认端口号是 80）<br>path - 定义服务器上的路径（如果省略，则文档必须位于网站的根目录中）。<br>filename - 定义文档/资源的名称</p>
+<h2 id="二、域名解析（DNS）"><a href="#二、域名解析（DNS）" class="headerlink" title="二、域名解析（DNS）"></a>二、域名解析（DNS）</h2><p>在浏览器输入网址后，首先要经过域名解析，因为浏览器并不能直接通过域名找到对应的服务器，而是要通过 IP 地址。大家这里或许会有个疑问—-计算机既可以被赋予 IP 地址，也可以被赋予主机名和域名。比如 <code>www.hackr.jp</code>。那怎么不一开始就赋予个 IP 地址？这样就可以省去解析麻烦。我们先来了解下什么是 IP 地址</p>
+<h4 id="1-IP-地址"><a href="#1-IP-地址" class="headerlink" title="1.IP 地址"></a>1.IP 地址</h4><p>IP 地址是指互联网协议地址，是 IP Address 的缩写。IP 地址是 IP 协议提供的一种统一的地址格式，它为互联网上的每一个网络和每一台主机分配一个逻辑地址，以此来屏蔽物理地址的差异。IP 地址是一个 32 位的二进制数，比如 127.0.0.1 为本机 IP。<br><strong>域名就相当于 IP 地址乔装打扮的伪装者，带着一副面具。它的作用就是便于记忆和沟通的一组服务器的地址</strong>。用户通常使用主机名或域名来访问对方的计算机，而不是直接通过 IP 地址访问。<strong>因为与 IP 地址的一组纯数字相比，用字母配合数字的表示形式来指定计算机名更符合人类的记忆习惯。但要让计算机去理解名称，相对而言就变得困难了。因为计算机更擅长处理一长串数字。为了解决上述的问题，DNS 服务应运而生。</strong></p>
+<h4 id="2-什么是域名解析"><a href="#2-什么是域名解析" class="headerlink" title="2.什么是域名解析"></a>2.什么是域名解析</h4><p>DNS 协议提供通过域名查找 IP 地址，或逆向从 IP 地址反查域名的服务。<strong>DNS 是一个网络服务器，我们的域名解析简单来说就是在 DNS 上记录一条信息记录</strong>。</p>
+<blockquote>
+<p> 例如 baidu.com  220.114.23.56（服务器外网IP地址）80（服务器端口号）</p>
+</blockquote>
+<h4 id="3-浏览器如何通过域名去查询-URL-对应的-IP-呢"><a href="#3-浏览器如何通过域名去查询-URL-对应的-IP-呢" class="headerlink" title="3. 浏览器如何通过域名去查询 URL 对应的 IP 呢"></a>3. 浏览器如何通过域名去查询 URL 对应的 IP 呢</h4><ul>
+<li>浏览器缓存：浏览器会按照一定的频率缓存 DNS 记录。</li>
+<li>操作系统缓存：如果浏览器缓存中找不到需要的 DNS 记录，那就去操作系统中找。</li>
+<li>路由缓存：路由器也有 DNS 缓存。</li>
+<li>ISP 的 DNS 服务器：ISP 是互联网服务提供商(Internet Service Provider)的简称，ISP 有专门的 DNS 服务器应对 DNS 查询请求。</li>
+<li>根服务器：ISP 的 DNS 服务器还找不到的话，它就会向根服务器发出请求，进行递归查询（DNS 服务器先问根域名服务器.com 域名服务器的 IP 地址，然后再问.baidu 域名服务器，依次类推）</li>
+</ul>
+<h4 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h4><p><strong>浏览器通过向 DNS 服务器发送域名，DNS 服务器查询到与域名相对应的 IP 地址，然后返回给浏览器，浏览器再将 IP 地址打在协议上，同时请求参数也会在协议搭载，然后一并发送给对应的服务器</strong>。</p>
+<h2 id="三、TCP-三次握手"><a href="#三、TCP-三次握手" class="headerlink" title="三、TCP 三次握手"></a>三、TCP 三次握手</h2><h4 id="1-TCP-三次握手的过程如下："><a href="#1-TCP-三次握手的过程如下：" class="headerlink" title="1.TCP 三次握手的过程如下："></a>1.TCP 三次握手的过程如下：</h4><ul>
+<li><strong>客户端发送一个带 SYN=1，Seq=X 的数据包到服务器端口</strong>（第一次握手，由浏览器发起，告诉服务器我要发送请求了）</li>
+<li><strong>服务器发回一个带 SYN=1， ACK=X+1， Seq=Y 的响应包以示传达确认信息</strong>（第二次握手，由服务器发起，告诉浏览器我准备接受了，你赶紧发送吧）</li>
+<li><strong>客户端再回传一个带 ACK=Y+1， Seq=Z 的数据包，代表“握手结束”</strong>（第三次握手，由浏览器发送，告诉服务器，我马上就发了，准备接受吧）</li>
+</ul>
+<h4 id="2-为啥需要三次握手"><a href="#2-为啥需要三次握手" class="headerlink" title="2.为啥需要三次握手"></a>2.为啥需要三次握手</h4><p>谢希仁著《计算机网络》中讲“三次握手”的目的是“<strong>为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误</strong>”。</p>
+<h2 id="四、发送-HTTP-请求"><a href="#四、发送-HTTP-请求" class="headerlink" title="四、发送 HTTP 请求"></a>四、发送 HTTP 请求</h2><p><strong>TCP 三次握手结束后，开始发送 HTTP 请求报文</strong>。<br>请求报文由请求行（request line）、请求头（header）、请求体三个部分组成。</p>
+<h4 id="1-请求行包含请求方法、URL、协议版本"><a href="#1-请求行包含请求方法、URL、协议版本" class="headerlink" title="1.请求行包含请求方法、URL、协议版本"></a>1.请求行包含请求方法、URL、协议版本</h4><ul>
+<li>请求方法包含 8 种：GET、POST、PUT、DELETE、PATCH、HEAD、OPTIONS、TRACE。</li>
+<li>URL 即请求地址，由 &lt;协议&gt;：//&lt;主机&gt;：&lt;端口&gt;/&lt;路径&gt;?&lt;参数&gt; 组成</li>
+<li>协议版本即 http 版本号</li>
+</ul>
+<blockquote>
+<p>POST  /chapter17/user.html HTTP/1.1</p>
+</blockquote>
+<h4 id="2-请求头包含请求的附加信息，由关键字-值对组成，每行一对，关键字和值用英文冒号“-”分隔。"><a href="#2-请求头包含请求的附加信息，由关键字-值对组成，每行一对，关键字和值用英文冒号“-”分隔。" class="headerlink" title="2.请求头包含请求的附加信息，由关键字/值对组成，每行一对，关键字和值用英文冒号“:”分隔。"></a>2.请求头包含请求的附加信息，由关键字/值对组成，每行一对，关键字和值用英文冒号“:”分隔。</h4><p>请求头部通知服务器有关于客户端请求的信息。它包含许多有关的客户端环境和请求正文的有用信息。其中比如：<strong>Host，表示主机名，虚拟主机；Connection,HTTP/1.1 增加的，使用 keepalive，即持久连接，一个连接可以发多个请求；User-Agent，请求发出者，兼容性以及定制化需求。</strong></p>
+<h4 id="3-请求体，可以承载多个请求参数的数据，包含回车符、换行符和请求数据，并不是所有请求都具有请求数据。"><a href="#3-请求体，可以承载多个请求参数的数据，包含回车符、换行符和请求数据，并不是所有请求都具有请求数据。" class="headerlink" title="3.请求体，可以承载多个请求参数的数据，包含回车符、换行符和请求数据，并不是所有请求都具有请求数据。"></a>3.请求体，可以承载多个请求参数的数据，包含回车符、换行符和请求数据，并不是所有请求都具有请求数据。</h4><h2 id="五、服务器处理请求并返回-HTTP-报文"><a href="#五、服务器处理请求并返回-HTTP-报文" class="headerlink" title="五、服务器处理请求并返回 HTTP 报文"></a>五、服务器处理请求并返回 HTTP 报文</h2><h4 id="1-服务器"><a href="#1-服务器" class="headerlink" title="1. 服务器"></a>1. 服务器</h4><p>服务器是网络环境中的高性能计算机，它侦听网络上的其他计算机（客户机）提交的服务请求，并提供相应的服务，比如网页服务、文件下载服务、邮件服务、视频服务。而客户端主要的功能是浏览网页、看视频、听音乐等等，两者截然不同。 每台服务器上都会安装处理请求的应用——web server。常见的 web server 产品有 apache、nginx、IIS 或 Lighttpd 等。<br><strong>web server 担任管控的角色</strong>，对于不同用户发送的请求，会结合配置文件，把不同请求委托给服务器上处理相应请求的程序进行处理（例如 CGI 脚本，JSP 脚本，servlets，ASP 脚本，服务器端 JavaScript，或者一些其它的服务器端技术等），然后返回后台程序处理产生的结果作为响应。</p>
+<h4 id="2-MVC-后台处理阶段"><a href="#2-MVC-后台处理阶段" class="headerlink" title="2.MVC 后台处理阶段"></a>2.MVC 后台处理阶段</h4><p>后台开发现在有很多框架，但大部分都还是按照 MVC 设计模式进行搭建的。<br>MVC 是一个设计模式，将应用程序分成三个核心部件：模型（model）– 视图（view）–控制器（controller），它们各自处理自己的任务，实现输入、处理和输出的分离。</p>
+<p><img src="/img/post/026/mvc.png" alt="MVC"></p>
+<ol>
+<li><p>视图（view）: <strong>它是提供给用户的操作界面，是程序的外壳。</strong></p>
+</li>
+<li><p>模型（model）:<strong>模型主要负责数据交互。</strong>在 MVC 的三个部件中，模型拥有最多的处理任务。一个模型能为多个视图提供数据。</p>
+</li>
+<li><p>控制器（controller）</p>
+<p>​        <strong>它负责根据用户从”视图层”输入的指令，选取”模型层”中的数据，然后对其进行相应的操作，产生最终结果</strong>。控制器属于管理者角色，从视图接收请求并决定调用哪个模型构件去处理请求，然后再确定用哪个视图来显示模型处理返回的数据。<br>​        这三层是紧密联系在一起的，但又是互相独立的，每一层内部的变化不影响其他层。每一层都对外提供接口（Interface），供上面一层调用。<br>​        至于这一阶段发生什么？简而言之，<strong>首先浏览器发送过来的请求先经过控制器，控制器进行逻辑处理和请求分发，接着会调用模型，这一阶段模型会获取 redis db 以及 MySQL 的数据，获取数据后将渲染好的页面，响应信息会以响应报文的形式返回给客户端，最后浏览器通过渲染引擎将网页呈现在用户面前。</strong></p>
+</li>
+</ol>
+<h4 id="3-http-响应报文"><a href="#3-http-响应报文" class="headerlink" title="3.http 响应报文"></a>3.http 响应报文</h4><p>响应报文由响应行（request line）、响应头部（header）、响应主体三个部分组成。</p>
+<p>(1) 响应行包含：协议版本，状态码，状态码描述</p>
+<p>状态码规则如下：<br>1xx：指示信息–表示请求已接收，继续处理。<br>2xx：成功–表示请求已被成功接收、理解、接受。<br>3xx：重定向–要完成请求必须进行更进一步的操作。<br>4xx：客户端错误–请求有语法错误或请求无法实现。<br>5xx：服务器端错误–服务器未能实现合法的请求。</p>
+<p>(2) 响应头部包含响应报文的附加信息，由 名/值 对组成</p>
+<p>(3) 响应主体包含回车符、换行符和响应返回数据，并不是所有响应报文都有响应数据</p>
+<h2 id="六、浏览器解析渲染页面"><a href="#六、浏览器解析渲染页面" class="headerlink" title="六、浏览器解析渲染页面"></a>六、浏览器解析渲染页面</h2><h2 id="七、TCP四次挥手"><a href="#七、TCP四次挥手" class="headerlink" title="七、TCP四次挥手"></a>七、TCP四次挥手</h2><ul>
+<li><strong>发起方向被动方发送报文，Fin、Ack、Seq，表示已经没有数据传输了。并进入 FIN_WAIT_1 状态</strong>。(第一次挥手：由浏览器发起的，发送给服务器，我请求报文发送完了，你准备关闭吧)</li>
+<li><strong>被动方发送报文，Ack、Seq，表示同意关闭请求。此时主机发起方进入 FIN_WAIT_2 状态</strong>。(第二次挥手：由服务器发起的，告诉浏览器，我请求报文接受完了，我准备关闭了，你也准备吧)</li>
+<li><strong>被动方向发起方发送报文段，Fin、Ack、Seq，请求关闭连接。并进入 LAST_ACK 状态</strong>。(第三次挥手：由服务器发起，告诉浏览器，我响应报文发送完了，你准备关闭吧)</li>
+<li><strong>发起方向被动方发送报文段，Ack、Seq。然后进入等待 TIME_WAIT 状态。被动方收到发起方的报文段以后关闭连接。发起方等待一定时间未收到回复，则正常关闭</strong>。(第四次挥手：由浏览器发起，告诉服务器，我响应报文接受完了，我准备关闭了，你也准备吧)</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://github.com/skyline75489/what-happens-when-zh_CN"> what-happens-when-zh_CN</a><br><a target="_blank" rel="noopener" href="https://time.geekbang.org/column/article/117637">导航流程</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6875147356103409678">深入导航流程</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/06/21/【027】React篇1/" data-toggle="tooltip" data-placement="top" title="React篇1-基础思想">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/06/19/【025】浏览器原理篇3-浏览器存储/" data-toggle="tooltip" data-placement="top" title="浏览器原理篇3-存储">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#浏览器原理" title="浏览器原理">浏览器原理</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/06/20/%E3%80%90026%E3%80%91%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%E7%AF%874-%E5%AF%BC%E8%88%AA%E6%B5%81%E7%A8%8B/";
+    var disqus_url = "http://yoursite.com/2021/06/20/%E3%80%90026%E3%80%91%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%E7%AF%874-%E5%AF%BC%E8%88%AA%E6%B5%81%E7%A8%8B/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

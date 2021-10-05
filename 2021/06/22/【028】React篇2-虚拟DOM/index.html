@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          React篇2-虚拟DOM - CXP的博客 | CXP&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2021/06/22/【028】React篇2-虚拟DOM/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CXP&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="/tags/tags.html">Tags</a>
+                    </li>
+                    
+                    
+
+                    
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function () {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                    <h1>React篇2-虚拟DOM</h1>
+                    <h2 class="subheading">虚拟DOM</h2>
+                    <span class="meta">
+                        Posted by Xiuping Chen on
+                        2021-06-22
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>vDOM是一个concept，指JS内存中和DOM对应的东西，在React的语境下<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/faq-internals.html">可以指React element，也可以指Fiber</a>。一个React element就是JSX组件被解析后的对象，可以看<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/introducing-jsx.html">官网JSX解析的最后两段代码</a>。而Fiber就是有更多运行上下文信息的React element。</p>
+<p>它的好处是<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903953499422727">跨平台、优化性能还有提升开发体验</a>。</p>
+</blockquote>
+<p>注意，对应可以不是网页DOM，譬如React Native对应的就是移动端的原生对象——官方也说虚拟DOM的名字有一定误导性，但是因为DOM对前端是很直观的概念，我们会依旧用vDOM和DOM来描述。</p>
+<h2 id="为什么需要Virtual-DOM"><a href="#为什么需要Virtual-DOM" class="headerlink" title="为什么需要Virtual DOM"></a>为什么需要Virtual DOM</h2><ul>
+<li>跨平台。支持跨平台，可以将JS对象渲染到浏览器DOM以外的环境中，通过Virtual DOM可以实现服务器端渲染。比如在Node.js中没有DOM，可以借助Virtual DOM 来实现SSR。支持了跨平台开发，比如ReactNative。</li>
+<li>性能优化。前端性能优化的一个秘诀就是尽可能少地操作DOM，优秀的Virtual DOM Diff 算法使得Virtual DOM将DOM的比对操作放在JS层，实现的在patch过程中尽可能地一次性将差异更新到DOM中，减少浏览器不必要的重绘，提高效率。这样保证了DOM不会出现性能很差的情况。</li>
+<li>开发体验。我们更新网上的展示内容是通过操纵HTML元素来实现的，要先获取到元素，然后再更新。虽然有jQuery框架来实现，但是还是比较复杂的。React框架用Virtual DOM帮助开发者不需要面对复杂的api，声明式编写UI，专注于更改数据就行了。</li>
+</ul>
+<h2 id="1-React的实现"><a href="#1-React的实现" class="headerlink" title="1. React的实现"></a>1. React的实现</h2><p>从虚拟DOM的角度来看，React实际做的事就是</p>
+<blockquote>
+<p>Component树 → vDOM树 → DOM树</p>
+</blockquote>
+<p>因为交互的存在，这个工作实际上是：</p>
+<blockquote>
+<p>Component树 → vDOM树 → DOM树→ 状态变化 → 新Component树 → 新vDOM树 →…</p>
+</blockquote>
+<p>如果每次都构建新Component树再渲染性能会很差，所以React做了优化，只更新差异的部分：</p>
+<blockquote>
+<p>…→ 状态变化 → 新Component树 →</p>
+<p>旧v树+diff(旧vDOM树, 新vDOM树) →</p>
+<p>旧DOM树+diff(旧DOM树, 新DOM树) →…</p>
+</blockquote>
+<p>从上述角度来看React的代码，它可以分成三个部分：</p>
+<ol>
+<li><p><strong>React core</strong>: import from ‘react’的’react’，负责Component(树) →vDOM(树)</p>
+</li>
+<li><p><strong>React renderer</strong>: ‘react-dom’, ‘react-native’等等，负责vDOM(树)→DOM(树)</p>
+</li>
+<li><p><strong>React reconciler</strong>: ‘react-reconciler’，提供高效的diff算法给出diff(旧vDOM, 新vDOM)</p>
+</li>
+</ol>
+<p>它以非常少的代码逐步地展示了React的核心实现，跟着看完你对React的架构会有一个更感性的认识。   <a target="_blank" rel="noopener" href="https://pomb.us/build-your-own-react/">build-your-own-react</a></p>
+<h2 id="2-React-core"><a href="#2-React-core" class="headerlink" title="2. React core"></a>2. React core</h2><p>内容参见它的<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/react-api.html#react">全局API</a></p>
+<p>在React开发中，Virtual DOM 元素即是React 元素，经常会使用JSX来写React元素，比如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;divStyleName&quot;</span> <span class="attr">onClick</span>=<span class="string">&#123;(e)</span> =&gt;</span> console.log(&#x27;点击了&#x27;)&#125;&gt;</span><br><span class="line">    Hello</span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;pic_url&quot;</span>&gt;</span>img<span class="tag">&lt;/<span class="name">img</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div2<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>不过，在React中不是必须要使用JSX的。<br> 因为其实 JSX 元素只是调用 React.createElement(component, props, …children) 的语法糖。其本质还是JavaScript，所有的JSX语法最终都会被转换成对这个方法的调用。因此，使用 JSX 可以完成的任何事情都可以通过纯 JavaScript 完成。<br>同时，浏览器是不能直接读取JSX，为了使浏览器能够读取JSX，需要在项目构建环境中配置有关 JSX 编译。比如 让 Babel 这样的 JSX 转换器将 JSX语句 转换为 目标 js 代码，再将其传给浏览器，JS引擎才能成功执行语句。用纯JavaScript来写上面的JSX示例（经过babel转译）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">React.createElement(<span class="string">&quot;div&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">className</span>: <span class="string">&quot;divStyleName&quot;</span>,</span><br><span class="line">    <span class="attr">onClick</span>: <span class="function"><span class="params">e</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;点击了&#x27;</span>)</span><br><span class="line">  &#125;, <span class="string">&quot;Hello&quot;</span>, React.createElement(<span class="string">&quot;img&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">src</span>: <span class="string">&quot;pic_url&quot;</span></span><br><span class="line">  &#125;, <span class="string">&quot;img&quot;</span>), React.createElement(<span class="string">&quot;div&quot;</span>, <span class="literal">null</span>, <span class="string">&quot;div2&quot;</span>), React.createElement(<span class="string">&quot;div&quot;</span>, <span class="literal">null</span>));</span><br></pre></td></tr></table></figure>
+
+<p>由上面代码可知使用了函数createElement，具体实现就可查看源码<a target="_blank" rel="noopener" href="https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L349">createElement</a></p>
+<h2 id="3-Renderer"><a href="#3-Renderer" class="headerlink" title="3. Renderer"></a>3. Renderer</h2><p>renderer是一个平台相关的层，我们需要根据自己应用的平台选择相应的renderer导入，譬如前端我们就是import ReactDOM from ‘react-dom’，移动端导入’react-native’。事实上，我们甚至可以实现自定义的renderer，参阅这个<a target="_blank" rel="noopener" href="https://github.com/chentsulin/awesome-react-renderer">列表</a>，其中包括pdf, vr, TV, threejs等等。</p>
+<h2 id="4-Reconciler"><a href="#4-Reconciler" class="headerlink" title="4. Reconciler"></a>4. Reconciler</h2><p>reconcile的含义是使xxx变得consistent，解决矛盾、差异。在React的世界里，我认为reconcile指的就是在新的vDOM和旧的DOM不一致后，使之一致的过程。</p>
+<p>reconciler的职责就是维护和更新vDOM，将vDOM的变化同步到DOM上。React16后，它包含了两个部分：一个diffing算法发现两颗vDOM树哪里不同，一个调度算法将diffing算法分成很多可中断的小步骤之后调度这些步骤，并最后同步变化到DOM上。调度的部分暂时放着，这一部分更多是介绍reconcile的概念和diffing算法。</p>
+<p>React16之前，reconciler只有diffing算法，它是一个不可打断的递归过程——发现一个vDOM的更新之后就操作对应的DOM上，接着发现下一个不同再操作DOM，最终完成整个递归。React 16后Fiber reconciler使递归变成了可以打断的循环，发现更新和绘制更新也分离了。这个“打断”就是</p>
+<blockquote>
+<p>在Fiber架构以前，没有reconciler的概念，更多是强调reconciliation这个一边diff一边更新DOM的抽象过程，以及对应的reconciliation算法。不存在一个单独的平台无关的reconciler。Fiber诞生之后，它不仅提供了新的reconciliation过程，也提供了一个reconciler的抽象层。可以说reconciler就是Fiber reconciler，而之前的reconciliation方法，以示区分才被称为stack reconciler。</p>
+</blockquote>
+<p>reconciler对我们通常是不可见的：</p>
+<ul>
+<li><p>使用上，我们只需要import ‘react’和’react-dom’，而不会import ‘react-reconciler’</p>
+</li>
+<li><p>功能上，reconciler(高效渲染)是renderer(渲染)的职责</p>
+</li>
+<li><p>源码的设计上，reconciler没有公开的API（其实有<a target="_blank" rel="noopener" href="https://github.com/facebook/react/tree/master/packages/react-reconciler">实验性的API</a>，方便第三方写自定义renderer），只能由renderer调用</p>
+</li>
+</ul>
+<p>React实现了一个O(n)的启发式diffing算法。如<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/reconciliation.html">官方文档</a>所言，这基于以下两个假设：</p>
+<ol>
+<li>两个不同类型的元素会产生出不同的树；</li>
+<li>开发者可以通过 key prop 来暗示哪些子元素在不同的渲染下能保持稳定；</li>
+</ol>
+<p>所以当以下假设没有得到满足，性能会有所损耗：</p>
+<ol>
+<li>该算法不会尝试匹配不同组件类型的子树。如果你发现你在两种不同类型的组件中切换，但输出非常相似的内容，建议把它们改成同一类型。在实践中，我们没有遇到这类问题。</li>
+<li>Key 应该具有稳定，可预测，以及列表内唯一的特质。不稳定的 key（比如通过 Math.random() 生成的）会导致许多组件实例和 DOM 节点被不必要地重新创建，这可能导致性能下降和子组件中的状态丢失。</li>
+</ol>
+<p>正如我们一再强调的，在Fiber架构之前，这个diffing算法是一个不可打断的递归过程，如果工作量大可能会引起页面卡顿。所以，React团队重写reconciler以支持更流畅的渲染。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/06/23/【029】React篇3-调度/" data-toggle="tooltip" data-placement="top" title="React篇3-调度">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2021/06/21/【027】React篇1/" data-toggle="tooltip" data-placement="top" title="React篇1-基础思想">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "Blog";
+    var disqus_identifier = "http://yoursite.com/2021/06/22/%E3%80%90028%E3%80%91React%E7%AF%872-%E8%99%9A%E6%8B%9FDOM/";
+    var disqus_url = "http://yoursite.com/2021/06/22/%E3%80%90028%E3%80%91React%E7%AF%872-%E8%99%9A%E6%8B%9FDOM/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CXP&#39;s Blog 2021 
+                    <br>
+                    Theme by <a target="_blank" rel="noopener" href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a target="_blank" rel="noopener" href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
