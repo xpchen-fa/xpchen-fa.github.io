@@ -99,10 +99,6 @@
                     
 
                     
-                    <li>
-                        <a href="/archives/archive.html">Archives</a>
-                    </li>
-                    
                     
 
                     
@@ -112,6 +108,10 @@
                     
                     
 
+                    
+                    <li>
+                        <a href="/archives/archive.html">Archives</a>
+                    </li>
                     
                     
 
@@ -234,6 +234,27 @@
 
 <div class="post-preview">
 
+    <a href="/2021/07/28/【036】继承/">
+        <h2 class="post-title">
+            继承
+        </h2>
+        <h3 class="post-subtitle">
+            原型链继承、构造函数继承、组合式继承、寄生式组合式继承、ES6继承
+        </h3>
+        <div class="post-content-preview">
+            原型链继承123456789101112131415function Parent()&#123;  this.name = [&#x27;陈&#x27;]&#125;Parent.prototype.getName = function() &#123;  return this.name&#125;function Child()&#123;&#125;Child.prototype =......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-07-28
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/2021/07/28/【037】性能优化/">
         <h2 class="post-title">
             性能优化
@@ -253,27 +274,6 @@
 全局负载均衡
 
 缓存系统（命中率—越高越好 &amp; 回源率—越低越好，一般......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Xiuping Chen on
-        2021-07-28
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2021/07/28/【036】继承/">
-        <h2 class="post-title">
-            继承
-        </h2>
-        <h3 class="post-subtitle">
-            原型链继承、构造函数继承、组合式继承、寄生式组合式继承、ES6继承
-        </h3>
-        <div class="post-content-preview">
-            原型链继承123456789101112131415function Parent()&#123;  this.name = [&#x27;陈&#x27;]&#125;Parent.prototype.getName = function() &#123;  return this.name&#125;function Child()&#123;&#125;Child.prototype =......
         </div>
     </a>
     <p class="post-meta">
@@ -648,15 +648,19 @@ HTTP响应(Response)报文，报文格式为......
 
 <div class="post-preview">
 
-    <a href="/2021/06/16/【022】JavaScript篇13-手写API/">
+    <a href="/2021/06/16/【023】浏览器原理篇1-渲染流程/">
         <h2 class="post-title">
-            JavaScript篇13—手写代码
+            浏览器原理篇1-渲染流程
         </h2>
         <h3 class="post-subtitle">
-            节流、防抖
+            渲染流程
         </h3>
         <div class="post-content-preview">
-            防抖12345678910111213141516171819function debounce(fn, delay = 500) &#123;    let timer = null;    return function() &#123;        if(timer)&#123;            clearTimeout(timer)        &#125;        ......
+            关于浏览器渲染流程，很多同学会给出如下答案，也是我之前一直以为的答案：
+
+浏览器根据html文件构建出DOM Tree，根据CSS文件构建出CSS stylesheets，浏览器解析完CSS和JS文件后将两个文件结合生成Render Tree，然后渲染到屏幕上。
+
+这个答案不算错，但是不够具体。本文就来详细地聊聊浏览器渲染，在开始正文之前，需要特别指出，本文的分析都是基于 Chrome 浏......
         </div>
     </a>
     <p class="post-meta">
@@ -718,9 +722,9 @@ HTTP响应(Response)报文，报文格式为......
                             
                         
                             
-                            <a href="/tags/#大数据" title="大数据" rel="2">大数据</a>
-                            
                         
+                            
+                            <a href="/tags/#大数据" title="大数据" rel="2">大数据</a>
                             
                         
                             
