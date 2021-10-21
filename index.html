@@ -92,10 +92,6 @@
                     
 
                     
-                    <li>
-                        <a href="/tags/tags.html">Tags</a>
-                    </li>
-                    
                     
 
                     
@@ -106,11 +102,15 @@
                     
 
                     
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
                     
 
                     
                     <li>
-                        <a href="/about/">About</a>
+                        <a href="/tags/tags.html">Tags</a>
                     </li>
                     
                     
@@ -186,6 +186,31 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/2021/10/21/daily-records/">
+        <h2 class="post-title">
+            2021 Daily记录
+        </h2>
+        <h3 class="post-subtitle">
+            records
+        </h3>
+        <div class="post-content-preview">
+            Daily2021-10-21做了一个文件预览的功能踩坑记录
+
+项目中有一个文件预览的功能，由于一些原因预览方案只能是后端发送文件流给前端然后前端进行预览。原本以为是比较容易的解决方案如下：
+
+123456789101112131415const [resumeUrl, setResumeUrl] = useState();&lt;!-- .... --&gt;services.reques......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Xiuping Chen on
+        2021-10-21
+    </p>
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -646,27 +671,6 @@ HTTP响应(Response)报文，报文格式为......
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2021/06/16/【022】JavaScript篇13-手写API/">
-        <h2 class="post-title">
-            JavaScript篇13—手写代码
-        </h2>
-        <h3 class="post-subtitle">
-            节流、防抖
-        </h3>
-        <div class="post-content-preview">
-            防抖12345678910111213141516171819function debounce(fn, delay = 500) &#123;    let timer = null;    return function() &#123;        if(timer)&#123;            clearTimeout(timer)        &#125;        ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Xiuping Chen on
-        2021-06-16
-    </p>
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -702,6 +706,10 @@ HTTP响应(Response)报文，报文格式为......
                     <div class="tags">
                         
                             
+                            <a href="/tags/#others" title="others" rel="5">others</a>
+                            
+                        
+                            
                             <a href="/tags/#React" title="React" rel="10">React</a>
                             
                         
@@ -710,7 +718,7 @@ HTTP响应(Response)报文，报文格式为......
                             
                         
                             
-                            <a href="/tags/#others" title="others" rel="4">others</a>
+                            <a href="/tags/#大数据" title="大数据" rel="2">大数据</a>
                             
                         
                             
@@ -721,10 +729,6 @@ HTTP响应(Response)报文，报文格式为......
                         
                             
                             <a href="/tags/#JavaScript" title="JavaScript" rel="17">JavaScript</a>
-                            
-                        
-                            
-                            <a href="/tags/#大数据" title="大数据" rel="2">大数据</a>
                             
                         
                             
